@@ -1,0 +1,2457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ECEverse – Community</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Modern, aesthetic community UI styles */
+    :root {
+  --primary: #6C63FF;
+  --secondary: #4D44DB;
+  --accent: #FF6584;
+  --light: #F8F9FF;
+  --dark: #2E2E48;
+  --gray: #8C8CA1;
+  --card-bg: #FFFFFF;
+  --section-bg: #F9FAFF;
+  --success: #4ADE80;
+  --warning: #FACC15;
+  --border: #e2e8f0;
+  --text: var(--dark);
+  --text-light: var(--gray);
+  --shadow: 0 5px 25px rgba(0,0,0,0.05);
+}
+
+    * {
+      box-sizing: border-box;
+      transition: var(--transition);
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial;
+      height: 100vh;
+      overflow: hidden;
+      color: var(--text);
+    }
+
+   header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem 5%;
+  background-color: rgba(255,255,255,0.98);
+  box-shadow: 0 2px 30px rgba(108,99,255,0.08);
+  z-index: 1000;
+  height: 70px; /* Fixed height */
+  border-bottom: none;
+}
+
+    header .left {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    header h1 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+}
+header .user {
+  color: var(--gray);
+  font-size: 14px;
+  background: var(--light);
+  padding: 8px 16px;
+  border-radius: 20px;
+}
+
+#logoutBtn {
+  background: var(--primary);
+  border: none;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+#logoutBtn:hover {
+  background: var(--secondary);
+  transform: translateY(-2px);
+}
+
+    .wrap {
+  padding: 100px 5% 30px;
+  width: 100%;
+  height: calc(100vh - 100px);
+  background: var(--section-bg);
+  overflow: hidden;
+}
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      padding: 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .card {
+  background: var(--card-bg);
+  border: 1px solid var(--light);
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: var(--shadow);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 30px rgba(108,99,255,0.15);
+}
+
+.card h3 {
+  margin: 0 0 12px;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.muted {
+  color: var(--gray);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+    button {
+  cursor: pointer;
+  border: none;
+  background: var(--primary);
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  color: white;
+}
+
+button:hover {
+  background: var(--secondary);
+  transform: translateY(-2px);
+}
+
+.btn-primary {
+  background: var(--primary);
+}
+
+.btn-primary:hover {
+  background: var(--secondary);
+}
+
+.btn-danger {
+  background: var(--accent);
+}
+
+.btn-ghost {
+  background: transparent;
+  border: 1px solid var(--primary);
+  color: var(--primary);
+}
+
+.btn-ghost:hover {
+  background: rgba(108, 99, 255, 0.1);
+}
+
+    /* Community room */
+   .room {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 24px;
+  height: calc(100vh - 180px); /* Adjust this value based on your header height */
+  padding: 0;
+  box-sizing: border-box;
+  background: var(--section-bg);
+}
+
+.room .panel {
+  background: var(--card-bg);
+  border: 1px solid var(--light);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.panel h4 {
+  margin: 0;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 16px;
+  background: var(--light);
+  border-bottom: 1px solid var(--light);
+}
+
+.panel h4:hover {
+  background: rgba(108, 99, 255, 0.05);
+}
+
+    .list {
+      padding: 8px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      overflow: auto;
+    }
+
+    .list .item {
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: var(--transition);
+    }
+
+    .list .item:hover {
+      background: rgba(79, 70, 229, 0.05);
+      border-color: var(--primary-light);
+    }
+
+    .badge {
+  font-size: 12px;
+  border: 1px solid var(--light);
+  padding: 6px 12px;
+  border-radius: 999px;
+  color: var(--gray);
+  background: var(--light);
+  font-weight: 500;
+}
+
+    .center {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+    .topbar {
+      padding: 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: white;
+    }
+
+    .topbar .title {
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+   #messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: var(--bg);
+  max-height: calc(100vh - 250px); /* Adjust based on your layout */
+}
+
+    .msg {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 16px;
+      background: #fff;
+      position: relative;
+      cursor: context-menu;
+      transition: var(--transition);
+      animation: fadeIn 0.3s ease;
+    }
+
+    .msg:hover {
+      background-color: #f9fafb;
+      box-shadow: var(--shadow);
+    }
+
+    .msg .meta {
+      font-size: 13px;
+      color: var(--text-light);
+      display: flex;
+      gap: 8px;
+      margin-bottom: 6px;
+      align-items: center;
+    }
+    
+    /* Online members list styling */
+    #onlineList {
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    #onlineList .item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 12px;
+    }
+
+    .online {
+      color: var(--success);
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    /* Back button in messages view */
+    #messagesBackBtn {
+      margin: 16px;
+      align-self: flex-start;
+    }
+    
+    .composer {
+  display: flex;
+  gap: 12px;
+  border-top: 1px solid var(--border);
+  padding: 16px;
+  background: white;
+  flex-shrink: 0; /* Prevent composer from shrinking */
+}
+    .composer input {
+      flex: 1;
+      padding: 12px 16px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 15px;
+    }
+
+    .composer input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    }
+
+    .row-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .hint {
+      padding: 16px;
+      background: #f9fafb;
+      border-top: 1px solid var(--border);
+      font-size: 14px;
+      color: var(--text);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .online {
+      color: var(--success);
+      font-weight: 600;
+    }
+
+    .collapsed .list {
+      display: none;
+    }
+
+    .icon-btn {
+      background: none;
+      border: none;
+      padding: 6px;
+      cursor: pointer;
+      color: var(--text-light);
+      border-radius: 6px;
+      transition: var(--transition);
+    }
+
+    .icon-btn:hover {
+      color: var(--primary);
+      background: rgba(79, 70, 229, 0.1);
+    }
+
+    .back-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--primary);
+      font-weight: 500;
+      padding: 8px 12px;
+      border-radius: 8px;
+      transition: var(--transition);
+    }
+
+    .back-btn:hover {
+      background: rgba(79, 70, 229, 0.1);
+    }
+
+    .member-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .member-modal-content {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 24px;
+      max-width: 450px;
+      width: 90%;
+      max-height: 80vh;
+      overflow: auto;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+
+    .member-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .member-modal-header h3 {
+      margin: 0;
+      font-weight: 600;
+    }
+
+    .member-modal-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .member-modal-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border-radius: 8px;
+      transition: var(--transition);
+    }
+
+    .member-modal-item:hover {
+      background: rgba(79, 70, 229, 0.05);
+    }
+
+    .member-modal-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      flex-shrink: 0;
+    }
+
+    /* Message context menu */
+    .context-menu {
+      position: fixed;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      z-index: 1000;
+      display: none;
+      flex-direction: column;
+      min-width: 180px;
+      overflow: hidden;
+      animation: scaleIn 0.15s ease;
+    }
+
+    .context-menu-item {
+      padding: 12px 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: var(--transition);
+    }
+
+    .context-menu-item:hover {
+      background-color: #f0f5ff;
+    }
+
+    .context-menu-divider {
+      height: 1px;
+      background-color: var(--border);
+      margin: 4px 0;
+    }
+
+    .reaction-bar {
+      display: flex;
+      gap: 6px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+
+    .reaction {
+      background: #f0f5ff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 4px 8px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .reaction:hover {
+      background: #e1e9ff;
+      transform: scale(1.1);
+    }
+
+    .user-reacted {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    /* Message actions */
+    .message-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .message-actions button {
+      font-size: 12px;
+      padding: 4px 8px;
+      display: flex;
+      align-items: center;
+    }
+
+    .message-actions button svg {
+      margin-right: 4px;
+    }
+
+    .message-actions button.saved {
+      color: var(--primary);
+    }
+
+    /* Answer section styles */
+    .answers-section {
+      transition: var(--transition);
+      margin-top: 12px;
+      border-top: 1px solid var(--border);
+      padding-top: 12px;
+    }
+
+    .answer {
+      padding: 8px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 8px;
+      background: #f9fafb;
+      transition: var(--transition);
+    }
+
+    .answer:hover {
+      background: #f0f5ff !important;
+    }
+
+    .answer-composer {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .answer-composer input {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+
+    /* Toggle icon animation */
+    .toggle-icon {
+      transition: transform 0.3s ease;
+    }
+
+    .collapsed .toggle-icon {
+      transform: rotate(-90deg);
+    }
+
+    /* Navigation item hover effects */
+    #navigationSection .item:hover {
+      background: rgba(79, 70, 229, 0.05);
+      border-color: var(--primary-light);
+    }
+
+    /* Sidebar toggle button */
+    .sidebar-toggle {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      z-index: 100;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+    }
+
+    .sidebar-hidden .room {
+      grid-template-columns: 0 1fr 280px;
+    }
+
+    .sidebar-hidden .panel:first-child {
+      display: none;
+    }
+
+    /* Answer modal */
+    .answer-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .answer-modal-content {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 24px;
+      width: 90%;
+      max-width: 600px;
+      max-height: 80vh;
+      overflow: auto;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+
+    .answer-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .answer-modal-header h3 {
+      margin: 0;
+      font-weight: 600;
+    }
+
+    .answer-modal-body {
+      margin-bottom: 20px;
+    }
+
+    .answer-modal-question {
+      background: #f9fafb;
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      border-left: 3px solid var(--primary);
+    }
+
+    .answer-modal-composer {
+      display: flex;
+      gap: 12px;
+    }
+
+    .answer-modal-composer input {
+      flex: 1;
+      padding: 12px 16px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 15px;
+    }
+
+    .answer-modal-composer input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    }
+
+    .answer-modal-answers {
+      margin-top: 20px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes scaleIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 1024px) {
+      .room {
+        grid-template-columns: 240px 1fr;
+      }
+      
+      .room .panel:last-child {
+        display: none;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .room {
+        grid-template-columns: 1fr;
+        padding: 12px;
+      }
+      
+      .room .panel:first-child,
+      .room .panel:last-child {
+        display: none;
+      }
+      
+      .grid {
+        grid-template-columns: 1fr;
+        padding: 16px;
+      }
+      
+      .sidebar-toggle {
+        display: none;
+      }
+    }
+    
+    .panel h4 {
+      margin: 16px 16px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 16px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      transition: var(--transition);
+    }
+
+    .panel h4:hover {
+      background: rgba(79, 70, 229, 0.05);
+    }
+    
+    /* Like button with filled heart */
+    .liked {
+      color: #ef4444 !important;
+    }
+    
+    .liked svg {
+      fill: #ef4444;
+    }
+    /* Add this to your CSS */
+#onlineSection.collapsed + #onlineList {
+  display: none;
+}
+
+#onlineSection.collapsed .toggle-icon {
+  transform: rotate(-90deg);
+}
+
+/* Add these styles to your CSS */
+.room .panel.collapsed {
+  width: 60px;
+  min-width: 60px;
+  overflow: visible;
+}
+
+.room .panel.collapsed h4,
+.room .panel.collapsed .list {
+  display: none;
+}
+
+.room .panel.collapsed .sidebar-toggle-only {
+  display: block;
+}
+
+.sidebar-toggle-only {
+  display: none;
+  padding: 16px;
+  text-align: center;
+}
+
+.sidebar-toggle {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 100;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+}
+
+/* Adjust grid when sidebar is collapsed */
+.room .panel:first-child.collapsed ~ .center {
+  grid-column: 1 / 3;
+}
+.sidebar {
+      width: 250px;
+      background: var(--card-bg);
+      border-right: 1px solid #eee;
+      padding: 1rem;
+      transition: width 0.3s;
+      overflow: hidden;
+    }
+    .sidebar.collapsed { width: 70px; }
+    .sidebar h2 {
+      font-size: 1.3rem;
+      color: var(--primary);
+      margin-bottom: 2rem;
+      white-space: nowrap;
+    }
+    .sidebar ul { list-style: none; }
+    .sidebar li {
+      margin-bottom: 1rem;
+    }
+    .sidebar a {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      color: var(--dark);
+      font-weight: 500;
+      padding: 0.6rem 0.8rem;
+      border-radius: 8px;
+      transition: background 0.3s;
+      white-space: nowrap;
+    }
+    .sidebar a i { margin-right: 0.8rem; color: var(--primary); }
+    .sidebar a:hover { background: var(--light); }
+    .toggle-btn {
+      cursor: pointer;
+      text-align: right;
+      margin-bottom: 1.5rem;
+      font-size: 1.2rem;
+      color: var(--gray);
+    }
+  </style>
+</head>
+<body>
+  <button class="sidebar-toggle" id="sidebarToggle">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M4 6H20M4 12H20M4 18H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+  
+
+  <header>
+    <div class="left">
+      <button class="back-btn" id="headerBackBtn" style="display: none;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Back
+      </button>
+      <h1>ECEverse Communities</h1>
+      <span id="userEmail" class="user"></span>
+    </div>
+    <div class="row-actions">
+      <button id="logoutBtn">Logout</button>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <!-- Community chooser -->
+    <div id="chooseView">
+      <div class="grid">
+        <div class="card" onclick="openCommunity('general')">
+          <h3>General</h3>
+          <div class="muted">Discuss general topics and announcements with the ECEverse community.</div>
+          <div style="margin-top:16px;display:flex;gap:10px;align-items:center">
+            <span class="badge"><span id="generalCount">0</span> members</span>
+            <button class="btn-primary">Join Community</button>
+          </div>
+        </div>
+        <div class="card" onclick="openCommunity('industry')">
+          <h3>Industry</h3>
+          <div class="muted">Share industry insights, opportunities, and professional discussions.</div>
+          <div style="margin-top:16px;display:flex;gap:10px;align-items:center">
+            <span class="badge"><span id="industryCount">0</span> members</span>
+            <button class="btn-primary">Join Community</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Community room -->
+    <div id="roomView" class="room hidden">
+      <!-- Left: Navigation & Members -->
+      <div class="panel">
+        <!-- Navigation buttons -->
+        <!-- Replace the navigation section with this -->
+<h4 onclick="showSavedMessages()" style="cursor: pointer; display: flex; align-items: center; justify-content: space-between;">
+  <span style="display: flex; align-items: center; gap: 8px;">
+    <i class="fas fa-bookmark"></i>
+    Saved Problems
+  </span>
+</h4>
+
+<h4 onclick="showMyDiscussions()" style="cursor: pointer; display: flex; align-items: center; justify-content: space-between; margin-top: 8px;">
+  <span style="display: flex; align-items: center; gap: 8px;">
+    <i class="fas fa-comments"></i>
+    My Discussion
+  </span>
+</h4>
+<h4 onclick="showAllMembers()" style="cursor: pointer; display: flex; align-items: center; justify-content: space-between; margin-top: 16px;">
+  <span style="display: flex; align-items: center; gap: 8px;">
+    <i class="fas fa-users"></i>
+    All Members
+    <span class="badge" id="membersCount">0</span>
+  </span>
+</h4>
+<!-- In the left panel, add this at the top -->
+<div class="sidebar-toggle-only">
+  <button class="icon-btn" onclick="toggleSidebar()">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M4 6H20M4 12H20M4 18H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+</div>
+<!-- In the left panel, replace the current members list with this: -->
+<h4 onclick="toggleSection('onlineSection')" style="cursor: pointer; display: flex; align-items: center; justify-content: space-between; background-color: white; ">
+  <!-- <span style="display: flex; align-items: center; gap: 8px;"> -->
+    <!-- <i class="fas fa-circle" style="color: var(--success);"></i> -->
+    Online Members
+    <span class="badge" id="onlineCount">0</span>
+  </span>
+  <!-- <i class="fas fa-chevron-down toggle-icon"></i> -->
+</h4>
+
+<div class="list" id="onlineList"></div>
+
+<!-- <h4 onclick="showAllMembers()" style="cursor: pointer; display: flex; align-items: center; justify-content: space-between; margin-top: 16px;">
+  <span style="display: flex; align-items: center; gap: 8px;">
+    <i class="fas fa-users"></i>
+    All Members
+    <span class="badge" id="membersCount">0</span>
+  </span>
+</h4> -->
+
+<!-- Remove the membersList div from here - we'll move it to the modal -->
+        <div class="list" id="membersList"></div>
+        <div class="list" id="onlineList"></div>
+      </div>
+
+      <!-- Center: Chat -->
+      <div class="panel center">
+        <div class="topbar">
+          <div>
+            <span class="title" id="roomTitle">#general</span>
+            <span class="badge" id="memberBadge">0 members</span>
+          </div>
+          <div class="row-actions">
+            <button id="joinBtn" class="btn-primary">Join Community</button>
+            <button id="exitBtn" class="btn-danger">Exit</button>
+            <button class="back-btn" id="roomBackBtn">
+              <!-- Back button content -->
+            </button>
+          </div>
+        </div>
+
+        <div id="messages"></div>
+
+        <div id="nonMemberHint" class="hint hidden">
+          You can view messages, but you must <b>join this community</b> to chat.
+        </div>
+
+        <div class="composer" id="composerRow">
+          <input id="messageInput" type="text" placeholder="Type your message…" />
+          <button class="btn-primary" id="sendBtn">Send</button>
+          <button id="clearBtn">Clear Chat</button>
+        </div>
+      </div>
+
+      <!-- Right: Channels (static placeholders)
+      <div class="panel">
+        <h4 onclick="toggleSection('channelsSection')" style="cursor: pointer; display: flex; align-items: center; justify-content: space-between;">
+          <span style="display: flex; align-items: center;">
+            Channels
+            <span class="badge" style="margin-left: 8px;">4</span>
+          </span>
+        </h4>
+        <div class="list" id="channelsList">
+          <div class="item"><span># general-chat</span></div>
+          <div class="item"><span># introductions</span></div>
+          <div class="item"><span># help</span></div>
+          <div class="item"><span># resources</span></div>
+        </div>
+      </div>
+    </div>
+  </div> -->
+
+  <!-- Context Menu -->
+  <div id="contextMenu" class="context-menu">
+    <div class="context-menu-item" onclick="reactToMessage('👍')">
+      <span>👍 Like</span>
+    </div>
+    <div class="context-menu-item" onclick="reactToMessage('❤️')">
+      <span>❤️ Love</span>
+    </div>
+    <div class="context-menu-item" onclick="reactToMessage('😂')">
+      <span>😂 Laugh</span>
+    </div>
+    <div class="context-menu-divider"></div>
+    <div class="context-menu-item" onclick="deleteMessageForMe()">
+      <span>Delete for me</span>
+    </div>
+    <div class="context-menu-item" id="deleteForEveryoneBtn" onclick="deleteMessageForEveryone()">
+      <span>Delete for everyone</span>
+    </div>
+    <div class="context-menu-item" onclick="copyMessageText()">
+      <span>Copy text</span>
+    </div>
+  </div>
+
+  <!-- Members Modal -->
+  <div id="membersModal" class="member-modal hidden">
+    <div class="member-modal-content">
+      <div class="member-modal-header">
+        <h3>All Community Members</h3>
+        <button class="icon-btn" onclick="hideAllMembers()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+      <div class="member-modal-list" id="allMembersList">
+        <!-- Members will be populated here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Answer Modal -->
+  <div id="answerModal" class="answer-modal hidden">
+    <div class="answer-modal-content">
+      <div class="answer-modal-header">
+        <h3>Answer Question</h3>
+        <button class="icon-btn" onclick="hideAnswerModal()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+      <div class="answer-modal-body">
+        <div class="answer-modal-question" id="answerModalQuestion">
+          <!-- Question content will be populated here -->
+        </div>
+        <div class="answer-modal-composer">
+          <input id="answerModalInput" type="text" placeholder="Type your answer…" />
+          <button class="btn-primary" id="answerModalSendBtn">Send Answer</button>
+        </div>
+        <div class="answer-modal-answers" id="answerModalAnswers">
+          <!-- Answers will be populated here -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase -->
+  <script type="module">
+    /********** Firebase SDKs **********/
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+    import { 
+      getAuth, onAuthStateChanged, signOut
+    } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+    import {
+      getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion, arrayRemove, 
+      collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, deleteDoc,
+      getDocs, where
+    } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+    import {
+      getDatabase, ref, onValue, set, get, child, serverTimestamp as rtdbServerTimestamp, onDisconnect, remove
+    } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-database.js";
+
+    /********** Config **********/
+   const firebaseConfig = {
+    apiKey: "AIzaSyD4T6rAV2npex-ZOJuu5IKQ1bDUkD7o9Oc",
+    authDomain: "eceverse-adeac.firebaseapp.com",
+    databaseURL: "https://eceverse-adeac-default-rtdb.firebaseio.com",
+    projectId: "eceverse-adeac",
+    storageBucket: "eceverse-adeac.firebasestorage.app",
+    messagingSenderId: "55835462054",
+    appId: "1:55835462054:web:9ca23a5817ed40f2842767",
+    measurementId: "G-KTV3P359DX"
+  };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const rtdb = getDatabase(app);
+
+    /********** State **********/
+    let currentUser = null;
+    let currentUsername = "";
+    let currentCommunity = null;
+    let messagesUnsub = null;
+    let membersUnsub = null;
+    let presenceUnsub = null;
+    let isMember = false;
+    let clearedChats = {}; // Track cleared chats per community
+    let currentMessageId = null;
+    let currentMessageUserId = null;
+    let currentAnswerMessageId = null;
+
+    /********** DOM **********/
+    const userEmailEl = document.getElementById('userEmail');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const headerBackBtn = document.getElementById('headerBackBtn');
+    const roomBackBtn = document.getElementById('roomBackBtn');
+    const contextMenu = document.getElementById('contextMenu');
+    const deleteForEveryoneBtn = document.getElementById('deleteForEveryoneBtn');
+    const sidebarToggle = document.getElementById('sidebarToggle');
+
+    const chooseView = document.getElementById('chooseView');
+    const roomView = document.getElementById('roomView');
+    const roomTitle = document.getElementById('roomTitle');
+    const memberBadge = document.getElementById('memberBadge');
+
+    const membersList = document.getElementById('membersList');
+    const onlineList = document.getElementById('onlineList');
+    const membersCount = document.getElementById('membersCount');
+    const onlineCount = document.getElementById('onlineCount');
+
+    const joinBtn = document.getElementById('joinBtn');
+    const exitBtn = document.getElementById('exitBtn');
+
+    const messagesDiv = document.getElementById('messages');
+    const messageInput = document.getElementById('messageInput');
+    const sendBtn = document.getElementById('sendBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const composerRow = document.getElementById('composerRow');
+    const nonMemberHint = document.getElementById('nonMemberHint');
+
+    const generalCount = document.getElementById('generalCount');
+    const industryCount = document.getElementById('industryCount');
+
+    const membersModal = document.getElementById('membersModal');
+    const allMembersList = document.getElementById('allMembersList');
+
+    const answerModal = document.getElementById('answerModal');
+    const answerModalQuestion = document.getElementById('answerModalQuestion');
+    const answerModalInput = document.getElementById('answerModalInput');
+    const answerModalSendBtn = document.getElementById('answerModalSendBtn');
+    const answerModalAnswers = document.getElementById('answerModalAnswers');
+
+/********** UI Functions **********/
+    // Toggle sidebar
+    sidebarToggle.addEventListener('click', () => {
+      document.body.classList.toggle('sidebar-hidden');
+      
+      // Update toggle icon
+      const icon = sidebarToggle.querySelector('svg');
+      if (document.body.classList.contains('sidebar-hidden')) {
+        icon.innerHTML = '<path d="M4 6H20M4 12H20M4 18H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>';
+      } else {
+        icon.innerHTML = '<path d="M6 18L18 6M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>';
+      }
+    });
+    window.toggleSection = function(sectionId) {
+  const section = document.getElementById(sectionId);
+  if (section) {
+    section.classList.toggle('collapsed');
+    
+    // Update the toggle icon
+    const toggleIcon = section.querySelector('.toggle-icon');
+    if (toggleIcon) {
+      toggleIcon.style.transform = section.classList.contains('collapsed') ? 'rotate(-90deg)' : 'rotate(0deg)';
+    }
+  }
+};
+
+    window.toggleSection = function(sectionId) {
+      const section = document.getElementById(sectionId);
+      if (section) {
+        section.classList.toggle('collapsed');
+        
+        // Update the toggle icon for navigation section
+        if (sectionId === 'navigationSection') {
+          const toggleIcon = document.querySelector('#navigationSection').closest('.panel').querySelector('.toggle-icon');
+          if (toggleIcon) {
+            toggleIcon.style.transform = section.classList.contains('collapsed') ? 'rotate(-90deg)' : 'rotate(0deg)';
+          }
+        }
+      }
+    };
+
+    window.showAllMembers = async function() {
+  if (!currentCommunity) return;
+  
+  try {
+    allMembersList.innerHTML = '';
+    
+    // Get community members
+    const cRef = doc(db, "communities", currentCommunity);
+    const cSnap = await getDoc(cRef);
+    const memberIds = cSnap.exists() ? (cSnap.data().members || []) : [];
+    
+    // Get online members from presence
+    const presenceSnapshot = await get(ref(rtdb, `presence/${currentCommunity}`));
+    const onlineMembers = presenceSnapshot.exists() ? presenceSnapshot.val() : {};
+    
+    for (const uid of memberIds) {
+      try {
+        const uSnap = await get(child(ref(rtdb), `users/${uid}`));
+        const userData = uSnap.exists() ? uSnap.val() : {};
+        const username = userData.username || userData.email?.split('@')[0] || uid;
+        
+        const isOnline = onlineMembers[uid] && onlineMembers[uid].state === 'online';
+        
+        const memberItem = document.createElement('div');
+        memberItem.className = 'member-modal-item';
+        memberItem.innerHTML = `
+          <div class="member-modal-avatar">${username.charAt(0).toUpperCase()}</div>
+          <div style="flex: 1;">
+            <div>${escapeHtml(username)} ${uid === currentUser.uid ? '(You)' : ''}</div>
+            <div style="font-size: 12px; color: #6b7280;">${isOnline ? 'Online' : 'Offline'}</div>
+          </div>
+          ${isOnline ? '<span class="online">●</span>' : ''}
+        `;
+        
+        allMembersList.appendChild(memberItem);
+      } catch (error) {
+        console.error("Error loading member:", error);
+      }
+    }
+    
+    membersModal.classList.remove('hidden');
+  } catch (error) {
+    console.error("Error loading all members:", error);
+  }
+};
+
+    window.hideAllMembers = function() {
+      membersModal.classList.add('hidden');
+    };
+
+    // Show answer modal
+    window.showAnswerModal = async function(messageId) {
+      if (!currentCommunity) return;
+      
+      try {
+        currentAnswerMessageId = messageId;
+        
+        // Get the message
+        const messageRef = doc(db, "communities", currentCommunity, "messages", messageId);
+        const messageSnap = await getDoc(messageRef);
+        
+        if (messageSnap.exists()) {
+          const messageData = messageSnap.data();
+          const time = messageData.timestamp?.toDate ? messageData.timestamp.toDate().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}) : '';
+          
+          // Populate question
+          answerModalQuestion.innerHTML = `
+            <div class="meta">
+              <span style="font-weight: 600;">${messageData.username || 'User'}</span>
+              <span>${time}</span>
+            </div>
+            <div>${escapeHtml(messageData.message || '')}</div>
+          `;
+          
+          // Load answers
+          await loadAnswersToModal(messageId);
+          
+          // Show modal
+          answerModal.classList.remove('hidden');
+          answerModalInput.focus();
+        }
+      } catch (error) {
+        console.error("Error showing answer modal:", error);
+      }
+    };
+
+    // Load answers to modal
+    async function loadAnswersToModal(messageId) {
+      try {
+        answerModalAnswers.innerHTML = '';
+        
+        const messageRef = doc(db, "communities", currentCommunity, "messages", messageId);
+        const messageSnap = await getDoc(messageRef);
+        
+        if (messageSnap.exists()) {
+          const messageData = messageSnap.data();
+          const answers = messageData.answers || [];
+          
+          if (answers.length === 0) {
+            answerModalAnswers.innerHTML = '<div class="hint" style="padding: 16px; text-align: center;">No answers yet</div>';
+            return;
+          }
+          
+          answers.forEach(answer => {
+            const time = answer.timestamp?.toDate ? answer.timestamp.toDate().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}) : '';
+            
+            const answerElement = document.createElement('div');
+            answerElement.className = 'answer';
+            answerElement.innerHTML = `
+              <div style="font-size: 12px; color: #6b7280;">
+                <strong>${answer.username}</strong> • ${time}
+              </div>
+              <div>${escapeHtml(answer.message || '')}</div>
+            `;
+            
+            answerModalAnswers.appendChild(answerElement);
+          });
+        }
+      } catch (error) {
+        console.error("Error loading answers to modal:", error);
+      }
+    }
+
+    // Hide answer modal
+    window.hideAnswerModal = function() {
+      answerModal.classList.add('hidden');
+      currentAnswerMessageId = null;
+    };
+
+    // Submit answer from modal
+    answerModalSendBtn.addEventListener('click', submitAnswerFromModal);
+    answerModalInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') submitAnswerFromModal();
+    });
+
+    async function submitAnswerFromModal() {
+      if (!currentUser || !currentCommunity || !currentAnswerMessageId) return;
+      
+      const answerText = answerModalInput.value.trim();
+      if (!answerText) return;
+      
+      try {
+        const messageRef = doc(db, "communities", currentCommunity, "messages", currentAnswerMessageId);
+        const messageSnap = await getDoc(messageRef);
+        
+        if (messageSnap.exists()) {
+          const messageData = messageSnap.data();
+          const answers = messageData.answers || [];
+          
+          // Add new answer
+          answers.push({
+            userId: currentUser.uid,
+            username: currentUsername || currentUser.email,
+            message: answerText,
+            timestamp: serverTimestamp()
+          });
+          
+          // Update message with new answer
+          await updateDoc(messageRef, { answers });
+          
+          // Clear input and reload answers
+          answerModalInput.value = '';
+          await loadAnswersToModal(currentAnswerMessageId);
+          
+          // If we're in the My Discussions view, refresh it
+          if (document.getElementById('messagesBackBtn')?.style.display === 'flex') {
+            showMyDiscussions();
+          }
+        }
+      } catch (error) {
+        console.error("Error submitting answer:", error);
+      }
+    }
+
+    /********** Auth **********/
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "login.html";
+        return;
+      }
+      currentUser = user;
+      userEmailEl.textContent = user.email;
+
+      // get username from RTDB users/{uid}
+      try {
+        const snap = await get(child(ref(rtdb), `users/${user.uid}`));
+        currentUsername = snap.exists() ? (snap.val().username || user.email.split('@')[0]) : user.email.split('@')[0];
+      } catch {
+        currentUsername = user.email.split('@')[0];
+      }
+
+      // Load cleared chats from localStorage
+      const savedClearedChats = localStorage.getItem('clearedChats');
+      if (savedClearedChats) {
+        clearedChats = JSON.parse(savedClearedChats);
+      }
+
+      // counts
+      updateCounts();
+    });
+
+    logoutBtn.addEventListener('click', () => signOut(auth));
+
+    // Back button handlers
+    headerBackBtn.addEventListener('click', goBackToHome);
+    roomBackBtn.addEventListener('click', goBackToHome);
+
+    function goBackToHome() {
+      stopListeners();
+      roomView.classList.add('hidden');
+      chooseView.classList.remove('hidden');
+      headerBackBtn.style.display = 'none';
+      currentCommunity = null;
+    }
+
+    async function updateCounts(){
+      try{
+        const gen = await getDoc(doc(db, "communities", "general"));
+        generalCount.textContent = gen.exists() ? (gen.data().members || []).length : 0;
+
+        const ind = await getDoc(doc(db, "communities", "industry"));
+        industryCount.textContent = ind.exists() ? (ind.data().members || []).length : 0;
+      }catch(e){ console.warn(e); }
+    }
+
+    /********** Open a community (read-only if not member) **********/
+    window.openCommunity = async (communityId) => {
+      if (!currentUser) return;
+
+      // stop old listeners
+      stopListeners();
+      clearLists();
+      messagesDiv.innerHTML = "";
+
+      currentCommunity = communityId;
+      roomTitle.textContent = `# ${communityId}`;
+
+      // Show room and back button
+      chooseView.classList.add('hidden');
+      roomView.classList.remove('hidden');
+      headerBackBtn.style.display = 'flex';
+
+      // Check membership
+      const cRef = doc(db, "communities", communityId);
+      const cSnap = await getDoc(cRef);
+      const members = cSnap.exists() ? (cSnap.data().members || []) : [];
+      isMember = members.includes(currentUser.uid);
+
+      // UI manage
+      setChatMode(isMember);
+      memberBadge.textContent = `${members.length} members`;
+      membersCount.textContent = members.length;
+
+      // Listen to messages (read-only for everyone)
+      listenMessages(communityId);
+
+      // Load members list
+      listenMembers(communityId);
+
+      // Presence: only attach if member and viewing this room
+      attachPresenceIfMember();
+    };
+
+    function setChatMode(member){
+      if (member){
+        joinBtn.classList.add('hidden');
+        composerRow.classList.remove('hidden');
+        nonMemberHint.classList.add('hidden');
+        sendBtn.disabled = false;
+        messageInput.disabled = false;
+      } else {
+        joinBtn.classList.remove('hidden');
+        composerRow.classList.add('hidden');
+        nonMemberHint.classList.remove('hidden');
+        sendBtn.disabled = true;
+        messageInput.disabled = true;
+      }
+    }
+
+    /********** Join community (required to chat & to be online) **********/
+    joinBtn.addEventListener('click', async () => {
+      if (!currentUser || !currentCommunity) return;
+      try{
+        const cRef = doc(db, "communities", currentCommunity);
+        await setDoc(cRef, { members: arrayUnion(currentUser.uid) }, { merge:true });
+        isMember = true;
+        setChatMode(true);
+        updateCounts();
+        // re-attach presence now that user is member
+        attachPresenceIfMember();
+      }catch(e){
+        alert("Failed to join. Try again.");
+        console.error(e);
+      }
+    });
+
+    /********** Exit community (removes from backend & presence) **********/
+    exitBtn.addEventListener('click', async () => {
+      if (!currentUser || !currentCommunity) return;
+      if (!confirm("Are you sure you want to exit this community?")) return;
+
+      try{
+        const cRef = doc(db, "communities", currentCommunity);
+        await updateDoc(cRef, { members: arrayRemove(currentUser.uid) });
+        // remove presence entry
+        await remove(ref(rtdb, `presence/${currentCommunity}/${currentUser.uid}`)).catch(()=>{});
+        isMember = false;
+
+        // After exit, go back to chooser
+        goBackToHome();
+        updateCounts();
+        alert("You left the community.");
+      }catch(e){
+        alert("Failed to exit. Try again.");
+        console.error(e);
+      }
+    });
+
+    /********** Messages **********/
+    async function sendMessage(){
+      if (!currentUser || !currentCommunity) return;
+      if (!isMember){
+        alert("Join this community to send messages.");
+        return;
+      }
+      const text = messageInput.value.trim();
+      if (!text) return;
+
+      try{
+        const messageData = {
+          userId: currentUser.uid,
+          username: currentUsername || currentUser.email,
+          message: text,
+          timestamp: serverTimestamp()
+        };
+        
+        // Check if this is a reply to another message
+        const replyingTo = sessionStorage.getItem('replyingTo');
+        if (replyingTo) {
+          messageData.replyingTo = replyingTo;
+          sessionStorage.removeItem('replyingTo');
+        }
+        
+        await addDoc(collection(db, "communities", currentCommunity, "messages"), messageData);
+        messageInput.value = "";
+      }catch(e){
+        console.error(e);
+        alert("Error sending message.");
+      }
+    }
+    
+    sendBtn.addEventListener('click', sendMessage);
+    messageInput.addEventListener('keydown', (e)=>{ if(e.key==='Enter') sendMessage(); });
+
+    clearBtn.addEventListener('click', () => {
+      if (!currentCommunity) return;
+      
+      if (confirm("Clear chat history for yourself only? Other members will still see all messages.")) {
+        // Store cleared state for this community
+        clearedChats[currentCommunity] = new Date().toISOString();
+        localStorage.setItem('clearedChats', JSON.stringify(clearedChats));
+        
+        // Clear messages from view
+        messagesDiv.innerHTML = "";
+        
+        // Add a note that chat was cleared
+        const note = document.createElement('div');
+        note.className = 'hint';
+        note.textContent = 'You cleared the chat history. Others can still see all messages.';
+        messagesDiv.appendChild(note);
+      }
+    });
+
+    function listenMessages(communityId){
+      // Hide back button when viewing regular messages
+      if (document.getElementById('messagesBackBtn')) {
+        document.getElementById('messagesBackBtn').style.display = 'none';
+      }
+      
+      if (messagesUnsub) messagesUnsub();
+      const qy = query(collection(db, "communities", communityId, "messages"), orderBy("timestamp","asc"));
+      messagesUnsub = onSnapshot(qy, (snap)=>{
+        messagesDiv.innerHTML = "";
+        
+        // Check if user cleared this chat
+        const clearedAt = clearedChats[communityId] ? new Date(clearedChats[communityId]) : null;
+        
+        // Get deleted messages for this user
+        const deletedMessages = JSON.parse(localStorage.getItem('deletedMessages') || '{}');
+        const userDeletedMessages = deletedMessages[communityId] || [];
+        
+        snap.forEach(d=>{
+          const m = d.data();
+          
+          // Skip messages that were sent before the user cleared the chat
+          if (clearedAt && m.timestamp && m.timestamp.toDate() < clearedAt) {
+            return;
+          }
+          
+          // Skip messages that user has deleted for themselves
+          if (userDeletedMessages.includes(d.id)) {
+            return;
+          }
+          
+          const div = document.createElement('div');
+          div.className = 'msg';
+          div.dataset.id = d.id;
+          div.dataset.userId = m.userId;
+          const time = m.timestamp?.toDate ? m.timestamp.toDate().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}) : '';
+
+          // Add reactions if they exist
+          let reactionsHtml = '';
+          if (m.reactions && Object.keys(m.reactions).length > 0) {
+            reactionsHtml = '<div class="reaction-bar">';
+            for (const [emoji, users] of Object.entries(m.reactions)) {
+              const userReacted = users.includes(currentUser.uid);
+              reactionsHtml += `<span class="reaction ${userReacted ? 'user-reacted' : ''}" onclick="quickReact('${d.id}', '${emoji}')">${emoji} ${users.length}</span>`;
+            }
+            reactionsHtml += '</div>';
+          }
+
+          // Check if message is saved by current user
+          const isSaved = m.savedBy && m.savedBy.includes(currentUser.uid);
+
+          // Check if message has answers
+          const hasAnswers = m.answers && m.answers.length > 0;
+
+          // Check if user has liked this message
+          const userLiked = m.reactions && m.reactions['❤️'] && m.reactions['❤️'].includes(currentUser.uid);
+
+          // Action buttons
+          const actionButtons = `
+            <div class="message-actions">
+              <button class="icon-btn ${userLiked ? 'liked' : ''}" onclick="likeMessage('${d.id}')">
+                <svg width="14" height="14" viewBox="0 0 24 24" ${userLiked ? 'fill="#ef4444"' : 'fill="none"'} xmlns="http://www.w3.org/2000/svg" style="margin-right: 4px;">
+                  <path d="M20.84 4.61C20.3292 4.099 19.7228 3.69364 19.0554 3.41708C18.3879 3.14052 17.6725 2.99817 16.95 2.99817C16.2275 2.99817 15.5121 3.14052 14.8446 3.41708C14.1772 3.69364 13.5708 4.099 13.06 4.61L12 5.67L10.94 4.61C9.9083 3.5783 8.50903 2.9987 7.05 2.9987C5.59096 2.9987 4.19169 3.5783 3.16 4.61C2.1283 5.6417 1.54871 7.04097 1.54871 8.5C1.54871 9.95903 2.1283 11.3583 3.16 12.39L4.22 13.45L12 21.23L19.78 13.45L20.84 12.39C21.351 11.8792 21.7563 11.2728 22.0329 10.6053C22.3095 9.93789 22.4518 9.22248 22.4518 8.5C22.4518 7.77752 22.3095 7.06211 22.0329 6.39465C21.7563 5.72719 21.351 5.12076 20.84 4.61V4.61Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                ${userLiked ? 'Liked' : 'Like'}
+              </button>
+              <button class="icon-btn" onclick="showAnswerModal('${d.id}')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 4px;">
+                  <path d="M21 15C21 15.5304 20.7893 16.0391 20.4142 16.4142C20.0391 16.7893 19.5304 17 19 17H7L3 21V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M16 10L20 6L16 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M20 6H10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Answer ${hasAnswers ? `(${m.answers.length})` : ''}
+              </button>
+              <button class="icon-btn ${isSaved ? 'saved' : ''}" onclick="saveMessage('${d.id}')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="${isSaved ? 'currentColor' : 'none'}" xmlns="http://www.w3.org/2000/svg" style="margin-right: 4px;">
+                  <path d="M5 5C5 3.89543 5.89543 3 7 3H17C18.1046 3 19 3.89543 19 5V21L12 17.5L5 21V5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                ${isSaved ? 'Saved' : 'Save'}
+              </button>
+            </div>
+          `;
+
+          // Highlight user's own messages
+          const isOwnMessage = m.userId === currentUser.uid;
+
+          div.innerHTML = `
+            <div class="meta">
+              <span style="font-weight: 600;">${m.username || 'User'}</span>
+              <span>${time}</span>
+            </div>
+            <div>${escapeHtml(m.message || '')}</div>
+            ${reactionsHtml}
+            ${actionButtons}
+          `;
+
+          // Add subtle background for own messages
+          if (isOwnMessage) {
+            div.style.background = 'rgba(79, 70, 229, 0.05)';
+            div.style.borderColor = 'rgba(79, 70, 229, 0.2)';
+          }
+          messagesDiv.appendChild(div);
+        });
+        
+        // Add cleared note if applicable
+        if (clearedAt) {
+          const note = document.createElement('div');
+          note.className = 'hint';
+          note.textContent = 'You cleared previous messages. Others can still see all messages.';
+          messagesDiv.appendChild(note);
+        }
+        
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      });
+    }
+
+    /********** Message Context Menu **********/
+    // Show context menu on right-click
+    document.addEventListener('contextmenu', function(e) {
+      const messageElement = e.target.closest('.msg');
+      if (messageElement) {
+        e.preventDefault();
+        currentMessageId = messageElement.dataset.id;
+        currentMessageUserId = messageElement.dataset.userId;
+        
+        // Position the context menu
+        contextMenu.style.display = 'flex';
+        contextMenu.style.left = e.pageX + 'px';
+        contextMenu.style.top = e.pageY + 'px';
+        
+        // Hide delete for everyone if user doesn't own the message
+        if (currentMessageUserId !== currentUser.uid) {
+          deleteForEveryoneBtn.style.display = 'none';
+        } else {
+          deleteForEveryoneBtn.style.display = 'flex';
+        }
+      }
+    });
+
+    // Hide context menu on click elsewhere
+    document.addEventListener('click', function() {
+      contextMenu.style.display = 'none';
+    });
+
+    // Prevent context menu from closing when clicking on it
+    contextMenu.addEventListener('click', function(e) {
+      e.stopPropagation();
+    });
+
+    // React to message
+    async function reactToMessage(reaction) {
+      if (!currentMessageId || !currentCommunity) return;
+      
+      try {
+        const messageRef = doc(db, "communities", currentCommunity, "messages", currentMessageId);
+        const messageSnap = await getDoc(messageRef);
+        
+        if (messageSnap.exists()) {
+          const messageData = messageSnap.data();
+          const reactions = messageData.reactions || {};
+          
+          // Toggle reaction
+          if (reactions[reaction] && reactions[reaction].includes(currentUser.uid)) {
+            // Remove reaction
+            const updatedUsers = reactions[reaction].filter(uid => uid !== currentUser.uid);
+            if (updatedUsers.length === 0) {
+              delete reactions[reaction];
+            } else {
+              reactions[reaction] = updatedUsers;
+            }
+          } else {
+            // Add reaction
+            if (!reactions[reaction]) {
+              reactions[reaction] = [];
+            }
+            reactions[reaction].push(currentUser.uid);
+          }
+          
+          // Update message with new reactions
+          await updateDoc(messageRef, { reactions });
+        }
+      } catch (error) {
+        console.error("Error reacting to message:", error);
+      }
+      
+      contextMenu.style.display = 'none';
+    }
+
+    // Delete message for me only
+    async function deleteMessageForMe() {
+      if (!currentMessageId || !currentCommunity) return;
+      
+      try {
+        // Store deleted message ID in localStorage
+        const deletedMessages = JSON.parse(localStorage.getItem('deletedMessages') || '{}');
+        if (!deletedMessages[currentCommunity]) {
+          deletedMessages[currentCommunity] = [];
+        }
+        deletedMessages[currentCommunity].push(currentMessageId);
+        localStorage.setItem('deletedMessages', JSON.stringify(deletedMessages));
+        
+        // Remove message from view
+        const messageElement = document.querySelector(`.msg[data-id="${currentMessageId}"]`);
+        if (messageElement) {
+          messageElement.remove();
+        }
+      } catch (error) {
+        console.error("Error deleting message for me:", error);
+      }
+      
+      contextMenu.style.display = 'none';
+    }
+
+    // Delete message for everyone
+    async function deleteMessageForEveryone() {
+      if (!currentMessageId || !currentCommunity) return;
+      
+      if (confirm("Are you sure you want to delete this message for everyone?")) {
+        try {
+          const messageRef = doc(db, "communities", currentCommunity, "messages", currentMessageId);
+          await deleteDoc(messageRef);
+        } catch (error) {
+          console.error("Error deleting message for everyone:", error);
+        }
+      }
+      
+      contextMenu.style.display = 'none';
+    }
+
+    // Copy message text
+    function copyMessageText() {
+      if (!currentMessageId) return;
+      
+      const messageElement = document.querySelector(`.msg[data-id="${currentMessageId}"]`);
+      if (messageElement) {
+        const messageText = messageElement.querySelector('div:last-child').textContent;
+        navigator.clipboard.writeText(messageText).then(() => {
+          // Show copied feedback (you could add a toast notification here)
+        });
+      }
+      
+      contextMenu.style.display = 'none';
+    }
+
+    // Quick react function for clicking on existing reactions
+    async function quickReact(messageId, emoji) {
+      if (!currentCommunity) return;
+      
+      try {
+        const messageRef = doc(db, "communities", currentCommunity, "messages", messageId);
+        const messageSnap = await getDoc(messageRef);
+        
+        if (messageSnap.exists()) {
+          const messageData = messageSnap.data();
+          const reactions = messageData.reactions || {};
+          
+          // Toggle reaction
+          if (reactions[emoji] && reactions[emoji].includes(currentUser.uid)) {
+            // Remove reaction
+            const updatedUsers = reactions[emoji].filter(uid => uid !== currentUser.uid);
+            if (updatedUsers.length === 0) {
+              delete reactions[emoji];
+            } else {
+              reactions[emoji] = updatedUsers;
+            }
+          } else {
+            // Add reaction
+            if (!reactions[emoji]) {
+              reactions[emoji] = [];
+            }
+            reactions[emoji].push(currentUser.uid);
+          }
+          
+          // Update message with new reactions
+          await updateDoc(messageRef, { reactions });
+        }
+      } catch (error) {
+        console.error("Error with quick reaction:", error);
+      }
+    }
+
+    /********** Like Functionality **********/
+    // Like message function
+    async function likeMessage(messageId) {
+      if (!currentCommunity) return;
+      
+      try {
+        const messageRef = doc(db, "communities", currentCommunity, "messages", messageId);
+        const messageSnap = await getDoc(messageRef);
+        
+        if (messageSnap.exists()) {
+          const messageData = messageSnap.data();
+          const reactions = messageData.reactions || {};
+          const heartReaction = '❤️';
+          
+          // Toggle heart reaction
+          if (reactions[heartReaction] && reactions[heartReaction].includes(currentUser.uid)) {
+            // Remove reaction
+            const updatedUsers = reactions[heartReaction].filter(uid => uid !== currentUser.uid);
+            if (updatedUsers.length === 0) {
+              delete reactions[heartReaction];
+            } else {
+              reactions[heartReaction] = updatedUsers;
+            }
+          } else {
+            // Add reaction
+            if (!reactions[heartReaction]) {
+              reactions[heartReaction] = [];
+            }
+            reactions[heartReaction].push(currentUser.uid);
+          }
+          
+          // Update message with new reactions
+          await updateDoc(messageRef, { reactions });
+        }
+      } catch (error) {
+        console.error("Error liking message:", error);
+      }
+    }
+
+    /********** Saved Messages & My Discussions **********/
+    // Save message function
+    async function saveMessage(messageId) {
+      if (!currentUser || !currentCommunity) return;
+      
+      try {
+        const messageRef = doc(db, "communities", currentCommunity, "messages", messageId);
+        const messageSnap = await getDoc(messageRef);
+        
+        if (messageSnap.exists()) {
+          const messageData = messageSnap.data();
+          const savedBy = messageData.savedBy || [];
+          
+          // Toggle save status
+          if (savedBy.includes(currentUser.uid)) {
+            // Remove from saved
+            await updateDoc(messageRef, {
+              savedBy: arrayRemove(currentUser.uid)
+            });
+            
+            // Remove from user's saved messages collection
+            await deleteDoc(doc(db, "users", currentUser.uid, "savedMessages", messageId));
+          } else {
+            // Add to saved
+            await updateDoc(messageRef, {
+              savedBy: arrayUnion(currentUser.uid)
+            });
+            
+            // Also save to user's saved messages collection
+            await setDoc(doc(db, "users", currentUser.uid, "savedMessages", messageId), {
+              communityId: currentCommunity,
+              messageId: messageId,
+              timestamp: serverTimestamp(),
+              messageText: messageData.message, // Store message text for display
+              username: messageData.username // Store username for display
+            });
+          }
+          
+          // Refresh the messages to update the save button state
+          if (messagesUnsub) {
+            messagesUnsub();
+            listenMessages(currentCommunity);
+          }
+        }
+      } catch (error) {
+        console.error("Error saving message:", error);
+      }
+    }
+
+    // Show saved messages
+    async function showSavedMessages() {
+      if (!currentUser) return;
+      
+      try {
+        // Add back button
+        addBackButtonToMessagesView();
+        document.getElementById('messagesBackBtn').style.display = 'flex';
+        
+        // Clear current view
+        messagesDiv.innerHTML = '';
+        
+        // Get saved messages
+        const savedMessagesRef = collection(db, "users", currentUser.uid, "savedMessages");
+        const savedMessagesSnap = await getDocs(query(savedMessagesRef, orderBy("timestamp", "desc")));
+        
+        if (savedMessagesSnap.empty) {
+          messagesDiv.innerHTML = '<div class="hint">You haven\'t saved any messages yet.</div>';
+          return;
+        }
+        
+        // Fetch and display each saved message
+        for (const docSnap of savedMessagesSnap.docs) {
+          const savedData = docSnap.data();
+          const messageRef = doc(db, "communities", savedData.communityId, "messages", savedData.messageId);
+          const messageSnap = await getDoc(messageRef);
+          
+          if (messageSnap.exists()) {
+            const m = messageSnap.data();
+            const time = m.timestamp?.toDate ? m.timestamp.toDate().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}) : '';
+            
+            const div = document.createElement('div');
+            div.className = 'msg';
+            div.innerHTML = `
+              <div class="meta">
+                <span style="font-weight: 600;">${m.username || 'User'}</span>
+                <span>${time}</span>
+                <span class="badge">#${savedData.communityId}</span>
+              </div>
+              <div>${escapeHtml(m.message || '')}</div>
+              <div class="message-actions" style="display: flex; gap: 8px; margin-top: 8px;">
+                <button class="icon-btn" onclick="openCommunity('${savedData.communityId}')">
+                  Go to Community
+                </button>
+                <button class="icon-btn" onclick="unsaveMessage('${savedData.messageId}', '${savedData.communityId}')">
+                  Remove
+                </button>
+              </div>
+            `;
+            
+            messagesDiv.appendChild(div);
+          }
+        }
+      } catch (error) {
+        console.error("Error loading saved messages:", error);
+        messagesDiv.innerHTML = '<div class="hint">Error loading saved messages.</div>';
+      }
+    }
+
+    // Unsave message
+    async function unsaveMessage(messageId, communityId) {
+      if (!currentUser) return;
+      
+      try {
+        // Remove from message's savedBy array
+        const messageRef = doc(db, "communities", communityId, "messages", messageId);
+        await updateDoc(messageRef, {
+          savedBy: arrayRemove(currentUser.uid)
+        });
+        
+        // Remove from user's saved messages
+        await deleteDoc(doc(db, "users", currentUser.uid, "savedMessages", messageId));
+        
+        // Refresh the view
+        showSavedMessages();
+      } catch (error) {
+        console.error("Error unsaving message:", error);
+      }
+    }
+
+    // Show my discussions
+    async function showMyDiscussions() {
+      if (!currentUser) return;
+      
+      try {
+        // Add back button
+        addBackButtonToMessagesView();
+        document.getElementById('messagesBackBtn').style.display = 'flex';
+        
+        // Clear current view
+        messagesDiv.innerHTML = '';
+        
+        // Get all communities the user is a member of
+        const userCommunities = [];
+        const communitiesSnap = await getDocs(collection(db, "communities"));
+        
+        for (const docSnap of communitiesSnap.docs) {
+          const communityData = docSnap.data();
+          if (communityData.members && communityData.members.includes(currentUser.uid)) {
+            userCommunities.push(docSnap.id);
+          }
+        }
+        
+        if (userCommunities.length === 0) {
+          messagesDiv.innerHTML = '<div class="hint">You\'re not a member of any communities yet.</div>';
+          return;
+        }
+        
+        // Get all messages from user's communities where user is the author OR has answered
+        let userMessages = [];
+        let userAnswers = [];
+        
+        for (const communityId of userCommunities) {
+          try {
+            // Get messages where user is the author
+            const messagesRef = collection(db, "communities", communityId, "messages");
+            const messagesSnap = await getDocs(query(messagesRef, where("userId", "==", currentUser.uid), orderBy("timestamp", "desc")));
+            
+            messagesSnap.forEach(docSnap => {
+              userMessages.push({
+                id: docSnap.id,
+                communityId: communityId,
+                type: 'message',
+                ...docSnap.data()
+              });
+            });
+            
+            // Get messages where user has answered
+            const allMessagesSnap = await getDocs(query(messagesRef, orderBy("timestamp", "desc")));
+            
+            allMessagesSnap.forEach(docSnap => {
+              const messageData = docSnap.data();
+              if (messageData.answers) {
+                const userAnswer = messageData.answers.find(answer => answer.userId === currentUser.uid);
+                if (userAnswer) {
+                  userAnswers.push({
+                    id: docSnap.id,
+                    communityId: communityId,
+                    type: 'answer',
+                    question: messageData.message,
+                    questionAuthor: messageData.username,
+                    answer: userAnswer,
+                    timestamp: userAnswer.timestamp
+                  });
+                }
+              }
+            });
+          } catch (error) {
+            console.error("Error loading messages from community:", communityId, error);
+          }
+        }
+        
+        if (userMessages.length === 0 && userAnswers.length === 0) {
+          messagesDiv.innerHTML = '<div class="hint">You haven\'t posted any messages or answers yet.</div>';
+          return;
+        }
+        
+        // Combine and sort by timestamp (newest first)
+        const allItems = [...userMessages, ...userAnswers];
+        allItems.sort((a, b) => {
+          const aTime = a.timestamp?.toDate ? a.timestamp.toDate().getTime() : 0;
+          const bTime = b.timestamp?.toDate ? b.timestamp.toDate().getTime() : 0;
+          return bTime - aTime;
+        });
+        
+        // Display user's messages and answers
+        allItems.forEach(item => {
+          if (item.type === 'message') {
+            const time = item.timestamp?.toDate ? item.timestamp.toDate().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}) : '';
+            
+            // Check if this message has answers
+            const hasAnswers = item.answers && item.answers.length > 0;
+            
+            const div = document.createElement('div');
+            div.className = 'msg';
+            div.innerHTML = `
+              <div class="meta">
+                <span style="font-weight: 600;">You</span>
+                <span>${time}</span>
+                <span class="badge">#${item.communityId}</span>
+                <span class="badge" style="background: #e0e7ff; color: var(--primary);">Your Question</span>
+              </div>
+              <div>${escapeHtml(item.message || '')}</div>
+              <div class="message-actions">
+                <button class="icon-btn" onclick="openCommunity('${item.communityId}')">
+                  Go to Community
+                </button>
+                ${hasAnswers ? `<button class="icon-btn" onclick="showAnswersInMyDiscussion('${item.id}', '${item.communityId}')">
+                  View Answers (${item.answers.length})
+                </button>` : ''}
+              </div>
+              <div id="answers-${item.id}" class="answers-section" style="display: none;">
+                <!-- Answers will be populated here when clicked -->
+              </div>
+            `;
+            
+            messagesDiv.appendChild(div);
+          } else if (item.type === 'answer') {
+            const time = item.answer.timestamp?.toDate ? item.answer.timestamp.toDate().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}) : '';
+            
+            const div = document.createElement('div');
+            div.className = 'msg';
+            div.innerHTML = `
+              <div class="meta">
+                <span style="font-weight: 600;">You</span>
+                <span>${time}</span>
+                <span class="badge">#${item.communityId}</span>
+                <span class="badge" style="background: #d1fae5; color: var(--success);">Your Answer</span>
+              </div>
+              <div style="font-size: 14px; color: #6b7280; margin-bottom: 8px;">
+                In response to <strong>${escapeHtml(item.questionAuthor)}'s</strong> question:
+              </div>
+              <div style="background: #f9fafb; padding: 8px; border-radius: 8px; margin-bottom: 8px; border-left: 3px solid var(--primary);">
+                ${escapeHtml(item.question || '')}
+              </div>
+              <div><strong>Your answer:</strong> ${escapeHtml(item.answer.message || '')}</div>
+              <div class="message-actions">
+                <button class="icon-btn" onclick="openCommunity('${item.communityId}')">
+                  Go to Community
+                </button>
+              </div>
+            `;
+            
+            messagesDiv.appendChild(div);
+          }
+        });
+      } catch (error) {
+        console.error("Error loading user discussions:", error);
+        messagesDiv.innerHTML = '<div class="hint">Error loading your discussions.</div>';
+      }
+    }
+
+    // Show answers in My Discussion view
+    async function showAnswersInMyDiscussion(messageId, communityId) {
+      const answersSection = document.getElementById(`answers-${messageId}`);
+      
+      // Toggle visibility
+      if (answersSection.style.display === 'none') {
+        // Load answers if not already loaded
+        if (answersSection.innerHTML === '') {
+          try {
+            const messageRef = doc(db, "communities", communityId, "messages", messageId);
+            const messageSnap = await getDoc(messageRef);
+            
+            if (messageSnap.exists()) {
+              const messageData = messageSnap.data();
+              const answers = messageData.answers || [];
+              
+              if (answers.length === 0) {
+                answersSection.innerHTML = '<div class="hint" style="padding: 8px; text-align: center;">No answers yet</div>';
+              } else {
+                answers.forEach(answer => {
+                  const time = answer.timestamp?.toDate ? answer.timestamp.toDate().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}) : '';
+                  
+                  const answerElement = document.createElement('div');
+                  answerElement.className = 'answer';
+                  answerElement.innerHTML = `
+                    <div style="font-size: 12px; color: #6b7280;">
+                      <strong>${answer.username}</strong> • ${time}
+                    </div>
+                    <div>${escapeHtml(answer.message || '')}</div>
+                  `;
+                  
+                  answersSection.appendChild(answerElement);
+                });
+              }
+            }
+          } catch (error) {
+            console.error("Error loading answers:", error);
+            answersSection.innerHTML = '<div class="hint" style="padding: 8px; text-align: center;">Error loading answers</div>';
+          }
+        }
+        
+        answersSection.style.display = 'block';
+      } else {
+        answersSection.style.display = 'none';
+      }
+    }
+
+    /********** Members & Presence **********/
+    function listenMembers(communityId){
+  // Firestore members list
+  if (membersUnsub) membersUnsub();
+  membersUnsub = onSnapshot(doc(db, "communities", communityId), async (snap)=>{
+    const ids = snap.exists() ? (snap.data().members || []) : [];
+    memberBadge.textContent = `${ids.length} members`;
+    membersCount.textContent = ids.length;
+    
+    // Don't populate the members list in the left panel anymore
+    // We'll only show online members there
+    membersList.innerHTML = "";
+  });
+
+  // RTDB presence for this community - keep this as is
+  if (presenceUnsub) presenceUnsub();
+  presenceUnsub = onValue(ref(rtdb, `presence/${communityId}`), (snap)=>{
+    onlineList.innerHTML = "";
+    const val = snap.val() || {};
+    let onlineCounter = 0;
+    
+    // val = { uid: { state:'online'|'offline', last_changed, username } }
+    Object.entries(val).forEach(([uid, p])=>{
+      if (p && p.state === 'online'){
+        onlineCounter++;
+        const row = document.createElement('div');
+        row.className = 'item';
+        row.innerHTML = `<span>${escapeHtml(p.username || uid)}</span><span class="online">●</span>`;
+        onlineList.appendChild(row);
+      }
+    });
+    
+    onlineCount.textContent = onlineCounter;
+  });
+}
+    // Attach presence only if user is a member AND currently viewing the community
+    async function attachPresenceIfMember(){
+      if (!currentUser || !currentCommunity) return;
+      if (!isMember) return;
+
+      const myPresenceRef = ref(rtdb, `presence/${currentCommunity}/${currentUser.uid}`);
+      // Set online
+      await set(myPresenceRef, {
+        state: 'online',
+        username: currentUsername || currentUser.email.split('@')[0],
+        last_changed: rtdbServerTimestamp()
+      }).catch(()=>{});
+
+      // Ensure offline on disconnect
+      onDisconnect(myPresenceRef).set({
+        state: 'offline',
+        username: currentUsername || currentUser.email.split('@')[0],
+        last_changed: rtdbServerTimestamp()
+      });
+
+      // Also react to tab visibility/network
+      window.addEventListener('beforeunload', () => {
+        // best-effort; onDisconnect covers most cases
+      });
+      document.addEventListener('visibilitychange', async () => {
+        if (!currentCommunity || !isMember) return;
+        if (document.visibilityState === 'visible'){
+          await set(myPresenceRef, {
+            state:'online',
+            username: currentUsername || currentUser.email.split('@')[0],
+            last_changed: rtdbServerTimestamp()
+          }).catch(()=>{});
+        } else {
+          await set(myPresenceRef, {
+            state:'offline',
+            username: currentUsername || currentUser.email.split('@')[0],
+            last_changed: rtdbServerTimestamp()
+          }).catch(()=>{});
+        }
+      });
+      window.addEventListener('online', async ()=>{
+        if (!currentCommunity || !isMember) return;
+        await set(myPresenceRef, { state:'online', username: currentUsername || currentUser.email.split('@')[0], last_changed: rtdbServerTimestamp() }).catch(()=>{});
+      });
+      window.addEventListener('offline', async ()=>{
+        if (!currentCommunity || !isMember) return;
+        await set(myPresenceRef, { state:'offline', username: currentUsername || currentUser.email.split('@')[0], last_changed: rtdbServerTimestamp() }).catch(()=>{});
+      });
+    }
+
+    /********** Utilities **********/
+    function stopListeners(){
+      if (messagesUnsub) { messagesUnsub(); messagesUnsub = null; }
+      if (membersUnsub) { membersUnsub(); membersUnsub = null; }
+      if (presenceUnsub) { presenceUnsub(); presenceUnsub = null; }
+    }
+    
+    function clearLists(){
+      membersList.innerHTML = "";
+      onlineList.innerHTML = "";
+    }
+    
+    function escapeHtml(str){
+      return String(str).replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
+    }
+    
+    // Function to add back button to messages view
+    function addBackButtonToMessagesView() {
+      // Create back button if it doesn't exist
+      if (!document.getElementById('messagesBackBtn')) {
+        const backButton = document.createElement('button');
+        backButton.id = 'messagesBackBtn';
+        backButton.className = 'back-btn';
+        backButton.innerHTML = `
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Back to Chat
+        `;
+        backButton.style.marginBottom = '16px';
+        backButton.style.display = 'none';
+        backButton.onclick = () => {
+          // Clear messages and re-listen to current community
+          messagesDiv.innerHTML = '';
+          if (currentCommunity) {
+            listenMessages(currentCommunity);
+          }
+          backButton.style.display = 'none';
+        };
+        
+        // Insert back button at the top of messages div
+        messagesDiv.parentNode.insertBefore(backButton, messagesDiv);
+      }
+    }
+
+    /********** Global Function Declarations **********/
+    window.saveMessage = saveMessage;
+    window.likeMessage = likeMessage;
+    window.showAnswerModal = showAnswerModal;
+    window.hideAnswerModal = hideAnswerModal;
+    window.showSavedMessages = showSavedMessages;
+    window.showMyDiscussions = showMyDiscussions;
+    window.unsaveMessage = unsaveMessage;
+    window.showAnswersInMyDiscussion = showAnswersInMyDiscussion;
+    window.showAllMembers = showAllMembers;
+    window.hideAllMembers = hideAllMembers;
+    window.reactToMessage = reactToMessage;
+    window.deleteMessageForMe = deleteMessageForMe;
+    window.deleteMessageForEveryone = deleteMessageForEveryone;
+    window.copyMessageText = copyMessageText;
+    window.quickReact = quickReact;
+    
+    /********** OPTIONAL: Auto-open last room via URL ?room=general **********/
+    const params = new URLSearchParams(window.location.search);
+    const pre = params.get('room');
+    if (pre) {
+      // Wait a tick for auth, then open
+      const tryOpen = setInterval(()=>{
+        if (currentUser){ clearInterval(tryOpen); openCommunity(pre); }
+      }, 200);
+    }
+
+    // Add this to your existing JavaScript code
+
+// Toggle sidebar function
+function toggleSidebar() {
+  const leftPanel = document.querySelector('.room .panel:first-child');
+  leftPanel.classList.toggle('collapsed');
+  
+  // Update the toggle icon
+  const icon = sidebarToggle.querySelector('svg');
+  if (leftPanel.classList.contains('collapsed')) {
+    icon.innerHTML = '<path d="M4 6H20M4 12H20M4 18H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>';
+  } else {
+    icon.innerHTML = '<path d="M6 18L18 6M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>';
+  }
+  
+  // Store sidebar state
+  localStorage.setItem('sidebarCollapsed', leftPanel.classList.contains('collapsed'));
+}
+
+// Add event listener to the sidebar toggle button
+sidebarToggle.addEventListener('click', toggleSidebar);
+
+// Check saved sidebar state on page load
+document.addEventListener('DOMContentLoaded', function() {
+  const savedState = localStorage.getItem('sidebarCollapsed');
+  if (savedState === 'true') {
+    const leftPanel = document.querySelector('.room .panel:first-child');
+    leftPanel.classList.add('collapsed');
+    
+    // Update the toggle icon
+    const icon = sidebarToggle.querySelector('svg');
+    icon.innerHTML = '<path d="M4 6H20M4 12H20M4 18H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>';
+  }
+});
+  </script>
+</body>
+</html>

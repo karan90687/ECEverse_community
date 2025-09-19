@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ECEverse - Community</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #3a7bd5;
+      --primary-hover: #2d69c1;
+      --secondary-color: #f0f5ff;
+      --text-primary: #2d3748;
+      --text-secondary: #6b7280;
+      --border-color: #e1e5ee;
+      --success-color: #10b981;
+      --danger-color: #ef4444;
+      --sidebar-bg: #2f3136;
+      --sidebar-text: #8e9297;
+    }
+    
+    body { 
+      font-family: 'Inter', sans-serif; 
+      background-color: #f5f7fa;
+      padding-top: 20px;
+      padding-bottom: 20px;
+    }
+    .container { 
+      background: white; 
+      border-radius: 12px; 
+      padding: 2rem; 
+      border: 1px solid var(--border-color); 
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      max-width: 1200px;
+    }
+    h2 { 
+      color: var(--primary-color); 
+      font-weight: 600; 
+      margin-bottom: 1.5rem; 
+    }
+    .btn-primary { 
+      background-color: var(--primary-color); 
+      border: none; 
+      padding: 10px 20px; 
+      border-radius: 8px; 
+      font-weight: 500;
+    }
+    .btn-primary:hover {
+      background-color: var(--primary-hover);
+    }
+    .community-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .message {
+      margin-bottom: 15px;
+      padding: 10px 15px;
+      border-radius: 8px;
+      background-color: white;
+      border: 1px solid var(--border-color);
+    }
+    .message-username {
+      font-weight: 500;
+      color: var(--primary-color);
+      margin-bottom: 5px;
+    }
+    .message-time {
+      font-size: 0.75rem;
+      color: #8C8CA1;
+      text-align: right;
+    }
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      background-color: var(--primary-color);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+    }
+    
+    /* Community Page Styles */
+    .community-container {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: white;
+      z-index: 1000;
+      overflow-y: auto;
+    }
+    .community-sidebar {
+      background-color: var(--sidebar-bg);
+      color: white;
+      height: 100vh;
+      padding: 20px 0;
+      position: fixed;
+      width: 240px;
+      overflow-y: auto;
+    }
+    .community-content {
+      margin-left: 240px;
+      padding: 20px;
+      width: calc(100% - 240px);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .community-title {
+      color: white;
+      padding: 0 20px;
+      margin-bottom: 20px;
+      font-size: 1.2rem;
+    }
+    .channel-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .channel-item {
+      padding: 8px 20px;
+      cursor: pointer;
+      color: var(--sidebar-text);
+      transition: all 0.2s;
+    }
+    .channel-item:hover {
+      background-color: #36393f;
+      color: white;
+    }
+    .channel-item.active {
+      background-color: #42464d;
+      color: white;
+    }
+    .member-list {
+      list-style: none;
+      padding: 0;
+      margin-top: 20px;
+    }
+    .member-item {
+      padding: 8px 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--sidebar-text);
+    }
+    .member-avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background-color: #7289da;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 0.8rem;
+    }
+    .community-topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      border-bottom: 1px solid var(--border-color);
+      background: white;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .community-name {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .exit-community {
+      background-color: var(--danger-color);
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .chat-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 20px 0;
+    }
+    #messages {
+      flex: 1;
+      border: 1px solid var(--border-color);
+      overflow-y: scroll;
+      padding: 15px;
+      border-radius: 8px;
+      background-color: #f9fafb;
+      margin-bottom: 15px;
+    }
+    .message-input-container {
+      display: flex;
+      gap: 10px;
+    }
+    #messageInput {
+      flex: 1;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 12px;
+      outline: none;
+    }
+    #sendBtn {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 0 20px;
+      cursor: pointer;
+    }
+    .online-status {
+      width: 10px;
+      height: 10px;
+      background-color: var(--success-color);
+      border-radius: 50%;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      border: 2px solid white;
+    }
+    .community-card {
+      margin-bottom: 20px;
+    }
+    .community-card .card {
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+    .community-card .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    /* Toggle button */
+.toggle-btn {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  z-index: 1001;
+  transition: background 0.3s;
+}
+
+.toggle-btn:hover {
+  background: var(--secondary);
+}
+
+/* Sidebar transition */
+.community-sidebar {
+  transition: transform 0.3s ease;
+}
+
+/* Hidden state */
+.community-sidebar.hidden {
+  transform: translateX(-250px); /* move sidebar inside */
+}
+.join-btn {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.3s;
+}
+
+.join-btn:hover {
+  background: var(--primary-dark, #0056b3);
+}
+
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Community Header -->
+    <div class="community-header">
+      <h2>ECEverse Communities</h2>
+      <div>
+        <span id="userEmail" style="margin-right: 15px; color: #6b7280;"></span>
+        <button id="logoutBtn" class="btn btn-primary">Logout</button>
+      </div>
+    </div>
+
+    <!-- User Info -->
+    <div class="user-info">
+      <div class="user-avatar" id="userAvatar">U</div>
+      <div>
+        <div>Welcome, <span id="usernameDisplay"></span></div>
+        <small style="color: #6b7280;">Select a community to start chatting</small>
+      </div>
+    </div>
+
+    <!-- Communities Selection -->
+    <div class="row">
+      <div class="col-md-6">
+        <div class="community-card">
+         <div class="card" onclick="openCommunity('general')" style="cursor: pointer;">
+  <div class="card-body">
+    <h5 class="card-title">General Community</h5>
+    <p class="card-text">Discuss general topics and announcements</p>
+    <div class="d-flex justify-content-between align-items-center">
+      <span class="text-muted"><span id="generalMemberCount">0</span> members</span>
+    </div>
+  </div>
+</div>
+
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="community-card">
+          <div class="card" onclick="openCommunity('industry')" style="cursor: pointer;">
+  <div class="card-body">
+    <h5 class="card-title">Industry Community</h5>
+    <p class="card-text">Share industry insights and opportunities</p>
+    <div class="d-flex justify-content-between align-items-center">
+      <span class="text-muted"><span id="industryMemberCount">0</span> members</span>
+    </div>
+  </div>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Join Community Modal -->
+    <div class="modal fade" id="joinCommunityModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Join <span id="modalCommunityName"></span></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>By joining this community, you agree to follow our community guidelines.</p>
+            <p>You'll be able to participate in discussions and connect with other members.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary" id="confirmJoinBtn">Join Community</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Community Page (initially hidden) -->
+  <div id="communityPage" class="community-container">
+    <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
+
+    <div class="community-sidebar">
+      <h3 class="community-title" id="sidebarCommunityName">General Community</h3>
+      
+      <ul class="channel-list">
+  <li class="channel-item active"><i class="fas fa-home me-2"></i> Home</li>
+  <li class="channel-item"><i class="fas fa-comments me-2"></i> My Discussions</li>
+  <li class="channel-item"><i class="fas fa-bookmark me-2"></i> Saved Posts</li>
+  <li class="channel-item"><i class="fas fa-users me-2"></i> Members</li>
+</ul>
+
+      
+      <div id="onlineMembersSection" style="display: none;">
+        <div style="padding: 20px; color: #8e9297; font-size: 0.9rem; margin-top: 20px;">
+          ONLINE MEMBERS — <span id="onlineCount">0</span>
+        </div>
+        
+        <ul class="member-list" id="communityMemberList">
+          <!-- Online members will be populated here -->
+        </ul>
+      </div>
+    </div>
+    
+    <div class="community-content">
+      <div class="community-topbar">
+        <div>
+          <button class="btn btn-sm btn-outline-secondary me-2" onclick="goBackToCommunities()">
+            <i class="fas fa-arrow-left me-1"></i> Back to Communities
+          </button>
+          <span class="community-name"># general-chat</span>
+        </div>
+        <div>
+          <button class="btn btn-sm btn-outline-primary me-2" onclick="showAllMembers()">
+            <i class="fas fa-users me-1"></i> View All Members
+          </button>
+          <button class="exit-community" onclick="exitCommunity()">
+            <i class="fas fa-door-open me-1"></i> Exit Community
+          </button>
+        </div>
+      </div>
+      
+      <div class="chat-container">
+        <div id="messages">
+          <!-- Messages will appear here -->
+        </div>
+       <div class="message-input" id="messageInputArea">
+  <!-- Initially show Join button -->
+  <button id="joinBtn" class="join-btn">Join Community</button>
+
+  <!-- Hidden input field (shown after joining) -->
+  <input type="text" id="messageInput" placeholder="Type a message..." style="display: none;">
+  <button id="sendBtn" style="display: none;">Send</button>
+</div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Firebase SDKs -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+    import { 
+      getAuth, 
+      signOut, 
+      onAuthStateChanged 
+    } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+    import { 
+      getFirestore, 
+      collection, 
+      addDoc, 
+      serverTimestamp, 
+      query, 
+      orderBy, 
+      onSnapshot,
+      doc,
+      setDoc,
+      getDoc,
+      updateDoc,
+      arrayRemove,
+      arrayUnion
+    } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+    import { 
+      getDatabase, 
+      ref, 
+      get, 
+      child
+    } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-database.js";
+
+    // Firebase configuration
+    const firebaseConfig = {
+  apiKey: "AIzaSyDvuHF3zAU9XJtoPyxpXDoyF3-FbyznPiE",
+  authDomain: "coreverse-cadd5.firebaseapp.com",
+  databaseURL: "https://coreverse-cadd5-default-rtdb.firebaseio.com",
+  projectId: "coreverse-cadd5",
+  storageBucket: "coreverse-cadd5.firebasestorage.app",
+  messagingSenderId: "484740921978",
+  appId: "1:484740921978:web:e882314214032bfbc2d9c3",
+  measurementId: "G-TJEW9MRPH0"
+};
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const rtdb = getDatabase(app);
+
+    // DOM elements
+    const userEmail = document.getElementById('userEmail');
+    const usernameDisplay = document.getElementById('usernameDisplay');
+    const userAvatar = document.getElementById('userAvatar');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const communityPage = document.getElementById('communityPage');
+    const communityMemberList = document.getElementById('communityMemberList');
+    const sidebarCommunityName = document.getElementById('sidebarCommunityName');
+    const messagesDiv = document.getElementById('messages');
+    const messageInput = document.getElementById('messageInput');
+    const sendBtn = document.getElementById('sendBtn');
+    const onlineCount = document.getElementById('onlineCount');
+
+    // Community management
+    let currentCommunity = null;
+    let unsubscribe = null;
+    let currentUsername = '';
+    let currentUserId = '';
+    let currentUserEmail = '';
+
+    // Auth state listener
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        currentUserId = user.uid;
+        currentUserEmail = user.email;
+        userEmail.textContent = user.email;
+        
+        // Get username from database
+        try {
+          const snapshot = await get(child(ref(rtdb), `users/${user.uid}`));
+          if (snapshot.exists()) {
+            currentUsername = snapshot.val().username;
+            usernameDisplay.textContent = currentUsername;
+            userAvatar.textContent = currentUsername.charAt(0).toUpperCase();
+          } else {
+            usernameDisplay.textContent = user.email;
+            userAvatar.textContent = user.email.charAt(0).toUpperCase();
+          }
+        } catch (error) {
+          console.error("Error getting user data:", error);
+          usernameDisplay.textContent = user.email;
+          userAvatar.textContent = user.email.charAt(0).toUpperCase();
+        }
+        
+        // Load community member counts
+        loadCommunityMembersCount();
+      } else {
+        window.location.href = "login.html";
+      }
+    });
+
+    // Logout button
+    logoutBtn.addEventListener('click', () => {
+      signOut(auth);
+    });
+
+    // Show join community modal
+    window.showJoinCommunity = function(community) {
+      const modal = new bootstrap.Modal(document.getElementById('joinCommunityModal'));
+      document.getElementById('modalCommunityName').textContent = community.charAt(0).toUpperCase() + community.slice(1);
+      
+      // Set up confirm button
+      const confirmBtn = document.getElementById('confirmJoinBtn');
+      confirmBtn.onclick = function() {
+        joinCommunity(community);
+        modal.hide();
+      };
+      
+      modal.show();
+    };
+
+    // Join community function
+    async function joinCommunity(community) {
+      try {
+        const communityRef = doc(db, "communities", community);
+        const communityDoc = await getDoc(communityRef);
+        
+        if (communityDoc.exists()) {
+          const members = communityDoc.data().members || [];
+          if (!members.includes(currentUserId)) {
+            await updateDoc(communityRef, {
+              members: arrayUnion(currentUserId)
+            });
+          }
+        } else {
+          // Create community document if it doesn't exist
+          await setDoc(communityRef, {
+            name: community,
+            members: [currentUserId],
+            createdAt: serverTimestamp()
+          });
+        }
+        
+        // Open the community after joining
+        openCommunity(community);
+        
+      } catch (error) {
+        console.error("Error joining community:", error);
+        alert("Error joining community. Please try again.");
+      }
+    }
+
+    // Open community page
+    window.openCommunity = async (community) => {
+      currentCommunity = community;
+      
+      // Check if user is already a member
+      const communityRef = doc(db, "communities", community);
+      const communityDoc = await getDoc(communityRef);
+      
+      let isMember = false;
+      if (communityDoc.exists()) {
+        const members = communityDoc.data().members || [];
+        isMember = members.includes(currentUserId);
+      }
+      
+      // If not a member, show join modal
+      if (!isMember) {
+        showJoinCommunity(community);
+        return;
+      }
+      
+      // If member, proceed to open community
+      sidebarCommunityName.textContent = community.charAt(0).toUpperCase() + community.slice(1) + " Community";
+      
+      // Show community page
+      document.querySelector('.container').style.display = 'none';
+      communityPage.style.display = 'block';
+      
+      // Load community members
+      loadCommunityMembers();
+      
+      // Start listening to messages
+      listenToMessages();
+    };
+
+    // Load community member counts
+    async function loadCommunityMembersCount() {
+      try {
+        // For General community
+        const generalDoc = await getDoc(doc(db, "communities", "general"));
+        if (generalDoc.exists()) {
+          const members = generalDoc.data().members || [];
+          document.getElementById('generalMemberCount').textContent = members.length;
+        }
+        
+        // For Industry community
+        const industryDoc = await getDoc(doc(db, "communities", "industry"));
+        if (industryDoc.exists()) {
+          const members = industryDoc.data().members || [];
+          document.getElementById('industryMemberCount').textContent = members.length;
+        }
+      } catch (error) {
+        console.error("Error loading community member counts:", error);
+      }
+    }
+
+    // Load community members
+    async function loadCommunityMembers() {
+      try {
+        const communityRef = doc(db, "communities", currentCommunity);
+        const communityDoc = await getDoc(communityRef);
+        
+        if (communityDoc.exists()) {
+          const memberIds = communityDoc.data().members || [];
+          const onlineMembersSection = document.getElementById('onlineMembersSection');
+          const communityMemberList = document.getElementById('communityMemberList');
+          
+          communityMemberList.innerHTML = '';
+          
+          if (memberIds.length === 0) {
+            onlineMembersSection.style.display = 'none';
+            return;
+          }
+          
+          let onlineCount = 0;
+          
+          // Add current user first if they are a member
+          if (memberIds.includes(currentUserId)) {
+            onlineCount++;
+            const currentUserLi = document.createElement('li');
+            currentUserLi.className = 'member-item';
+            currentUserLi.innerHTML = `
+              <div class="position-relative">
+                <div class="member-avatar">${currentUsername.charAt(0).toUpperCase()}</div>
+                <div class="online-status"></div>
+              </div>
+              <div>${currentUsername} (You)</div>
+            `;
+            communityMemberList.appendChild(currentUserLi);
+          }
+          
+          // Fetch details for other members
+          for (const memberId of memberIds) {
+            if (memberId === currentUserId) continue;
+            
+            try {
+              const userSnapshot = await get(child(ref(rtdb), `users/${memberId}`));
+              if (userSnapshot.exists()) {
+                onlineCount++;
+                const userData = userSnapshot.val();
+                const username = userData.username || userData.email.split('@')[0];
+                const avatar = username.charAt(0).toUpperCase();
+                
+                const memberLi = document.createElement('li');
+                memberLi.className = 'member-item';
+                memberLi.innerHTML = `
+                  <div class="position-relative">
+                    <div class="member-avatar">${avatar}</div>
+                    <div class="online-status"></div>
+                  </div>
+                  <div>${username}</div>
+                `;
+                communityMemberList.appendChild(memberLi);
+              }
+            } catch (error) {
+              console.error("Error fetching user data:", error);
+            }
+          }
+          
+          // Update online count and show section if there are members
+          if (onlineCount > 0) {
+            document.getElementById('onlineCount').textContent = onlineCount;
+            onlineMembersSection.style.display = 'block';
+          } else {
+            onlineMembersSection.style.display = 'none';
+          }
+        }
+      } catch (error) {
+        console.error("Error loading community members:", error);
+      }
+    }
+
+    // Listen to messages in the community
+    function listenToMessages() {
+      // Unsubscribe previous listener if any
+      if (unsubscribe) unsubscribe();
+
+      // Listen to messages in this community
+      const q = query(collection(db, "communities", currentCommunity, "messages"), orderBy("timestamp", "asc"));
+      unsubscribe = onSnapshot(q, (snapshot) => {
+        messagesDiv.innerHTML = "";
+        snapshot.forEach(doc => {
+          const msg = doc.data();
+          const messageEl = document.createElement("div");
+          messageEl.className = "message";
+          
+          // Format timestamp
+          let timeString = '';
+          if (msg.timestamp) {
+            const date = msg.timestamp.toDate();
+            timeString = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          }
+          
+          messageEl.innerHTML = `
+            <div class="message-username">${msg.username}</div>
+            <div>${msg.message}</div>
+            <div class="message-time">${timeString}</div>
+          `;
+          messagesDiv.appendChild(messageEl);
+        });
+        // Scroll to bottom
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      });
+    }
+
+    // Send message
+    async function sendMessage() {
+      // Check if user is a member of this community
+      const communityRef = doc(db, "communities", currentCommunity);
+      const communityDoc = await getDoc(communityRef);
+      
+      if (communityDoc.exists()) {
+        const members = communityDoc.data().members || [];
+        if (!members.includes(currentUserId)) {
+          alert("You need to join this community before you can post messages.");
+          return;
+        }
+      }
+      
+      const text = messageInput.value.trim();
+      
+      if (text && currentCommunity) {
+        try {
+          await addDoc(collection(db, "communities", currentCommunity, "messages"), {
+            userId: currentUserId,
+            username: currentUsername || currentUserEmail,
+            message: text,
+            timestamp: serverTimestamp()
+          });
+          messageInput.value = "";
+        } catch (error) {
+          console.error("Error sending message: ", error);
+          alert("Error sending message. Please try again.");
+        }
+      }
+    }
+
+    // Set up send message event listeners
+    sendBtn.addEventListener('click', sendMessage);
+    messageInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        sendMessage();
+      }
+    });
+
+    // Go back to communities list
+    window.goBackToCommunities = function() {
+      // Unsubscribe from messages
+      if (unsubscribe) unsubscribe();
+      
+      communityPage.style.display = 'none';
+      document.querySelector('.container').style.display = 'block';
+    };
+
+    // Show all members modal
+    window.showAllMembers = function() {
+      alert("This would show a modal with all community members.");
+      // Implementation for modal would go here
+    };
+
+    // Exit community
+    window.exitCommunity = async () => {
+      if (confirm("Are you sure you want to exit this community?")) {
+        try {
+          const communityRef = doc(db, "communities", currentCommunity);
+          await updateDoc(communityRef, {
+            members: arrayRemove(currentUserId)
+          });
+          
+          // Also add to exitedUsers collection for tracking
+          await setDoc(doc(db, "exitedUsers", currentUserId + "_" + currentCommunity), {
+            userId: currentUserId,
+            community: currentCommunity,
+            username: currentUsername,
+            email: currentUserEmail,
+            exitedAt: serverTimestamp()
+          });
+          
+          // Return to main page
+          if (unsubscribe) unsubscribe();
+          communityPage.style.display = 'none';
+          document.querySelector('.container').style.display = 'block';
+          
+          alert("You have left the community.");
+        } catch (error) {
+          console.error("Error exiting community:", error);
+          alert("Error exiting community. Please try again.");
+        }
+      }
+    };
+
+    function toggleSidebar() {
+    document.querySelector('.community-sidebar').classList.toggle('hidden');
+  }
+
+  function renderMessageBar(username) {
+  const membersRef = firebase.database().ref("community_members/" + username);
+
+  membersRef.once("value").then((snapshot) => {
+    const container = document.getElementById("messageInputBar");
+    container.innerHTML = ""; // clear old content
+
+    if (snapshot.exists()) {
+      // User is already a member → show normal input
+      container.innerHTML = `
+        <input id="messageInput" type="text" placeholder="Type a message..." />
+        <button id="sendBtn">Send</button>
+      `;
+    } else {
+      // Not a member → show join button
+      container.innerHTML = `
+        <button id="joinBtn" class="join-btn">Join Community</button>
+      `;
+
+      document.getElementById("joinBtn").addEventListener("click", () => {
+        membersRef.set({
+          joinedAt: new Date().toISOString()
+        }).then(() => {
+          renderMessageBar(username); // re-render as input bar
+        });
+      });
+    }
+  });
+}
+
+// Call this after login
+firebase.auth().onAuthStateChanged((user) => {
+  if (user) {
+    renderMessageBar(user.displayName || user.email.split("@")[0]);
+  }
+});
+  </script>
+</body>
+</html> 

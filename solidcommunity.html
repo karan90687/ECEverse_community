@@ -1,0 +1,1667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ECEverse - Community Feed</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-database-compat.js"></script>
+  <style>
+    :root {
+      --primary: #6C63FF;
+      --secondary: #4D44DB;
+      --accent: #FF6584;
+      --light: #F8F9FF;
+      --dark: #2E2E48;
+      --gray: #8C8CA1;
+      --card-bg: #FFFFFF;
+      --section-bg: #F9FAFF;
+      --success: #4ADE80;
+      --danger: #EF4444;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; font-family: 'Inter', sans-serif; }
+    body { background: var(--section-bg); color: var(--dark); display:flex; min-height:100vh; }
+
+    /* Sidebar */
+    .sidebar {
+      width: 250px;
+      background: var(--card-bg);
+      border-right: 1px solid #eee;
+      padding: 1rem;
+      transition: width 0.3s;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .sidebar.collapsed { width: 70px; }
+    .sidebar.collapsed .link-text { display: none; }
+    .sidebar.collapsed .online-members-section { display: none; }
+    .sidebar h2 {
+      font-size: 1.3rem;
+      color: var(--primary);
+      margin-bottom: 1.5rem;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+    }
+    .sidebar h2 i { margin-right: 10px; }
+    .sidebar ul { list-style: none; margin-bottom: 1.5rem; }
+    .sidebar li {
+      margin-bottom: 0.8rem;
+    }
+    .sidebar a {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      color: var(--dark);
+      font-weight: 500;
+      padding: 0.6rem 0.8rem;
+      border-radius: 8px;
+      transition: background 0.3s;
+      white-space: nowrap;
+    }
+    .sidebar a i { margin-right: 0.8rem; color: var(--primary); }
+    .sidebar a:hover { background: var(--light); }
+    .toggle-btn {
+      cursor: pointer;
+      text-align: right;
+      margin-bottom: 1.5rem;
+      font-size: 1.2rem;
+      color: var(--gray);
+    }
+
+    /* Online Members */
+    .online-members-section {
+      margin-top: auto;
+      padding-top: 1.5rem;
+      border-top: 1px solid #eee;
+    }
+    .online-members-section h3 {
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+    }
+    .online-members-section h3 i {
+      margin-right: 8px;
+      color: var(--success);
+    }
+    .online-member {
+      display: flex;
+      align-items: center;
+      padding: 0.5rem;
+      margin-bottom: 0.5rem;
+      border-radius: 6px;
+      background: var(--light);
+    }
+    .online-member i {
+      margin-right: 8px;
+      color: var(--success);
+      font-size: 0.7rem;
+    }
+
+    /* Feed */
+    .feed-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      height: 100vh; /* make container fill screen */
+    }
+    .feed-header {
+      padding: 1.5rem;
+      background: var(--card-bg);
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .feed-header h1 {
+      font-size: 1.6rem;
+      color: var(--dark);
+    }
+    .user-info {
+      display: flex;
+      align-items: center;
+    }
+    .user-email {
+      background: var(--light);
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      color: var(--gray);
+    }
+    .feed-list {
+      flex: 1;
+      padding: 1.5rem;
+      overflow-y: auto; /* only feed scrolls */
+    }
+
+    .feed-item {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      position: relative;
+    }
+    .feed-item h3 {
+      margin-bottom: 0.8rem;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+    }
+    .feed-item h3 .badge {
+      font-size: 0.7rem;
+      background: var(--light);
+      color: var(--primary);
+      padding: 0.2rem 0.5rem;
+      border-radius: 10px;
+      margin-left: 0.5rem;
+    }
+    .message-text { display: block; margin-bottom: 1rem; color: var(--gray); }
+    .message-time {
+      font-size: 0.8rem;
+      color: var(--gray);
+      margin-top: 0.5rem;
+    }
+    .feed-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .feed-actions button {
+      background: var(--light);
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      color: var(--dark);
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+    }
+    .feed-actions button i { margin-right: 0.5rem; }
+    .feed-actions button:hover { background: var(--primary); color: #fff; }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .modal-content {
+      background: var(--card-bg);
+      padding: 2rem;
+      border-radius: 12px;
+      width: 600px; /* Increased width for answers modal */
+      max-width: 90%;
+      position: relative;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+    .modal-content h2 { margin-bottom: 1rem; }
+    .modal-content textarea {
+      width: 100%;
+      height: 100px;
+      padding: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      resize: none;
+      font-family: inherit;
+      margin-bottom: 1rem;
+    }
+    .modal-content button {
+      padding: 0.7rem 1.2rem;
+      background: var(--primary);
+      border: none;
+      color: #fff;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    .close-btn {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      cursor: pointer;
+      font-size: 1.5rem;
+      color: var(--gray);
+    }
+
+    /* Answers Section in Modal */
+    .answers-list {
+      margin-bottom: 1.5rem;
+      max-height: 300px;
+      overflow-y: auto;
+      border-top: 1px solid #eee;
+      padding-top: 1rem;
+    }
+    .answer-item {
+      background: var(--light);
+      padding: 0.8rem;
+      border-radius: 8px;
+      margin-bottom: 0.8rem;
+      font-size: 0.9rem;
+    }
+    .answer-item strong {
+      color: var(--primary);
+    }
+    .answer-time {
+      font-size: 0.8rem;
+      color: var(--gray);
+      margin-top: 0.5rem;
+    }
+
+    /* Message bar */
+    .message-bar {
+      flex-shrink: 0; /* prevent bar from shrinking */
+      position: sticky;
+      bottom: 0;
+      padding: 1rem;
+      background: var(--card-bg);
+      border-top: 1px solid #eee;
+      display: flex;
+      align-items: center;
+    }
+    .message-bar input {
+      flex: 1;
+      padding: 0.8rem 1rem;
+      border: 1px solid #ddd;
+      border-radius: 17px;
+      font-family: inherit;
+    }
+    .message-bar button {
+      margin-left: 0.8rem;
+      padding: 0.8rem 1.5rem;
+      border: none;
+      background: var(--primary);
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    .community-bar button {
+      margin-left: 0.8rem;
+      padding: 0.8rem 1.5rem;
+      border: none;
+      background: var(--primary);
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    /* Like button */
+    .liked { color: var(--danger) !important; }
+
+    /* Members modal */
+    .members-list {
+      max-height: 300px;
+      overflow-y: auto;
+    }
+    .member-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.8rem;
+      border-bottom: 1px solid #eee;
+    }
+    .member-item:last-child {
+      border-bottom: none;
+    }
+
+    /* Loading */
+    .loading {
+      text-align: center;
+      padding: 2rem;
+      color: var(--gray);
+    }
+
+    /* Context menu */
+    #contextMenu {
+      position: absolute;
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      z-index: 1000;
+      padding: 0.5rem 0;
+    }
+    #contextMenu div {
+      padding: 0.7rem 1rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    #contextMenu div:hover {
+      background: var(--light);
+    }
+    .communities-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .community-item {
+      display: flex;
+      align-items: center;
+      padding: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .community-item:hover {
+      background: var(--light);
+      border-color: var(--primary);
+    }
+
+    .community-item i {
+      margin-right: 1rem;
+      font-size: 1.5rem;
+      color: var(--primary);
+    }
+
+    .community-item span {
+      font-weight: 500;
+    }
+    /* Add this to your existing CSS */
+.sidebar a.has-notification {
+    position: relative;
+    border: 2px solid #4ADE80;
+   
+}
+
+.feed-item.has-new-comments {
+    border: 2px solid #4ADE80;
+}
+
+    
+  </style>
+</head>
+<body>
+
+  <!-- Community Selection Modal -->
+  <div class="modal" id="communityModal" style="display: flex;">
+    <div class="modal-content">
+      <h2>Select a Community</h2>
+      <div class="communities-list">
+        <div class="community-item" onclick="selectCommunity('general')">
+          <i class="fas fa-users"></i>
+          <span>General Community</span>
+        </div>
+        <div class="community-item" onclick="selectCommunity('industry')">
+          <i class="fas fa-building"></i>
+          <span>Industry Community</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="toggle-btn" id="toggleBtn"><i class="fas fa-bars"></i></div>
+    <h2><i class="fas fa-bolt"></i> <span class="link-text">ECEverse</span></h2>
+    <ul>
+      <li><a href="#" onclick="showAllMessages(event)"><i class="fas fa-home"></i><span class="link-text">Home Feed</span></a></li>
+      <li>
+    <a href="#" onclick="showCommentsFeed(event)">
+        <i class="fas fa-comments"></i>
+        <span class="link-text" id="commentsBtn">Answers</span>
+    </a>
+</li>
+      <li><a href="#" onclick="showMyDiscussions(event)"><i class="fas fa-comments"></i><span class="link-text">My Discussion</span></a></li>
+      <li><a href="#" onclick="showSavedMessages(event)"><i class="fas fa-bookmark"></i><span class="link-text">Saved Discussion</span></a></li>
+      <li><a href="#" onclick="showAllMembers(event)"><i class="fas fa-users"></i><span class="link-text">Members</span></a></li>
+      <li><a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i><span class="link-text">Exit</span></a></li>
+    </ul>
+    
+    <!-- Online Members Section -->
+    <div class="online-members-section">
+      <h3><span class="link-text">Online Members</span></h3>
+      <div class="online-members-list" id="onlineMembersList">
+        <div class="loading">Loading online members...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feed -->
+  <div class="feed-container">
+    <div class="feed-header">
+      <div class="community-bar">
+        <button id="joinCommunityBtn">Join Community</button>
+      </div>
+      <h1>Community Feed</h1>
+      <div class="user-info">
+        <span class="user-email" id="userEmail">user@example.com</span>
+      </div>
+    </div>
+    <div class="feed-list" id="feedList">
+      <div class="loading">Loading messages...</div>
+    </div>
+
+    <!-- Messaging Bar -->
+    <div class="message-bar">
+      <input type="text" id="messageInput" placeholder="Type a message..." />
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+
+  <!-- Answer Modal -->
+  <div class="modal" id="answerModal">
+    <div class="modal-content">
+      <span class="close-btn" id="closeModal">&times;</span>
+      <h2>Answers</h2>
+      <div class="answers-list" id="answersList">
+        <div class="loading">Loading answers...</div>
+      </div>
+      <h3>Post Your Answer</h3>
+      <textarea id="answerInput" placeholder="Write your answer..."></textarea>
+      <button onclick="submitAnswer()">Submit</button>
+    </div>
+  </div>
+  
+  <!-- Comment Modal -->
+  <div class="modal" id="commentModal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeComments()">&times;</span>
+      <h2>Answers</h2>
+      <div class="answers-list" id="commentList">
+        <div class="loading">Loading comments...</div>
+      </div>
+      <h3>Post a Comment</h3>
+      <textarea id="commentInput" placeholder="Write your comment..."></textarea>
+      <button onclick="postComment()">Post</button>
+    </div>
+  </div>
+
+  <!-- Members Modal -->
+  <div class="modal" id="membersModal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="hideAllMembers()">&times;</span>
+      <h2>All Community Members</h2>
+      <div class="members-list" id="allMembersList">
+        <div class="loading">Loading members...</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Firebase configuration
+    const firebaseConfig = {
+     apiKey: "AIzaSyD4T6rAV2npex-ZOJuu5IKQ1bDUkD7o9Oc",
+    authDomain: "eceverse-adeac.firebaseapp.com",
+    databaseURL: "https://eceverse-adeac-default-rtdb.firebaseio.com",
+    projectId: "eceverse-adeac",
+    storageBucket: "eceverse-adeac.firebasestorage.app",
+    messagingSenderId: "55835462054",
+    appId: "1:55835462054:web:9ca23a5817ed40f2842767",
+    measurementId: "G-KTV3P359DX"
+  };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+    const rtdb = firebase.database();
+
+    // State variables
+    let currentUser = null;
+    let currentCommunity = null;
+    let messagesUnsub = null;
+    let presenceUnsub = null;
+    let activeMsgId = null;
+
+    // DOM elements
+    const feedList = document.getElementById('feedList');
+    const messageInput = document.getElementById('messageInput');
+    const onlineMembersList = document.getElementById('onlineMembersList');
+    const userEmail = document.getElementById('userEmail');
+    const answerModal = document.getElementById('answerModal');
+    const answerInput = document.getElementById('answerInput');
+    const answersList = document.getElementById('answersList');
+    const membersModal = document.getElementById('membersModal');
+    const allMembersList = document.getElementById('allMembersList');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const sidebar = document.getElementById('sidebar');
+    const toggleBtn = document.getElementById('toggleBtn');
+
+    // Chunk an array into groups of size n
+    function chunk(arr, n) {
+      const out = [];
+      for (let i = 0; i < arr.length; i += n) out.push(arr.slice(i, i + n));
+      return out;
+    }
+
+    function updateFeedHeader(title) {
+      const header = document.querySelector('.feed-header h1');
+      if (header) header.textContent = title;
+    }
+
+    // Initialize the app
+    function initApp() {
+      document.getElementById('joinCommunityBtn').addEventListener('click', joinCommunity);
+
+      function joinCommunity() {
+        if (!currentCommunity) {
+          alert("Please select a community first!");
+          return;
+        }
+        
+        const communityRef = db.collection("communities").doc(currentCommunity);
+        communityRef.update({
+          members: firebase.firestore.FieldValue.arrayUnion(currentUser.uid)
+        }).then(() => {
+          alert("You joined the community!");
+        }).catch(err => {
+          console.error("Error joining community:", err);
+        });
+      }
+
+      // Authentication state observer
+      auth.onAuthStateChanged((user) => {
+        if (user) {
+          currentUser = user;
+          userEmail.textContent = user.email;
+          
+          // Don't automatically set up presence and listeners
+          // Wait for community selection first
+          if (currentCommunity) {
+            setupPresence();
+            listenToMessages();
+            listenToOnlineMembers();
+            listenForUnreadComments();
+          }
+        } else {
+          window.location.href = "login.html";
+        }
+      });
+
+      // Event listeners
+      messageInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') sendMessage();
+      });
+
+      document.getElementById('closeModal').addEventListener('click', () => {
+        answerModal.style.display = 'none';
+      });
+
+      logoutBtn.addEventListener('click', () => {
+        auth.signOut();
+      });
+
+      toggleBtn.addEventListener('click', () => {
+        sidebar.classList.toggle('collapsed');
+      });
+
+      // Close modals when clicking outside
+      window.addEventListener('click', (e) => {
+        if (e.target === answerModal) answerModal.style.display = 'none';
+        if (e.target === membersModal) membersModal.style.display = 'none';
+        if (e.target === document.getElementById('commentModal')) closeComments();
+        
+        // Remove context menu if clicked elsewhere
+        const contextMenu = document.getElementById('contextMenu');
+        if (contextMenu && e.target !== contextMenu) {
+          contextMenu.remove();
+        }
+      });
+    }
+
+    // Listen to messages from Firebase
+    // Listen to messages from Firebase
+// Listen to messages from Firebase
+// Listen to messages from Firebase
+function listenToMessages() {
+  if (messagesUnsub) messagesUnsub();
+  
+  messagesUnsub = db.collection("communities")
+    .doc(currentCommunity)
+    .collection("messages")
+    .orderBy("timestamp", "asc") // Oldest first
+    .onSnapshot((snapshot) => {
+      feedList.innerHTML = '';
+      
+      if (snapshot.empty) {
+        feedList.innerHTML = '<div class="loading">No messages yet. Be the first to post!</div>';
+        return;
+      }
+      
+      snapshot.forEach((doc) => {
+        const message = doc.data();
+        addMessageToFeed(doc.id, message);
+      });
+      
+      // Scroll to the bottom to show latest message
+      setTimeout(() => {
+        feedList.scrollTop = feedList.scrollHeight;
+      }, 100);
+    }, (error) => {
+      console.error("Error listening to messages:", error);
+      feedList.innerHTML = '<div class="loading">Error loading messages. Please refresh.</div>';
+    });
+}
+
+    // Add message to feed
+    // Add message to feed
+function addMessageToFeed(id, message, container = feedList, hasUnreadComments = false) {
+    const isOwnMessage = currentUser && message.userId === currentUser.uid;
+    const hasLikes = message.likes && message.likes.length > 0;
+    const hasAnswers = message.answers && message.answers.length > 0;
+    const isLiked = hasLikes && message.likes.includes(currentUser.uid);
+    const isSaved = message.savedBy && message.savedBy.includes(currentUser.uid);
+
+    const time = message.timestamp 
+        ? new Date(message.timestamp.toDate()).toLocaleTimeString() 
+        : 'Just now';
+
+    const div = document.createElement('div');
+    div.className = 'feed-item message';
+    if (hasUnreadComments) {
+        div.classList.add('has-new-comments');
+    }
+    div.id = id;
+    div.innerHTML = `
+        <h3>${message.username || 'User'} ${isOwnMessage ? '<span class="badge">You</span>' : ''}</h3>
+        <span class="message-text">${escapeHtml(message.message || '')}</span>
+        <div class="message-time">${time}</div>
+        <div class="feed-actions">
+            <button class="like-btn ${isLiked ? 'liked' : ''}" onclick="toggleLike('${id}')">
+                <i class="fa fa-heart ${isLiked ? 'liked' : ''}"></i> 
+                ${hasLikes ? message.likes.length : '0'}
+            </button>
+            <button onclick="saveMessage('${id}')">
+                <i class="fas fa-bookmark ${isSaved ? 'liked' : ''}"></i> Save
+            </button>
+            
+            <button onclick="openComments('${id}')">
+                <i class="fas fa-comment"></i> Answers
+                <span id="comment-count-${id}"></span>
+            </button>
+        </div>
+    `;
+
+    container.appendChild(div);
+
+    // Live update for comment count
+    listenToCommentCount(id);
+}
+
+    function listenToCommentCount(messageId) {
+      db.collection("communities")
+        .doc(currentCommunity)
+        .collection("messages")
+        .doc(messageId)
+        .collection("comments")
+        .onSnapshot(snapshot => {
+          const count = snapshot.size;
+          const el = document.getElementById(`comment-count-${messageId}`);
+          if (el) el.textContent = count > 0 ? `(${count})` : "";
+        });
+    }
+
+    // Global unread comment listener
+    // Global unread comment listener
+// Global unread comment listener
+// Global unread comment listener
+// Global unread comment listener
+// Global unread comment listener
+let commentsUnsubGlobal = null;
+
+function listenForUnreadComments() {
+    if (commentsUnsubGlobal) commentsUnsubGlobal(); // cleanup old
+
+    if (!currentCommunity || !currentUser) return;
+
+    commentsUnsubGlobal = db.collection("communities")
+        .doc(currentCommunity)
+        .collection("commentIndex")
+        .where("ownerId", "==", currentUser.uid)
+        .onSnapshot(snapshot => {
+            let totalUnseen = 0;
+            
+            // Get all message IDs that have comments
+            const messageIds = snapshot.docs.map(doc => doc.id);
+            
+            if (messageIds.length === 0) {
+                updateCommentButtonCount(0);
+                return;
+            }
+            
+            // Check each message for unread comments
+            const promises = messageIds.map(messageId => {
+                return db.collection("communities")
+                    .doc(currentCommunity)
+                    .collection("messages")
+                    .doc(messageId)
+                    .collection("comments")
+                    .where("userId", "!=", currentUser.uid) // Only count comments from others
+                    .get()
+                    .then(commentsSnap => {
+                        // Manually filter comments that haven't been read by current user
+                        commentsSnap.forEach(doc => {
+                            const comment = doc.data();
+                            const readBy = comment.readBy || [];
+                            if (!readBy.includes(currentUser.uid)) {
+                                totalUnseen++;
+                            }
+                        });
+                    });
+            });
+
+            Promise.all(promises).then(() => {
+                console.log("Total unread comments:", totalUnseen);
+                updateCommentButtonCount(totalUnseen);
+            });
+        }, error => {
+            console.error("Error in unread comments listener:", error);
+        });
+}
+
+    function updateCommentButtonCount(count) {
+    const btn = document.getElementById("commentsBtn");
+    const parentLink = btn.closest('a');
+    
+    if (btn) {
+        btn.textContent = count > 0 ? `Answers (${count})` : `Answers`;
+        
+        // Add or remove the notification style
+        if (count > 0) {
+            parentLink.classList.add('has-notification');
+        } else {
+            parentLink.classList.remove('has-notification');
+        }
+    }
+}
+
+   function showCommentsFeed(event) {
+    if (event) event.preventDefault();
+    
+    if (!currentUser) {
+        alert("You must be logged in.");
+        return;
+    }
+
+    // DON'T mark all comments as read when opening the feed
+    // We'll only mark them as read when clicking individual message buttons
+
+    if (!currentCommunity) {
+        showCommunityModal();
+        feedList.innerHTML = '<div class="loading">Please select a community first.</div>';
+        return;
+    }
+
+    if (messagesUnsub) messagesUnsub(); // stop any previous message listener
+
+    updateFeedHeader("My Messages With Comments");
+    feedList.innerHTML = '<div class="loading">Loading your commented messages...</div>';
+
+    // Listen to the prebuilt index
+    messagesUnsub = db.collection("communities")
+        .doc(currentCommunity)
+        .collection("commentIndex")
+        .where("ownerId", "==", currentUser.uid)
+        .onSnapshot(async (snapshot) => {
+            try {
+                if (snapshot.empty) {
+                    feedList.innerHTML = '<div class="loading">None of your messages have comments yet.</div>';
+                    return;
+                }
+
+                const rows = snapshot.docs
+                    .map(d => ({ id: d.id, ...d.data() }))
+                    .sort((a, b) => {
+                        const ta = a.lastCommentAt?.toMillis?.() || 0;
+                        const tb = b.lastCommentAt?.toMillis?.() || 0;
+                        return tb - ta;
+                    });
+
+                const messageIds = rows.map(r => r.messageId);
+                const chunksArr = chunk(messageIds, 10);
+                const allMessages = [];
+
+                for (const ids of chunksArr) {
+                    const snap = await db.collection("communities")
+                        .doc(currentCommunity)
+                        .collection("messages")
+                        .where(firebase.firestore.FieldPath.documentId(), "in", ids)
+                        .get();
+
+                    snap.forEach(doc => {
+                        allMessages.push({ id: doc.id, data: doc.data() });
+                    });
+                }
+
+                const dataById = new Map(allMessages.map(m => [m.id, m.data]));
+                feedList.innerHTML = "";
+                let rendered = 0;
+
+                // Check each message for unread comments
+                for (const r of rows) {
+                    const msg = dataById.get(r.messageId);
+                    if (msg) {
+                        // Check if this message has unread comments
+                        const hasUnreadComments = await checkForUnreadComments(r.messageId);
+                        addMessageToFeed(r.messageId, msg, feedList, hasUnreadComments);
+                        rendered++;
+                    }
+                }
+
+                if (rendered === 0) {
+                    feedList.innerHTML = '<div class="loading">None of your messages have comments yet.</div>';
+                }
+
+            } catch (err) {
+                console.error("Error loading comments feed:", err);
+                feedList.innerHTML = '<div class="loading">Error loading your commented messages.</div>';
+            }
+        }, (err) => {
+            console.error("Index listener error:", err);
+            feedList.innerHTML = '<div class="loading">Error loading your commented messages.</div>';
+        });
+}
+// Send new message to Firebase
+async function sendMessage() {
+    const text = messageInput.value.trim();
+    if (!text || !currentUser) return;
+
+    try {
+        const communityRef = db.collection("communities").doc(currentCommunity);
+
+        // Check if user is a member before posting
+        const communityDoc = await communityRef.get();
+        
+        if (!communityDoc.exists) {
+            alert("Community not found!");
+            return;
+        }
+
+        const members = communityDoc.data().members || [];
+        
+        if (!members.includes(currentUser.uid)) {
+            alert("You must join the community before posting.");
+            return;
+        }
+
+        // If user is a member → allow posting
+        const messageData = {
+            userId: currentUser.uid,
+            username: currentUser.email.split('@')[0],
+            message: text,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+            likes: [],
+            answers: [],
+            savedBy: []
+        };
+
+        await communityRef.collection("messages").add(messageData);
+        messageInput.value = "";
+        
+    } catch (error) {
+        console.error("Error sending message:", error);
+        alert("Error sending message. Please try again.");
+    }
+}
+
+// Function to check if a message has unread comments
+async function checkForUnreadComments(messageId) {
+    if (!currentUser || !currentCommunity) return false;
+    
+    const commentsRef = db.collection("communities")
+        .doc(currentCommunity)
+        .collection("messages")
+        .doc(messageId)
+        .collection("comments");
+    
+    // Get all unread comments (comments from others that haven't been read by current user)
+    const unreadComments = await commentsRef
+        .where("userId", "!=", currentUser.uid)
+        .get();
+    
+    // Check if any comments haven't been read by current user
+    for (const doc of unreadComments.docs) {
+        const comment = doc.data();
+        const readBy = comment.readBy || [];
+        if (!readBy.includes(currentUser.uid)) {
+            return true; // Found at least one unread comment
+        }
+    }
+    
+    return false; // No unread comments found
+}
+    // Toggle like on a message
+    function toggleLike(messageId) {
+      if (!currentUser) return;
+      
+      const messageRef = db.collection("communities")
+        .doc(currentCommunity)
+        .collection("messages")
+        .doc(messageId);
+      
+      messageRef.get().then((doc) => {
+        if (doc.exists) {
+          const message = doc.data();
+          const likes = message.likes || [];
+          const likeIndex = likes.indexOf(currentUser.uid);
+          
+          if (likeIndex > -1) {
+            // Unlike
+            likes.splice(likeIndex, 1);
+          } else {
+            // Like
+            likes.push(currentUser.uid);
+          }
+          
+          messageRef.update({ likes: likes });
+        }
+      });
+    }
+
+    // Save message
+    function saveMessage(messageId) {
+      if (!currentUser) return;
+      
+      const messageRef = db.collection("communities")
+        .doc(currentCommunity)
+        .collection("messages")
+        .doc(messageId);
+      
+      messageRef.get().then((doc) => {
+        if (doc.exists) {
+          const message = doc.data();
+          const savedBy = message.savedBy || [];
+          const saveIndex = savedBy.indexOf(currentUser.uid);
+          
+          if (saveIndex > -1) {
+            // Unsave
+            savedBy.splice(saveIndex, 1);
+          } else {
+            // Save
+            savedBy.push(currentUser.uid);
+          }
+          
+          messageRef.update({ savedBy: savedBy });
+        }
+      });
+    }
+
+    // Open answer modal
+    function openAnswerModal(messageId) {
+      activeMsgId = messageId;
+      answerInput.value = "";
+      answersList.innerHTML = '<div class="loading">Loading answers...</div>';
+      answerModal.style.display = 'flex';
+      answerInput.focus();
+
+      // Fetch the message to display its answers
+      db.collection("communities")
+        .doc(currentCommunity)
+        .collection("messages")
+        .doc(messageId)
+        .get()
+        .then((doc) => {
+          if (doc.exists) {
+            const message = doc.data();
+            const answers = message.answers || [];
+            answersList.innerHTML = renderAnswers(answers);
+          } else {
+            answersList.innerHTML = '<div class="loading">No answers yet.</div>';
+          }
+        })
+        .catch((error) => {
+          console.error("Error loading answers:", error);
+          answersList.innerHTML = '<div class="loading">Error loading answers.</div>';
+        });
+    }
+
+    // Submit answer
+    function submitAnswer() {
+      const text = answerInput.value.trim();
+      if (!text) {
+        alert("Please enter an answer.");
+        return;
+      }
+      if (!activeMsgId) {
+        alert("No message selected. Please try again.");
+        return;
+      }
+      if (!currentUser) {
+        alert("You must be logged in to post an answer.");
+        return;
+      }
+      if (!currentCommunity) {
+        alert("Please select a community first.");
+        showCommunityModal();
+        return;
+      }
+
+      const answer = {
+        userId: currentUser.uid,
+        username: currentUser.email.split('@')[0],
+        message: text,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      };
+      
+      const messageRef = db.collection("communities")
+        .doc(currentCommunity)
+        .collection("messages")
+        .doc(activeMsgId);
+      
+      // Use arrayUnion to add the answer to the answers array
+      messageRef.update({
+        answers: firebase.firestore.FieldValue.arrayUnion(answer)
+      })
+      .then(() => {
+        console.log("Answer saved successfully");
+        answerInput.value = "";
+        
+        // Refresh answers in the modal
+        messageRef.get().then((doc) => {
+          if (doc.exists) {
+            const message = doc.data();
+            answersList.innerHTML = renderAnswers(message.answers || []);
+          } else {
+            answersList.innerHTML = '<div class="loading">No answers yet.</div>';
+          }
+        });
+      })
+      .catch((error) => {
+        console.error("Error adding answer:", error);
+        alert(`Error posting answer: ${error.message}`);
+      });
+    }
+
+    // Setup user presence
+    function setupPresence() {
+      if (!currentUser) return;
+      
+      const userPresenceRef = rtdb.ref(`presence/${currentCommunity}/${currentUser.uid}`);
+      
+      // Set user as online
+      userPresenceRef.set({
+        state: 'online',
+        username: currentUser.email.split('@')[0],
+        lastChanged: firebase.database.ServerValue.TIMESTAMP
+      });
+      
+      // Set user as offline when they disconnect
+      userPresenceRef.onDisconnect().set({
+        state: 'offline',
+        username: currentUser.email.split('@')[0],
+        lastChanged: firebase.database.ServerValue.TIMESTAMP
+      });
+    }
+
+    // Listen to online members
+    function listenToOnlineMembers() {
+      if (presenceUnsub) presenceUnsub();
+      
+      presenceUnsub = rtdb.ref(`presence/${currentCommunity}`).on('value', (snapshot) => {
+        const onlineMembers = snapshot.val() || {};
+        onlineMembersList.innerHTML = '';
+        
+        let hasOnlineMembers = false;
+        
+        Object.entries(onlineMembers).forEach(([uid, userData]) => {
+          if (userData.state === 'online') {
+            hasOnlineMembers = true;
+            const memberElement = document.createElement('div');
+            memberElement.className = 'online-member';
+            memberElement.innerHTML = `
+              <i class="fas fa-circle"></i>
+              <span>${userData.username || uid}</span>
+            `;
+            onlineMembersList.appendChild(memberElement);
+          }
+        });
+        
+        if (!hasOnlineMembers) {
+          onlineMembersList.innerHTML = '<div class="loading">No online members</div>';
+        }
+      });
+    }
+
+    // Show all members modal
+    function showAllMembers(event) {
+      if (event) event.preventDefault();
+      
+      db.collection("communities")
+        .doc(currentCommunity)
+        .get()
+        .then((doc) => {
+          if (doc.exists) {
+            const members = doc.data().members || [];
+            allMembersList.innerHTML = '';
+            
+            if (members.length === 0) {
+              allMembersList.innerHTML = '<div class="loading">No members found</div>';
+            }
+            
+            // Get online status from RTDB
+            rtdb.ref(`presence/${currentCommunity}`).once('value').then((snapshot) => {
+              const onlineMembers = snapshot.val() || {};
+              
+              members.forEach((uid) => {
+                const isOnline = onlineMembers[uid] && onlineMembers[uid].state === 'online';
+                const isCurrentUser = uid === currentUser.uid;
+                const username = onlineMembers[uid] ? onlineMembers[uid].username : uid.substring(0, 8);
+                
+                const memberElement = document.createElement('div');
+                memberElement.className = 'member-item';
+                memberElement.innerHTML = `
+                  <div>
+                    <strong>${username} ${isCurrentUser ? '(You)' : ''}</strong>
+                    <div style="color: ${isOnline ? '#4ADE80' : '#8C8CA1'}; font-size: 0.8rem;">
+                      ${isOnline ? 'Online' : 'Offline'}
+                    </div>
+                  </div>
+                  ${isOnline ? '<i class="fas fa-circle" style="color: #4ADE80;"></i>' : ''}
+                `;
+                allMembersList.appendChild(memberElement);
+              });
+            });
+            
+            membersModal.style.display = 'flex';
+          }
+        })
+        .catch((error) => {
+          console.error("Error loading members:", error);
+          allMembersList.innerHTML = '<div class="loading">Error loading members</div>';
+        });
+    }
+
+    function hideAllMembers() {
+      membersModal.style.display = 'none';
+    }
+
+    // Utility function to escape HTML
+    function escapeHtml(text) {
+      if (!text) return '';
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // Render answers
+    function renderAnswers(answers) {
+      if (!answers || answers.length === 0) return '<div class="loading">No answers yet.</div>';
+      
+      // Sort answers by timestamp (newest first)
+      const sortedAnswers = [...answers].sort((a, b) => {
+        const aTime = a.timestamp ? a.timestamp.toDate() : new Date(0);
+        const bTime = b.timestamp ? b.timestamp.toDate() : new Date(0);
+        return bTime - aTime;
+      });
+      
+      return sortedAnswers.map(answer => `
+        <div class="answer-item">
+          <strong>${answer.username}:</strong> ${escapeHtml(answer.message)}
+          <div class="answer-time">
+            ${answer.timestamp ? new Date(answer.timestamp.toDate()).toLocaleString() : 'Just now'}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Context menu for messages
+    document.addEventListener("contextmenu", function(e) {
+      if (e.target.closest(".feed-item")) {
+        e.preventDefault();
+        const msgEl = e.target.closest(".feed-item");
+        showContextMenu(e.pageX, e.pageY, msgEl.id);
+      }
+    });
+
+    function showContextMenu(x, y, msgId) {
+      const existingMenu = document.getElementById("contextMenu");
+      if (existingMenu) existingMenu.remove();
+
+      const menu = document.createElement("div");
+      menu.id = "contextMenu";
+      menu.style.position = "absolute";
+      menu.style.top = y + "px";
+      menu.style.left = x + "px";
+      menu.innerHTML = `
+        <div onclick="deleteForMe('${msgId}')">Delete for me</div>
+        <div onclick="deleteForEveryone('${msgId}')">Delete for everyone</div>
+        <div onclick="editMessage('${msgId}')">Edit message</div>
+      `;
+
+      document.body.appendChild(menu);
+    }
+
+    function deleteForMe(id) {
+      document.getElementById(id).style.display = "none";
+    }
+
+    function deleteForEveryone(id) {
+      if (!confirm("Are you sure you want to delete this message for everyone?")) return;
+      
+      db.collection("communities")
+        .doc(currentCommunity)
+        .collection("messages")
+        .doc(id)
+        .delete()
+        .catch((error) => {
+          console.error("Error deleting message:", error);
+          alert("Error deleting message. You may not have permission.");
+        });
+    }
+
+    function editMessage(id) {
+      const msgEl = document.getElementById(id);
+      const textEl = msgEl.querySelector(".message-text");
+      const oldText = textEl.innerText;
+      
+      const input = document.createElement("textarea");
+      input.value = oldText;
+      input.style.width = "100%";
+      input.style.padding = "0.5rem";
+      input.style.border = "1px solid #ddd";
+      input.style.borderRadius = "4px";
+      input.style.fontFamily = "inherit";
+      
+      textEl.replaceWith(input);
+      input.focus();
+      
+      const saveEdit = () => {
+        const newText = input.value.trim();
+        if (newText && newText !== oldText) {
+          db.collection("communities")
+            .doc(currentCommunity)
+            .collection("messages")
+            .doc(id)
+            .update({ message: newText })
+            .catch((error) => {
+              console.error("Error updating message:", error);
+              alert("Error updating message. You may not have permission.");
+            });
+        }
+        
+        const span = document.createElement("span");
+        span.className = "message-text";
+        span.innerText = newText || oldText;
+        input.replaceWith(span);
+      };
+      
+      input.addEventListener("blur", saveEdit);
+      input.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          saveEdit();
+        }
+      });
+    }
+
+    function selectCommunity(community) {
+      currentCommunity = community;
+      document.getElementById('communityModal').style.display = 'none';
+      document.querySelector('.feed-header h1').textContent = `${community.charAt(0).toUpperCase() + community.slice(1)} Community Feed`;
+      
+      // Now that we have a community, set up the app
+      if (currentUser) {
+        setupPresence();
+        listenToMessages();
+        listenToOnlineMembers();
+        listenForUnreadComments();
+      }
+    }
+
+    function showCommunityModal() {
+      document.getElementById('communityModal').style.display = 'flex';
+    }
+
+    // Update feed header
+    function updateFeedHeader(title) {
+      const header = document.querySelector('.feed-header h1');
+      header.textContent = title;
+    }
+
+    // Show my discussions
+    function showMyDiscussions(event) {
+      if (event) event.preventDefault();
+      if (!currentUser) return;
+
+      // Check if a community is selected
+      if (!currentCommunity) {
+        showCommunityModal();
+        feedList.innerHTML = '<div class="loading">Please select a community first.</div>';
+        return;
+      }
+
+      // Stop the real-time feed listener when viewing my discussions
+      if (messagesUnsub) messagesUnsub();
+
+      feedList.innerHTML = '<div class="loading">Loading your discussions...</div>';
+      updateFeedHeader("My Discussions");
+
+      db.collection("communities")
+        .doc(currentCommunity)
+        .collection("messages")
+        .where("userId", "==", currentUser.uid)
+        .orderBy("timestamp", "desc")
+        .get()
+        .then((snapshot) => {
+          feedList.innerHTML = '';
+
+          if (snapshot.empty) {
+            feedList.innerHTML = '<div class="loading">You haven\'t started any discussions yet.</div>';
+            return;
+          }
+
+          snapshot.forEach((doc) => {
+            const message = doc.data();
+            addMessageToFeed(doc.id, message);
+          });
+        })
+        .catch((error) => {
+          console.error("Error loading your discussions:", error);
+          feedList.innerHTML = '<div class="loading">Error loading your discussions.</div>';
+        });
+    }
+
+    // Show saved messages
+    function showSavedMessages(event) {
+      if (event) event.preventDefault();
+      if (!currentUser) return;
+
+      // Check if a community is selected
+      if (!currentCommunity) {
+        showCommunityModal();
+        feedList.innerHTML = '<div class="loading">Please select a community first.</div>';
+        return;
+      }
+
+      // Stop the real-time feed listener when viewing saved messages
+      if (messagesUnsub) messagesUnsub();
+
+      feedList.innerHTML = '<div class="loading">Loading saved messages...</div>';
+      updateFeedHeader("Saved Discussions");
+
+      db.collection("communities")
+        .doc(currentCommunity)
+        .collection("messages")
+        .where("savedBy", "array-contains", currentUser.uid)
+        .get()
+        .then((snapshot) => {
+          feedList.innerHTML = '';
+
+          if (snapshot.empty) {
+            feedList.innerHTML = '<div class="loading">No saved messages yet.</div>';
+            return;
+          }
+
+          snapshot.forEach((doc) => {
+            const message = doc.data();
+            addMessageToFeed(doc.id, message);
+          });
+        })
+        .catch((error) => {
+          console.error("Error loading saved messages:", error);
+          feedList.innerHTML = '<div class="loading">Error loading saved messages.</div>';
+        });
+    }
+
+    // Show all messages (main feed)
+    function showAllMessages(event) {
+      if (event) event.preventDefault();
+      
+      // Check if a community is selected
+      if (!currentCommunity) {
+        showCommunityModal();
+        feedList.innerHTML = '<div class="loading">Please select a community first.</div>';
+        return;
+      }
+
+      feedList.innerHTML = '<div class="loading">Loading messages...</div>';
+      listenToMessages();
+      updateFeedHeader(`${currentCommunity.charAt(0).toUpperCase() + currentCommunity.slice(1)} Community Feed`);
+    }
+
+    let activeCommentMsgId = null;
+
+    // Open comments modal
+   // Open comments modal
+async function openComments(messageId) {
+    activeCommentMsgId = messageId;
+    document.getElementById("commentInput").value = "";
+    document.getElementById("commentList").innerHTML = '<div class="loading">Loading comments...</div>';
+    document.getElementById("commentModal").style.display = "flex";
+    
+    // Mark comments as read for this specific message
+    await markCommentsAsRead(messageId);
+    
+    // Remove the notification style from this specific message
+    const messageElement = document.getElementById(messageId);
+    if (messageElement) {
+        messageElement.classList.remove('has-new-comments');
+    }
+    
+    loadComments(messageId);
+    
+    // Update the unread count
+    listenForUnreadComments();
+}
+
+    // Close comments modal
+    function closeComments() {
+      document.getElementById("commentModal").style.display = "none";
+      document.getElementById("commentList").innerHTML = "";
+      activeCommentMsgId = null;
+    }
+
+    // Load comments from Firestore
+    function loadComments(messageId) {
+      db.collection("communities")
+        .doc(currentCommunity)
+        .collection("messages")
+        .doc(messageId)
+        .collection("comments")
+        .orderBy("timestamp", "asc")
+        .onSnapshot(snapshot => {
+          const list = document.getElementById("commentList");
+          list.innerHTML = "";
+          if (snapshot.empty) {
+            list.innerHTML = "<div class='loading'>No comments yet.</div>";
+            return;
+          }
+          snapshot.forEach(doc => {
+            const data = doc.data();
+            const div = document.createElement("div");
+            div.className = "answer-item"; // reuse answer-item style
+            div.innerHTML = `
+              <strong>${data.username || "Anon"}:</strong> ${escapeHtml(data.text)}
+              <div class="answer-time">${data.timestamp ? new Date(data.timestamp.toDate()).toLocaleString() : 'Just now'}</div>
+            `;
+            list.appendChild(div);
+          });
+        });
+    }
+// Mark all comments as read for a specific message
+// Mark all comments as read for a specific message
+// Mark all comments as read for a specific message
+// Mark all comments as read for a specific message
+async function markCommentsAsRead(messageId) {
+    if (!currentUser || !currentCommunity) return;
+    
+    const commentsRef = db.collection("communities")
+        .doc(currentCommunity)
+        .collection("messages")
+        .doc(messageId)
+        .collection("comments");
+    
+    // Get all unread comments (comments from others that haven't been read by current user)
+    const unreadComments = await commentsRef
+        .where("userId", "!=", currentUser.uid)
+        .get();
+    
+    // Filter comments that haven't been read by current user
+    const commentsToMarkAsRead = [];
+    unreadComments.docs.forEach(doc => {
+        const comment = doc.data();
+        const readBy = comment.readBy || [];
+        if (!readBy.includes(currentUser.uid)) {
+            commentsToMarkAsRead.push(doc);
+        }
+    });
+    
+    console.log(`Found ${commentsToMarkAsRead.length} unread comments in message ${messageId}`);
+    
+    // Add a 'readBy' field to each comment to mark it as read by current user
+    const batch = db.batch();
+    commentsToMarkAsRead.forEach(doc => {
+        const commentRef = commentsRef.doc(doc.id);
+        batch.update(commentRef, {
+            readBy: firebase.firestore.FieldValue.arrayUnion(currentUser.uid)
+        });
+    });
+    
+    if (commentsToMarkAsRead.length > 0) {
+        await batch.commit();
+        console.log(`Marked ${commentsToMarkAsRead.length} comments as read in message ${messageId}`);
+    }
+}
+
+// Mark all comments as read when viewing comments feed
+async function markAllCommentsAsRead() {
+  if (!currentUser || !currentCommunity) return;
+  
+  console.log("Marking all comments as read for user:", currentUser.uid);
+  
+  // Get all messages with comments that belong to the current user
+  const commentIndexSnapshot = await db.collection("communities")
+    .doc(currentCommunity)
+    .collection("commentIndex")
+    .where("ownerId", "==", currentUser.uid)
+    .get();
+  
+  console.log("Found", commentIndexSnapshot.size, "messages with comments");
+  
+  // Mark comments as read for each message
+  const promises = commentIndexSnapshot.docs.map(doc => {
+    return markCommentsAsRead(doc.id);
+  });
+  
+  await Promise.all(promises);
+  console.log("All comments marked as read");
+  
+  // Force refresh the unread comments count
+  listenForUnreadComments();
+}
+// Mark all comments as read when viewing comments feed
+// Mark all comments as read when viewing comments feed
+async function markAllCommentsAsRead() {
+  if (!currentUser || !currentCommunity) return;
+  
+  console.log("Marking all comments as read for user:", currentUser.uid);
+  
+  // Get all messages with comments that belong to the current user
+  const commentIndexSnapshot = await db.collection("communities")
+    .doc(currentCommunity)
+    .collection("commentIndex")
+    .where("ownerId", "==", currentUser.uid)
+    .get();
+  
+  console.log("Found", commentIndexSnapshot.size, "messages with comments");
+  
+  // Mark comments as read for each message
+  const promises = commentIndexSnapshot.docs.map(doc => {
+    return markCommentsAsRead(doc.id);
+  });
+  
+  await Promise.all(promises);
+  console.log("All comments marked as read");
+}
+
+// Mark all comments as read when viewing comments feed
+async function markAllCommentsAsRead() {
+  if (!currentUser || !currentCommunity) return;
+  
+  // Get all messages with comments that belong to the current user
+  const commentIndexSnapshot = await db.collection("communities")
+    .doc(currentCommunity)
+    .collection("commentIndex")
+    .where("ownerId", "==", currentUser.uid)
+    .get();
+  
+  // Mark comments as read for each message
+  const promises = commentIndexSnapshot.docs.map(doc => {
+    return markCommentsAsRead(doc.id);
+  });
+  
+  await Promise.all(promises);
+}
+    // Post new comment
+    // Post new comment
+async function postComment() {
+  const input = document.getElementById("commentInput");
+  const text = input.value.trim();
+  if (!text || !activeCommentMsgId) return;
+
+  if (!currentUser) {
+    alert("You must be logged in to comment.");
+    return;
+  }
+  if (!currentCommunity) {
+    alert("Please select a community first.");
+    showCommunityModal();
+    return;
+  }
+
+  const messageRef = db.collection("communities")
+    .doc(currentCommunity)
+    .collection("messages")
+    .doc(activeCommentMsgId);
+
+  try {
+    // 1) Add the comment under the message's subcollection
+    await messageRef.collection("comments").add({
+      text,
+      username: currentUser.email.split('@')[0],
+      userId: currentUser.uid,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+      readBy: [currentUser.uid] // The comment author has already read it
+    });
+
+    input.value = "";
+
+    // 2) Read the message to know its owner
+    const msgSnap = await messageRef.get();
+    if (!msgSnap.exists) return;
+    const ownerId = msgSnap.data().userId;
+
+    // 3) Update the comment index for fast fetching
+    const idxRef = db.collection("communities")
+      .doc(currentCommunity)
+      .collection("commentIndex")
+      .doc(activeCommentMsgId);
+
+    await idxRef.set({
+      messageId: activeCommentMsgId,
+      ownerId: ownerId,
+      community: currentCommunity,
+      lastCommentAt: firebase.firestore.FieldValue.serverTimestamp(),
+      commentCount: firebase.firestore.FieldValue.increment(1)
+    }, { merge: true });
+
+  } catch (err) {
+    console.error("Error posting comment:", err);
+    alert("Error posting comment.");
+  }
+}
+
+    // Initialize the app when the page loads
+    window.addEventListener('load', initApp);
+  </script>
+</body>
+</html>

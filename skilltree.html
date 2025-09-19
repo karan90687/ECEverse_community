@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Z-Transform Mindmap</title>
+  <style>
+    body {
+      margin: 0;
+      background: #f7faff;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+    }
+    .mindmap {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+    }
+    .node {
+      padding: 10px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      position: absolute;
+      text-align: center;
+      white-space: nowrap;
+      opacity: 1;
+      transition: transform 0.6s ease, opacity 0.6s ease;
+    }
+    /* Node colors */
+    .main-node {
+      background: rgb(195, 195, 233);
+      color: black;
+    }
+    .child-node {
+      background: lightsteelblue;
+      color: #033d19;
+    }
+    .subchild-node {
+      background: mediumaquamarine;
+      color: #5a3200;
+    }
+    .hidden {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(40px); /* slide effect */
+    }
+    svg {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+    }
+    path {
+      stroke-dasharray: 1000;
+      stroke-dashoffset: 1000;
+      animation: draw 0.6s forwards;
+    }
+    @keyframes draw {
+      to { stroke-dashoffset: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="mindmap" id="mindmap">
+    <svg id="connections"></svg>
+
+    <!-- Root Node -->
+    <div class="node main-node" id="root" data-x="200" data-y="300">Z-Transform</div>
+
+    <!-- First-level children -->
+    <div class="node child-node hidden" id="comp" data-x="450" data-y="150">Comparison with Other Transforms</div>
+    <div class="node child-node hidden" id="def" data-x="450" data-y="230">Definition</div>
+    <div class="node child-node hidden" id="signal" data-x="450" data-y="310">Signal Types</div>
+    <div class="node child-node hidden" id="roc" data-x="450" data-y="390">ROC</div>
+    <div class="node child-node hidden" id="props" data-x="450" data-y="470">Properties</div>
+    <div class="node child-node hidden" id="std" data-x="450" data-y="550">Std. Z-Transforms</div>
+    <div class="node child-node hidden" id="inv" data-x="450" data-y="630">Inverse Z</div>
+    <div class="node child-node hidden" id="lti" data-x="450" data-y="710">LTI Systems</div>
+
+    <!-- Second-level under Comparison -->
+    <div class="node subchild-node hidden" id="fourier" data-x="750" data-y="120">Fourier Transform</div>
+    <div class="node subchild-node hidden" id="laplace" data-x="750" data-y="200">Laplace Transform</div>
+    <div class="node subchild-node hidden" id="ztrans" data-x="750" data-y="280">Z-Transform</div>
+
+    
+  </div>
+
+  <script>
+    const svg = document.getElementById("connections");
+
+    function positionNodes() {
+      document.querySelectorAll(".node").forEach(node => {
+        node.style.left = node.dataset.x + "px";
+        node.style.top = node.dataset.y + "px";
+      });
+    }
+    positionNodes();
+
+    function drawCurve(x1, y1, x2, y2) {
+      const dx = (x2 - x1) / 2;
+      return `M${x1},${y1} C${x1+dx},${y1} ${x2-dx},${y2} ${x2},${y2}`;
+    }
+
+    function updateConnections() {
+      svg.innerHTML = "";
+      const mapRect = document.getElementById("mindmap").getBoundingClientRect();
+
+      function connect(parent, child) {
+        if (child.classList.contains("hidden")) return;
+        const p = parent.getBoundingClientRect();
+        const c = child.getBoundingClientRect();
+        const x1 = p.left + p.width/2 - mapRect.left;
+        const y1 = p.top + p.height/2 - mapRect.top;
+        const x2 = c.left + c.width/2 - mapRect.left;
+        const y2 = c.top + c.height/2 - mapRect.top;
+
+        const path = drawCurve(x1,y1,x2,y2);
+        const line = document.createElementNS("http://www.w3.org/2000/svg","path");
+        line.setAttribute("d", path);
+        line.setAttribute("stroke","#6b6b6b");
+        line.setAttribute("stroke-width","2");
+        line.setAttribute("fill","none");
+        svg.appendChild(line);
+      }
+
+      const root = document.getElementById("root");
+      ["comp","def","signal","roc","props","std","inv","lti"].forEach(id => connect(root, document.getElementById(id)));
+
+      const comp = document.getElementById("comp");
+      ["fourier","laplace","ztrans"].forEach(id => connect(comp, document.getElementById(id)));
+    }
+
+    // Hierarchy map
+    const childrenMap = {
+      root: ["comp","def","signal","roc","props","std","inv","lti"],
+      comp: ["fourier","laplace","ztrans"]
+    };
+
+    // Collapse all descendants recursively
+    function collapseAll(ids) {
+      ids.forEach(id => {
+        const node = document.getElementById(id);
+        if (!node.classList.contains("hidden")) {
+          node.classList.add("hidden");
+        }
+        if (childrenMap[id]) {
+          collapseAll(childrenMap[id]);
+        }
+      });
+    }
+
+    // Toggle function
+    function toggleNodes(triggerId) {
+      const trigger = document.getElementById(triggerId);
+      const children = childrenMap[triggerId];
+
+      trigger.addEventListener("click", () => {
+        const anyVisible = children.some(id => !document.getElementById(id).classList.contains("hidden"));
+
+        if (anyVisible) {
+          collapseAll(children);
+        } else {
+          children.forEach(id => {
+            const node = document.getElementById(id);
+            node.classList.remove("hidden");
+          });
+        }
+        updateConnections();
+      });
+    }
+
+    // Apply toggle logic
+    toggleNodes("root");
+    toggleNodes("comp");
+
+    window.addEventListener("resize", updateConnections);
+  </script>
+</body>
+</html>

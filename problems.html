@@ -1,0 +1,3119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LearnVerse</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <style>
+    :root {
+      --primary: #6C63FF;
+      --primary-dark: #018786;
+      --primary-light: #cefff9;
+      --secondary:  #4D44DB;
+      --accent: #FF5252;
+      --text-primary: #2D3748;
+      --text-secondary: #718096;
+      --bg-primary: #FFFFFF;
+      --bg-secondary: #F7FAFC;
+      --border-color: #f3f6f6;
+      --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.04);
+      --success: #48BB78;
+      --warning: #ECC94B;
+    }
+
+    [data-theme="dark"] {
+      --primary: #03DAC6;
+      --primary-dark: #cefff9;
+      --primary-light: #015450;
+      --secondary: #BB86FC;
+      --accent: #FF5252;
+      --text-primary: #EDF2F7;
+      --text-secondary: #A0AEC0;
+      --bg-primary: #1A202C;
+      --bg-secondary: #2D3748;
+      --border-color: #4A5568;
+      --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --success: #68D391;
+      --warning: #FAF089;
+    }
+
+    * { 
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box; 
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
+    }
+
+    body { 
+      background: var(--bg-secondary); 
+      color: var(--text-primary); 
+      line-height: 1.6;
+      font-size: 14px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* Header */
+    header {
+      background: var(--bg-primary);
+      border-bottom: 1px solid var(--border-color);
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--card-shadow);
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    nav {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+
+    nav a {
+      color: var(--text-primary);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 14px;
+      transition: color 0.2s;
+    }
+
+    nav a:hover {
+      color: var(--primary);
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      padding: 6px 12px;
+      border-radius: 6px;
+      transition: background 0.2s;
+    }
+
+    .user-info:hover {
+      background: var(--bg-secondary);
+    }
+
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background-color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: white;
+    }
+
+    .theme-toggle {
+      background: none;
+      border: none;
+      color: var(--text-primary);
+      cursor: pointer;
+      font-size: 16px;
+      padding: 6px;
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+
+    .theme-toggle:hover {
+      background: var(--bg-secondary);
+    }
+
+    /* Container */
+    .container {
+      display: flex;
+      min-height: calc(100vh - 70px);
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 280px;
+      background: var(--bg-primary);
+      border-right: 1px solid var(--border-color);
+      padding: 1.5rem;
+      overflow-y: auto;
+      transition: var(--transition);
+      position: sticky;
+      top: 70px;
+      height: calc(100vh - 70px);
+    }
+
+    .sidebar-section {
+      margin-bottom: 2rem;
+    }
+
+    .sidebar-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .domain-list {
+      list-style: none;
+    }
+
+    .domain-item {
+      margin-bottom: 4px;
+    }
+
+    .domain-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      color: var(--text-primary);
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .domain-link:hover {
+      background: var(--bg-secondary);
+    }
+
+    .domain-link.active {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .filter-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    .filter-btn {
+      padding: 6px 12px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-primary);
+      color: var(--text-secondary);
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filter-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .filter-btn.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+    }
+
+    /* Main content */
+    .main-content {
+      flex: 1;
+      padding: 24px;
+      overflow-y: auto;
+      width: calc(100% - 280px);
+      transition: margin-right 0.3s ease;
+    }
+
+    .domain-header {
+      margin-bottom: 2rem;
+    }
+
+    .domain-header h1 {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--text-primary);
+    }
+
+    .domain-description {
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+
+    /* Progress container */
+    .progress-container {
+      background: var(--bg-primary);
+      border-radius: 8px;
+      padding: 16px;
+      box-shadow: var(--card-shadow);
+      margin-bottom: 24px;
+    }
+
+    .progress-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    .progress-info strong {
+      color: var(--text-primary);
+      margin: 0 4px;
+    }
+
+    .progress-bar {
+      height: 8px;
+      background: var(--bg-secondary);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--primary);
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+
+    /* Search container */
+    .search-container {
+      position: relative;
+      margin-bottom: 1.5rem;
+    }
+
+    .search-container i {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-secondary);
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 10px 16px 10px 40px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 14px;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    /* Problem list */
+    .problems-table {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .table-header {
+      display: grid;
+      grid-template-columns: 40px 1fr 100px 100px 100px 100px;
+      gap: 1rem;
+      padding: 12px 16px;
+      background: var(--bg-secondary);
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border-color);
+      border-radius: 8px 8px 0 0;
+    }
+
+    .problem-row {
+      display: grid;
+      grid-template-columns: 40px 1fr 100px 100px 100px 100px;
+      gap: 1rem;
+      padding: 12px 16px;
+      background: var(--bg-primary);
+      border-radius: 6px;
+      box-shadow: var(--card-shadow);
+      align-items: center;
+      transition: all 0.2s;
+    }
+
+    .problem-row:hover {
+      background: var(--bg-secondary);
+    }
+
+    .status-icon {
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .saved-icon {
+      color: var(--warning);
+    }
+
+    .unsolved-icon {
+      color: var(--text-secondary);
+    }
+
+    .problem-title {
+      color: var(--text-primary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .problem-title:hover {
+      color: var(--primary);
+    }
+
+    .popularity-tag, .level-tag {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 500;
+      text-align: center;
+    }
+
+    .popularity-tag {
+      background-color: var(--bg-secondary);
+      color: var(--text-primary);
+    }
+
+    .level-tag {
+      background-color: var(--secondary);
+      color: white;
+    }
+
+    .difficulty {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 500;
+      text-align: center;
+    }
+
+    .difficulty.easy {
+      color: var(--success);
+      background-color: rgba(72, 187, 120, 0.1);
+    }
+
+    .difficulty.medium {
+      color: var(--warning);
+      background-color: rgba(236, 201, 75, 0.1);
+    }
+
+    .difficulty.hard {
+      color: var(--accent);
+      background-color: rgba(255, 82, 82, 0.1);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      color: var(--text-secondary);
+    }
+
+    .empty-state i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: var(--border-color);
+    }
+
+    /* Admin controls */
+    .admin-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 2rem;
+      padding: 1rem;
+      background-color: var(--bg-secondary);
+      border-radius: 6px;
+    }
+
+    .admin-btn {
+      padding: 0.7rem 1.2rem;
+      border: none;
+      border-radius: 6px;
+      background-color: var(--primary);
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .admin-btn:hover {
+      background-color: var(--primary-dark);
+    }
+
+    .btn-danger {
+      background-color: var(--accent);
+    }
+
+    .btn-danger:hover {
+      background-color: #e53935;
+    }
+
+    /* Modal styles */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .modal.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-content {
+      background-color: var(--bg-primary);
+      border-radius: 8px;
+      width: 90%;
+      max-width: 600px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: var(--card-shadow);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .modal-header h2 {
+      color: var(--primary);
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .close-modal {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--text-secondary);
+      transition: color 0.2s;
+    }
+
+    .close-modal:hover {
+      color: var(--text-primary);
+    }
+
+    .form-group {
+      padding: 1rem 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.8rem;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 14px;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      transition: border-color 0.2s;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .option-row {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+      align-items: center;
+    }
+
+    .option-input {
+      flex: 1;
+    }
+
+    .remove-option {
+      background: none;
+      border: none;
+      color: var(--accent);
+      cursor: pointer;
+      font-size: 1.2rem;
+      padding: 0.5rem;
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+
+    .remove-option:hover {
+      background: var(--bg-secondary);
+    }
+
+    .add-option-btn, .submit-question-btn {
+      padding: 0.7rem 1.2rem;
+      border: none;
+      border-radius: 6px;
+      background-color: var(--primary);
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+      transition: all 0.2s;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .add-option-btn {
+      background-color: var(--text-secondary);
+    }
+
+    .add-option-btn:hover, .submit-question-btn:hover {
+      opacity: 0.9;
+    }
+
+    /* Question Detail View */
+    .question-detail-backdrop {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      z-index: 999;
+    }
+
+    .question-detail-backdrop.show {
+      display: block;
+    }
+
+    .question-detail-view {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      max-width: 800px;
+      max-height: 90vh;
+      background-color: var(--bg-primary);
+      border-radius: 8px;
+      box-shadow: var(--card-shadow);
+      z-index: 1000;
+      overflow-y: auto;
+      padding: 2rem;
+    }
+
+    .question-detail-view.show {
+      display: block;
+    }
+
+    .back-to-problems {
+      padding: 0.7rem 1.2rem;
+      border: none;
+      border-radius: 6px;
+      background-color: var(--bg-secondary);
+      color: var(--text-primary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      transition: all 0.2s;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .back-to-problems:hover {
+      background-color: var(--border-color);
+    }
+
+    .question-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1.5rem;
+    }
+
+    .question-description {
+      margin-bottom: 2rem;
+      line-height: 1.6;
+      color: var(--text-primary);
+    }
+
+    .options-container {
+      margin-bottom: 2rem;
+    }
+
+    .option-item {
+      padding: 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      margin-bottom: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .option-item:hover {
+      background-color: var(--bg-secondary);
+    }
+
+    .option-item.selected {
+      border-color: var(--primary);
+      background-color: rgba(3, 218, 198, 0.1);
+    }
+
+    .option-item.correct {
+      border-color: var(--success);
+      background-color: rgba(72, 187, 120, 0.1);
+    }
+
+    .option-item.incorrect {
+      border-color: var(--accent);
+      background-color: rgba(255, 82, 82, 0.1);
+    }
+
+    .submit-answer-btn {
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: 6px;
+      background-color: var(--primary);
+      color: white;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .submit-answer-btn:hover {
+      background-color: var(--primary-dark);
+    }
+
+    .submit-answer-btn:disabled {
+      background-color: var(--text-secondary);
+      cursor: not-allowed;
+    }
+
+    .feedback-message {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      border-radius: 6px;
+      font-weight: 500;
+    }
+
+    .feedback-correct {
+      background-color: rgba(72, 187, 120, 0.1);
+      color: var(--success);
+      border: 1px solid var(--success);
+    }
+
+    .feedback-incorrect {
+      background-color: rgba(255, 82, 82, 0.1);
+      color: var(--accent);
+      border: 1px solid var(--accent);
+    }
+
+    /* Enhanced Roadmap Section */
+    .roadmap-container {
+      position: fixed;
+      top: 70px;
+      right: 0;
+      width: 320px;
+      height: calc(100vh - 70px);
+      background-color: var(--bg-primary);
+      border-left: 1px solid var(--border-color);
+      padding: 1.5rem;
+      overflow-y: auto;
+      box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+      z-index: 90;
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+    }
+
+    .roadmap-container.show {
+      transform: translateX(0);
+    }
+
+    .roadmap-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .roadmap-header h2 {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .roadmap-toggle {
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .roadmap-toggle:hover {
+      background: var(--primary-dark);
+    }
+
+    .roadmap-content {
+      display: none;
+    }
+
+    .roadmap-content.show {
+      display: block;
+    }
+
+    .roadmap-item {
+      margin-bottom: 1.5rem;
+      padding-left: 16px;
+      border-left: 2px solid var(--primary);
+      position: relative;
+    }
+
+    .roadmap-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .roadmap-item-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+      cursor: pointer;
+    }
+
+    .roadmap-toggle-icon {
+      margin-right: 8px;
+      color: var(--primary);
+      transition: transform 0.2s;
+      font-size: 14px;
+    }
+
+    .roadmap-toggle-icon.rotated {
+      transform: rotate(90deg);
+    }
+
+    .roadmap-item h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .roadmap-details {
+      display: none;
+      margin-left: 20px;
+    }
+
+    .roadmap-details.show {
+      display: block;
+    }
+
+    .roadmap-details ul {
+      list-style: none;
+    }
+
+    .roadmap-details li {
+      padding: 6px 0;
+      color: var(--text-secondary);
+      position: relative;
+      padding-left: 20px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+    }
+
+    .roadmap-details li:before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: var(--primary);
+      font-size: 18px;
+    }
+
+    .roadmap-progress {
+      height: 6px;
+      background: var(--bg-secondary);
+      border-radius: 3px;
+      margin: 8px 0;
+      overflow: hidden;
+    }
+
+    .roadmap-progress-fill {
+      height: 100%;
+      background: var(--success);
+      border-radius: 3px;
+      transition: width 0.5s ease;
+    }
+
+    .roadmap-empty {
+      text-align: center;
+      padding: 2rem;
+      color: var(--text-secondary);
+    }
+
+    .roadmap-empty i {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: var(--border-color);
+    }
+
+    /* Adjust main content when roadmap is visible */
+    .roadmap-visible .main-content {
+      margin-right: 320px;
+      transition: margin-right 0.3s ease;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 1024px) {
+      .sidebar {
+        width: 240px;
+      }
+      
+      .roadmap-container {
+        width: 280px;
+      }
+      
+      .main-content {
+        width: calc(100% - 240px);
+      }
+      
+      .roadmap-visible .main-content {
+        margin-right: 280px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+      
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: static;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+      }
+      
+      .roadmap-container {
+        position: static;
+        width: 100%;
+        height: auto;
+        transform: none;
+        border-left: none;
+        border-top: 1px solid var(--border-color);
+      }
+      
+      .roadmap-container.show {
+        transform: none;
+      }
+      
+      .main-content {
+        width: 100%;
+        padding: 16px;
+      }
+      
+      .roadmap-visible .main-content {
+        margin-right: 0;
+      }
+      
+      .table-header, .problem-row {
+        grid-template-columns: 30px 1fr 80px 80px 80px 80px;
+        gap: 0.5rem;
+        padding: 0.8rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      header {
+        padding: 1rem;
+      }
+      
+      nav {
+        gap: 1rem;
+      }
+      
+      .table-header, .problem-row {
+        grid-template-columns: 30px 1fr 70px 70px 70px 70px;
+        font-size: 0.8rem;
+        gap: 0.3rem;
+        padding: 0.5rem;
+      }
+      
+      .problem-title {
+        font-size: 0.9rem;
+      }
+      
+      .popularity-tag, .level-tag, .difficulty {
+        font-size: 0.7rem;
+      }
+      
+      .admin-controls {
+        flex-direction: column;
+      }
+      
+      .question-detail-view {
+        padding: 1rem;
+      }
+    }
+    .roadmap-toggle-btn {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 8px 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.roadmap-toggle-btn:hover {
+  background: var(--primary-light);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+  padding: 1rem;
+}
+
+.pagination-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.pagination-btn {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--border-color);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.pagination-btn:hover {
+  background: var(--bg-secondary);
+  border-color: var(--primary);
+}
+
+.pagination-btn.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+#deleteCsvResults {
+  background-color: var(--bg-secondary);
+  padding: 1rem;
+  border-radius: 6px;
+  margin-top: 1rem;
+}
+
+#deleteCsvResults h3 {
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+}
+
+#deleteCsvResults ul {
+  margin-top: 0.5rem;
+  padding-left: 1.5rem;
+}
+
+#deleteCsvResults li {
+  color: var(--text-secondary);
+  margin-bottom: 0.25rem;
+}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <i class="fas fa-brain"></i>
+      <span>LearnVerse</span>
+    </div>
+    <nav>
+      <a href="#">Problems</a>
+      <a href="#">Study Plans</a>
+      <a href="#">Community</a>
+      <div class="user-info" id="userInfo">
+        <div class="user-avatar" id="userAvatar">G</div>
+        <span id="userName">Guest</span>
+      </div>
+      <button class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon"></i>
+      </button>
+      <button class="roadmap-toggle-btn" id="headerRoadmapToggle">
+  <i class="fas fa-road"></i>
+  <span>Show Roadmap</span>
+</button>
+    </nav>
+  </header>
+
+  <div class="container" id="container">
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-title">Learning Domains</div>
+        <ul class="domain-list" id="domainList">
+          <!-- Domains will be loaded here -->
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">Difficulty</div>
+        <div class="filter-options">
+          <button class="filter-btn active" data-filter="difficulty" data-value="all">All</button>
+          <button class="filter-btn" data-filter="difficulty" data-value="easy">Easy</button>
+          <button class="filter-btn" data-filter="difficulty" data-value="medium">Medium</button>
+          <button class="filter-btn" data-filter="difficulty" data-value="hard">Hard</button>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">Status</div>
+        <div class="filter-options">
+          <button class="filter-btn active" data-filter="status" data-value="all">All</button>
+          <button class="filter-btn" data-filter="status" data-value="solved">Attempted</button>
+          <button class="filter-btn" data-filter="status" data-value="unsolved">Unattempted</button>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+  <div class="sidebar-title">Solution Status</div>
+  <div class="filter-options">
+    <button class="filter-btn active" data-filter="solution" data-value="all">All</button>
+    <button class="filter-btn" data-filter="solution" data-value="correct">Correctly Solved</button>
+    <button class="filter-btn" data-filter="solution" data-value="incorrect">Incorrectly Solved</button>
+  </div>
+</div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">Saved Questions</div>
+        <div class="filter-options">
+          <button class="filter-btn active" data-filter="saved" data-value="all">All</button>
+          <button class="filter-btn" data-filter="saved" data-value="saved">Saved</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <div class="domain-header">
+        <h1 id="domainTitle">Select a Domain</h1>
+        <p id="domainDescription">Choose a learning domain from the sidebar to get started.</p>
+      </div>
+
+      <div class="progress-container">
+        <div class="progress-info">
+          <span>Progress: <span id="solvedCount">0</span>/<span id="totalCount">0</span> solved</span>
+          <span id="progressPercent">0%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <div class="search-container">
+        <input type="text" class="search-input" id="searchInput" placeholder="Search questions...">
+      </div>
+
+      <div class="problems-table" id="problemsTable">
+        <div class="table-header">
+          <div></div>
+          <div>Title</div>
+          <div>Popularity</div>
+          <div>Level</div>
+          <div>Difficulty</div>
+          <div>Actions</div>
+        </div>
+        <div class="empty-state" id="emptyState">
+          <i class="fas fa-inbox"></i>
+          <p>No problems available. Select a domain to view questions.</p>
+        </div>
+      </div>
+
+      
+
+     <div id="adminControls" style="display: none;">
+      <div class="admin-controls">
+    <button class="admin-btn" onclick="showAddCSVModal()">
+      <i class="fas fa-file-csv"></i> Add File
+    </button>
+    <button class="admin-btn" onclick="showDeleteCSVModal()">
+      <i class="fas fa-trash"></i> Delete from File
+    </button>
+    <button class="admin-btn" onclick="showAddDomainModal()">
+      <i class="fas fa-plus"></i> Add Domain
+    </button>
+    <button class="admin-btn" onclick="showAddRoadmapModal()">
+      <i class="fas fa-plus"></i> Add Roadmap
+    </button>
+    <button class="admin-btn btn-danger" onclick="showDeleteQuestionModal()">
+      <i class="fas fa-trash"></i> Delete Question
+    </button>
+    <button class="admin-btn btn-danger" onclick="showDeleteDomainModal()">
+      <i class="fas fa-trash"></i> Delete Domain
+    </button>
+    <button class="admin-btn btn-danger" onclick="showDeleteRoadmapModal()">
+      <i class="fas fa-trash"></i> Delete Roadmap
+    </button>
+   </div>
+   <div class="empty-state" id="adminEmptyMessage" style="display: none;">
+    <p>Admin controls enabled. You can manage content.</p>
+   </div>
+   </div>
+</div>
+
+    <!-- Roadmap Section -->
+    <div class="roadmap-container" id="roadmapContainer">
+      <div class="roadmap-header">
+        <h2><i class="fas fa-road"></i> Learning Path</h2>
+        <button class="roadmap-toggle" id="toggleRoadmap">
+          <i class="fas fa-chevron-left roadmap-toggle-icon"></i>
+          <span>Hide Roadmap</span>
+        </button>
+      </div>
+      <div class="roadmap-content show" id="roadmapContent">
+        <div class="roadmap-empty">
+          <i class="fas fa-map-marked-alt"></i>
+          <p>Select a domain to view its learning roadmap.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- Add Question Modal -->
+<div class="modal" id="addQuestionModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Add New Question</h2>
+      <button class="close-modal" onclick="closeModal('addQuestionModal')">&times;</button>
+    </div>
+    <div class="form-group">
+      <label for="questionDomain">Domain</label>
+      <select id="questionDomain" class="form-control">
+        <!-- Domains will be populated here -->
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="questionTitle">Question Title</label>
+      <input type="text" id="questionTitle" class="form-control" placeholder="Enter question title">
+    </div>
+    <div class="form-group">
+      <label for="questionDescription">Description</label>
+      <textarea id="questionDescription" class="form-control" rows="3" placeholder="Enter question description"></textarea>
+    </div>
+    <div class="form-group">
+      <label>Options</label>
+      <div id="optionsContainer">
+        <div class="option-row">
+          <input type="text" class="form-control option-input" placeholder="Option 1">
+          <button class="remove-option" onclick="removeOption(this)"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="option-row">
+          <input type="text" class="form-control option-input" placeholder="Option 2">
+          <button class="remove-option" onclick="removeOption(this)"><i class="fas fa-times"></i></button>
+        </div>
+      </div>
+      <button class="add-option-btn" onclick="addOption()">
+        <i class="fas fa-plus"></i> Add Option
+      </button>
+    </div>
+    <div class="form-group">
+      <label for="correctAnswer">Correct Answer</label>
+      <input type="text" id="correctAnswer" class="form-control" placeholder="Enter correct answer">
+    </div>
+    <div class="form-group">
+      <label for="difficultySelect">Difficulty</label>
+      <select id="difficultySelect" class="form-control">
+        <option value="easy">Easy</option>
+        <option value="medium">Medium</option>
+        <option value="hard">Hard</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <button class="submit-question-btn" onclick="addQuestion()">
+        <i class="fas fa-plus"></i> Add Question
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Add CSV Modal -->
+<div class="modal" id="addCSVModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Upload Questions CSV</h2>
+      <button class="close-modal" onclick="closeModal('addCSVModal')">&times;</button>
+    </div>
+    <div class="form-group">
+      <label for="csvDomain">Domain</label>
+      <select id="csvDomain" class="form-control">
+        <!-- Domains will be populated here -->
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="csvFile">CSV File</label>
+      <input type="file" id="csvFile" class="form-control" accept=".csv">
+      <small>CSV format: Title, Description, Option1, Option2, Option3, Option4, CorrectAnswer, Difficulty</small>
+    </div>
+    <div class="form-group">
+      <button class="submit-question-btn" onclick="processCSV()">
+        <i class="fas fa-upload"></i> Upload Questions
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Questions from CSV Modal -->
+<div class="modal" id="deleteCSVModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Delete Questions from CSV</h2>
+      <button class="close-modal" onclick="closeModal('deleteCSVModal')">&times;</button>
+    </div>
+    <div class="form-group">
+      <label for="deleteCsvDomain">Domain</label>
+      <select id="deleteCsvDomain" class="form-control">
+        <!-- Domains will be populated here -->
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="deleteCsvFile">CSV File</label>
+      <input type="file" id="deleteCsvFile" class="form-control" accept=".csv">
+      <small>CSV format: Title, Description, Option1, Option2, Option3, Option4, CorrectAnswer, Difficulty</small>
+    </div>
+    <div class="form-group">
+      <button class="submit-question-btn" onclick="processDeleteCSV()">
+        <i class="fas fa-trash"></i> Delete Questions
+      </button>
+    </div>
+    <div class="form-group" id="deleteCsvResults" style="display: none;">
+      <h3>Deletion Results:</h3>
+      <div id="deletedCount" style="color: var(--success);"></div>
+      <div id="notFoundCount" style="color: var(--accent);"></div>
+      <div id="notFoundList"></div>
+    </div>
+  </div>
+</div>
+
+  <!-- Delete Question Modal
+  <div class="modal" id="deleteQuestionModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Delete Question</h2>
+        <button class="close-modal" onclick="closeModal('deleteQuestionModal')">&times;</button>
+      </div>
+      <div class="form-group">
+        <label for="deleteQuestionSelect">Select Question to Delete</label>
+        <select id="deleteQuestionSelect" class="form-control">
+          Questions will be populated here
+        </select>
+      </div>
+      <div class="form-group">
+        <button class="submit-question-btn" style="background: var(--accent)" onclick="deleteQuestion()">
+          <i class="fas fa-trash"></i> Delete Question
+        </button>
+      </div>
+    </div>
+  </div> -->
+
+  <!-- Delete Domain Modal -->
+  <div class="modal" id="deleteDomainModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Delete Domain</h2>
+        <button class="close-modal" onclick="closeModal('deleteDomainModal')">&times;</button>
+      </div>
+      <div class="form-group">
+        <label for="deleteDomainSelect">Select Domain to Delete</label>
+        <select id="deleteDomainSelect" class="form-control">
+          <!-- Domains will be populated here -->
+        </select>
+      </div>
+      <div class="form-group">
+        <button class="submit-question-btn" style="background: var(--accent)" onclick="deleteDomain()">
+          <i class="fas fa-trash"></i> Delete Domain
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Roadmap Modal -->
+  <div class="modal" id="deleteRoadmapModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Delete Roadmap</h2>
+        <button class="close-modal" onclick="closeModal('deleteRoadmapModal')">&times;</button>
+      </div>
+      <div class="form-group">
+        <label for="deleteRoadmapSelect">Select Roadmap to Delete</label>
+        <select id="deleteRoadmapSelect" class="form-control">
+          <!-- Roadmaps will be populated here -->
+        </select>
+      </div>
+      <div class="form-group">
+        <button class="submit-question-btn" style="background: var(--accent)" onclick="deleteRoadmap()">
+          <i class="fas fa-trash"></i> Delete Roadmap
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Domain Modal -->
+  <div class="modal" id="addDomainModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Add New Domain</h2>
+        <button class="close-modal" onclick="closeModal('addDomainModal')">&times;</button>
+      </div>
+      <div class="form-group">
+        <label for="domainName">Domain Name</label>
+        <input type="text" id="domainName" class="form-control" placeholder="Enter domain name">
+      </div>
+      <div class="form-group">
+        <label for="domainIcon">Icon Class (Font Awesome)</label>
+        <input type="text" id="domainIcon" class="form-control" placeholder="e.g., fas fa-microchip">
+      </div>
+      <div class="form-group">
+        <label for="domainDescription">Description</label>
+        <textarea id="domainDescription" class="form-control" placeholder="Enter domain description"></textarea>
+      </div>
+      <div class="form-group">
+        <button class="submit-question-btn" onclick="addDomain()">
+          <i class="fas fa-plus"></i> Add Domain
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Roadmap Modal -->
+  <div class="modal" id="addRoadmapModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Add Roadmap</h2>
+        <button class="close-modal" onclick="closeModal('addRoadmapModal')">&times;</button>
+      </div>
+      <div class="form-group">
+        <label for="roadmapDomain">Domain</label>
+        <select id="roadmapDomain" class="form-control">
+          <!-- Domains will be populated here -->
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="roadmapTitle">Roadmap Title</label>
+        <input type="text" id="roadmapTitleInput" class="form-control" placeholder="Enter roadmap title">
+      </div>
+      <div class="form-group">
+        <label>Roadmap Content</label>
+        <div id="mainHeadingsContainer">
+          <div class="main-heading-item">
+            <div class="form-group">
+              <label>Main Heading 1</label>
+              <input type="text" class="form-control main-heading-input" placeholder="Enter main heading">
+            </div>
+            <div class="subheadings-container">
+              <div class="form-group">
+                <label>Subheading 1</label>
+                <input type="text" class="form-control subheading-input" placeholder="Enter subheading">
+              </div>
+              <div class="form-group">
+                <label>Subheading 2</label>
+                <input type="text" class="form-control subheading-input" placeholder="Enter subheading">
+              </div>
+            </div>
+            <button class="add-subheading-btn" onclick="addSubheading(this)">
+              <i class="fas fa-plus"></i> Add Subheading
+            </button>
+            <button class="remove-heading-btn" onclick="removeHeading(this)">
+              <i class="fas fa-times"></i> Remove Heading
+            </button>
+          </div>
+        </div>
+        <button class="add-option-btn" onclick="addMainHeading()">
+          <i class="fas fa-plus"></i> Add Main Heading
+        </button>
+      </div>
+      <div class="form-group">
+        <button class="submit-question-btn" onclick="addRoadmap()">
+          <i class="fas fa-plus"></i> Add Roadmap
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Question Detail Backdrop -->
+  <div class="question-detail-backdrop" id="questionDetailBackdrop" onclick="hideQuestionDetail()"></div>
+  
+  <!-- Question Detail View -->
+  <div class="question-detail-view" id="questionDetailView">
+    <button class="back-to-problems" onclick="hideQuestionDetail()">
+      <i class="fas fa-arrow-left"></i> Back to Problems
+    </button>
+
+    <div class="question-header">
+      <div>
+        <h2 id="detailQuestionTitle">Question Title</h2>
+        <div class="difficulty medium" id="detailQuestionDifficulty">Medium</div>
+      </div>
+    </div>
+
+    <p class="question-description" id="detailQuestionDescription"></p>
+
+    <div class="options-container" id="detailQuestionOptions">
+      <!-- Options will be populated here -->
+    </div>
+
+    <button class="submit-answer-btn" id="submitAnswerBtn" onclick="checkAnswer()">
+      Submit Answer
+    </button>
+
+    <div class="feedback-message" id="feedbackMessage" style="display: none;"></div>
+  </div>
+
+  <script>
+    // Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyD4T6rAV2npex-ZOJuu5IKQ1bDUkD7o9Oc",
+    authDomain: "eceverse-adeac.firebaseapp.com",
+    databaseURL: "https://eceverse-adeac-default-rtdb.firebaseio.com",
+    projectId: "eceverse-adeac",
+    storageBucket: "eceverse-adeac.firebasestorage.app",
+    messagingSenderId: "55835462054",
+    appId: "1:55835462054:web:9ca23a5817ed40f2842767",
+    measurementId: "G-KTV3P359DX"
+  };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    // Current user state
+    let currentUser = null;
+    let currentDomain = null;
+    let questions = [];
+    let domains = [];
+    let roadmaps = [];
+    let userProgress = {};
+    let currentSelectedOption = null;
+    let currentQuestionId = null;
+    let currentPage = 1;
+
+    // Check authentication state
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        currentUser = user;
+        document.getElementById('userName').textContent = user.displayName || user.email;
+        document.getElementById('userAvatar').textContent = (user.displayName || user.email).charAt(0).toUpperCase();
+        
+        // Show admin controls only for srujansrujan@gmail.com
+        if (user.email === 'srujansrujan@gmail.com') {
+          document.getElementById('adminControls').style.display = 'block';
+          document.getElementById('adminEmptyMessage').style.display = 'block';
+        }
+        
+        // Load data
+        loadDomains();
+        loadUserProgress();
+        setupFilterListeners();
+        setupSearchListener();
+        
+        // Initialize roadmap toggle
+        initRoadmapToggle();
+      } else {
+        // Redirect to login page if not authenticated
+        window.location.href = 'login.html';
+      }
+    });
+
+    // Theme toggle functionality
+    const themeToggle = document.getElementById('themeToggle');
+    
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark-theme');
+      
+      if (document.body.classList.contains('dark-theme')) {
+        document.body.setAttribute('data-theme', 'dark');
+        themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        localStorage.setItem('theme', 'dark');
+      } else {
+        document.body.removeAttribute('data-theme');
+        themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+        localStorage.setItem('theme', 'light');
+      }
+    });
+    
+    // Check for saved theme preference
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark-theme');
+      document.body.setAttribute('data-theme', 'dark');
+      themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+    }
+    
+    // Initialize roadmap toggle
+    function initRoadmapToggle() {
+      const toggleRoadmapBtn = document.getElementById('toggleRoadmap');
+      const roadmapContainer = document.getElementById('roadmapContainer');
+      const mainContent = document.querySelector('.main-content');
+      
+      if (toggleRoadmapBtn && roadmapContainer) {
+        // Set initial state
+        roadmapContainer.classList.add('show');
+        document.body.classList.add('roadmap-visible');
+        
+        toggleRoadmapBtn.addEventListener('click', () => {
+          roadmapContainer.classList.toggle('show');
+          document.body.classList.toggle('roadmap-visible');
+          
+          const icon = toggleRoadmapBtn.querySelector('.roadmap-toggle-icon');
+          const span = toggleRoadmapBtn.querySelector('span');
+          
+          if (roadmapContainer.classList.contains('show')) {
+            icon.className = 'fas fa-chevron-left roadmap-toggle-icon';
+            span.textContent = 'Hide Roadmap';
+          } else {
+            icon.className = 'fas fa-chevron-right roadmap-toggle-icon';
+            span.textContent = 'Show Roadmap';
+          }
+        });
+      }
+    }
+    
+    // Setup search listener
+   function setupSearchListener() {
+      const searchInput = document.getElementById('searchInput');
+      searchInput.addEventListener('input', () => {
+        filterQuestions();
+      });
+    }
+    
+    // Load domains from Firestore
+    function loadDomains() {
+      db.collection('domains').get().then((querySnapshot) => {
+        domains = [];
+        const domainList = document.getElementById('domainList');
+        domainList.innerHTML = '';
+        
+        querySnapshot.forEach((doc) => {
+          const domain = { id: doc.id, ...doc.data() };
+          domains.push(domain);
+          
+          const li = document.createElement('li');
+          li.className = 'domain-item';
+          li.innerHTML = `
+            <a href="#" class="domain-link" data-domain="${domain.id}">
+              <i class="${domain.icon}"></i>
+              <span>${domain.name}</span>
+            </a>
+          `;
+          domainList.appendChild(li);
+          
+          // Add event listener to domain link
+          li.querySelector('.domain-link').addEventListener('click', (e) => {
+            e.preventDefault();
+            selectDomain(domain.id);
+          });
+        });
+        
+        // Populate domain dropdowns in modals
+        populateDomainDropdowns();
+      }).catch((error) => {
+        console.error('Error loading domains:', error);
+      });
+    }
+    
+    // Select a domain
+    function selectDomain(domainId) {
+      currentDomain = domains.find(d => d.id === domainId);
+      document.getElementById('domainTitle').textContent = currentDomain.name;
+      document.getElementById('domainDescription').textContent = currentDomain.description || 'No description available';
+      
+      // Load questions for this domain
+      loadQuestions(domainId);
+      
+      // Load roadmap for this domain
+      loadRoadmap(domainId);
+    }
+    
+    // Load questions from Firestore
+// Load questions from Firestore with pagination
+  function loadQuestions(domainId) {
+      db.collection('questions')
+        .where('domain', '==', domainId)
+        .get()
+        .then((querySnapshot) => {
+          questions = [];
+          const problemsTable = document.getElementById('problemsTable');
+          problemsTable.innerHTML = `
+            <div class="table-header">
+              <div></div>
+              <div>Title</div>
+              <div>Popularity</div>
+              <div>Level</div>
+              <div>Difficulty</div>
+              <div>Actions</div>
+            </div>
+            <div id="questionsContainer"></div>
+            <div id="paginationControls" class="pagination-controls"></div>
+          `;
+          
+          if (querySnapshot.empty) {
+            problemsTable.innerHTML += `
+              <div class="empty-state">
+                <i class="fas fa-inbox"></i>
+                <p>No problems available for this domain yet.</p>
+                ${currentUser && currentUser.email === 'srujansrujan@gmail.com' ? 
+                  '<p>Use the "Add Question" button to create the first problem.</p>' : ''}
+              </div>
+            `;
+            return;
+          }
+          
+          querySnapshot.forEach((doc) => {
+            const question = { id: doc.id, ...doc.data() };
+            questions.push(question);
+          });
+          
+          // Initialize pagination
+          currentPage = 1;
+          renderQuestionsPage(1);
+          renderPaginationControls();
+          
+          // Update progress UI
+          updateProgressUI();
+        })
+        .catch((error) => {
+          console.error('Error loading questions:', error);
+        });
+    }
+
+    // Render questions for a specific page
+    function renderQuestionsPage(page) {
+      const questionsPerPage = 8;
+      const startIndex = (page - 1) * questionsPerPage;
+      const endIndex = Math.min(startIndex + questionsPerPage, questions.length);
+      const questionsContainer = document.getElementById('questionsContainer');
+      
+      questionsContainer.innerHTML = '';
+      
+      if (questions.length === 0) {
+        questionsContainer.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-inbox"></i>
+            <p>No problems available for this domain yet.</p>
+          </div>
+        `;
+        return;
+      }
+      
+      for (let i = startIndex; i < endIndex; i++) {
+        const question = questions[i];
+        const isSaved = userProgress.savedQuestions && userProgress.savedQuestions.includes(question.id);
+        const isSolved = userProgress.solvedQuestions && userProgress.solvedQuestions.includes(question.id);
+        const isCorrect = userProgress.correctAnswers && userProgress.correctAnswers.includes(question.id);
+        
+        const problemRow = document.createElement('div');
+        problemRow.className = 'problem-row';
+        problemRow.setAttribute('data-id', question.id);
+        problemRow.setAttribute('data-solved', isSolved);
+        problemRow.setAttribute('data-correct', isCorrect);
+        problemRow.setAttribute('data-saved', isSaved);
+        problemRow.setAttribute('data-difficulty', question.difficulty);
+        problemRow.setAttribute('data-title', question.title.toLowerCase());
+        
+        problemRow.innerHTML = `
+          <div class="status-icon" onclick="toggleSaveQuestion('${question.id}')">
+            <i class="fas fa-bookmark ${isSaved ? 'saved-icon' : 'unsolved-icon'}"></i>
+          </div>
+          <a href="#" class="problem-title" onclick="showQuestionDetail('${question.id}'); return false;">${question.title}</a>
+          <div class="popularity-tag">${question.popularity || 'New'}</div>
+          <div class="level-tag">${question.level || 'Practice'}</div>
+          <div class="difficulty ${question.difficulty}">${question.difficulty}</div>
+          <div>
+            ${isSolved ? 
+              `<span class="difficulty ${isCorrect ? 'easy' : 'hard'}">${isCorrect ? 'Correct' : 'Wrong'}</span>` : 
+              `<button class="filter-btn" onclick="attemptQuestion('${question.id}')">Attempt</button>`
+            }
+          </div>
+        `;
+        
+        questionsContainer.appendChild(problemRow);
+      }
+      
+      // Apply filters after rendering
+      filterQuestions();
+    }
+
+    // Render pagination controls
+    function renderPaginationControls() {
+      const questionsPerPage = 8;
+      const totalPages = Math.ceil(questions.length / questionsPerPage);
+      const paginationControls = document.getElementById('paginationControls');
+      
+      paginationControls.innerHTML = '';
+      
+      if (totalPages <= 1) return;
+      
+      const paginationContainer = document.createElement('div');
+      paginationContainer.className = 'pagination-buttons';
+      
+      // Previous button
+      if (currentPage > 1) {
+        const prevButton = document.createElement('button');
+        prevButton.className = 'pagination-btn';
+        prevButton.innerHTML = '<i class="fas fa-chevron-left"></i>';
+        prevButton.addEventListener('click', () => {
+          renderQuestionsPage(currentPage - 1);
+          currentPage--;
+          updatePaginationButtons();
+        });
+        paginationContainer.appendChild(prevButton);
+      }
+      
+      // Page number buttons
+      for (let i = 1; i <= totalPages; i++) {
+        const pageButton = document.createElement('button');
+        pageButton.className = `pagination-btn ${i === currentPage ? 'active' : ''}`;
+        pageButton.textContent = i;
+        pageButton.addEventListener('click', () => {
+          renderQuestionsPage(i);
+          currentPage = i;
+          updatePaginationButtons();
+        });
+        paginationContainer.appendChild(pageButton);
+      }
+      
+      // Next button
+      if (currentPage < totalPages) {
+        const nextButton = document.createElement('button');
+        nextButton.className = 'pagination-btn';
+        nextButton.innerHTML = '<i class="fas fa-chevron-right"></i>';
+        nextButton.addEventListener('click', () => {
+          renderQuestionsPage(currentPage + 1);
+          currentPage++;
+          updatePaginationButtons();
+        });
+        paginationContainer.appendChild(nextButton);
+      }
+      
+      paginationControls.appendChild(paginationContainer);
+    }
+
+    // Update pagination buttons active state
+    function updatePaginationButtons() {
+      const buttons = document.querySelectorAll('.pagination-btn');
+      buttons.forEach((button, index) => {
+        if (button.textContent === String(currentPage)) {
+          button.classList.add('active');
+        } else {
+          button.classList.remove('active');
+        }
+      });
+    }
+
+    // Filter questions based on selected filters and search
+    function filterQuestions() {
+      const difficultyFilter = document.querySelector('[data-filter="difficulty"].active')?.dataset.value || 'all';
+      const statusFilter = document.querySelector('[data-filter="status"].active')?.dataset.value || 'all';
+      const solutionFilter = document.querySelector('[data-filter="solution"].active')?.dataset.value || 'all';
+      const savedFilter = document.querySelector('[data-filter="saved"].active')?.dataset.value || 'all';
+      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+      
+      // Get all questions for the current domain
+      const domainQuestions = questions.filter(q => q.domain === currentDomain.id);
+      
+      // Filter questions based on criteria
+      const filteredQuestions = domainQuestions.filter(question => {
+        let show = true;
+        const isSolved = userProgress.solvedQuestions && userProgress.solvedQuestions.includes(question.id);
+        const isCorrect = userProgress.correctAnswers && userProgress.correctAnswers.includes(question.id);
+        const isSaved = userProgress.savedQuestions && userProgress.savedQuestions.includes(question.id);
+        const title = question.title.toLowerCase();
+        
+        // Apply difficulty filter
+        if (difficultyFilter !== 'all' && question.difficulty !== difficultyFilter) {
+          show = false;
+        }
+        
+        // Apply status filter
+        if (statusFilter !== 'all') {
+          if (statusFilter === 'solved' && !isSolved) show = false;
+          if (statusFilter === 'unsolved' && isSolved) show = false;
+        }
+        
+        // Apply solution filter
+        if (solutionFilter !== 'all') {
+          if (solutionFilter === 'correct' && (!isSolved || !isCorrect)) show = false;
+          if (solutionFilter === 'incorrect' && (!isSolved || isCorrect)) show = false;
+        }
+        
+        // Apply saved filter
+        if (savedFilter !== 'all') {
+          if (savedFilter === 'saved' && !isSaved) show = false;
+        }
+        
+        // Apply search filter
+        if (searchTerm && !title.includes(searchTerm)) {
+          show = false;
+        }
+        
+        return show;
+      });
+      
+      // Update the questions array for pagination
+      const filteredQuestionIds = filteredQuestions.map(q => q.id);
+      const displayQuestions = questions.filter(q => filteredQuestionIds.includes(q.id));
+      
+      // Render the filtered questions with pagination
+      currentPage = 1;
+      renderFilteredQuestions(displayQuestions);
+    }
+
+    // Render filtered questions with pagination
+    function renderFilteredQuestions(filteredQuestions) {
+      const questionsPerPage = 8;
+      const startIndex = (currentPage - 1) * questionsPerPage;
+      const endIndex = Math.min(startIndex + questionsPerPage, filteredQuestions.length);
+      const questionsContainer = document.getElementById('questionsContainer');
+      
+      questionsContainer.innerHTML = '';
+      
+      if (filteredQuestions.length === 0) {
+        questionsContainer.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-search"></i>
+            <p>No questions match your filters.</p>
+          </div>
+        `;
+        
+        // Hide pagination controls
+        document.getElementById('paginationControls').innerHTML = '';
+        return;
+      }
+      
+      for (let i = startIndex; i < endIndex; i++) {
+        const question = filteredQuestions[i];
+        const isSaved = userProgress.savedQuestions && userProgress.savedQuestions.includes(question.id);
+        const isSolved = userProgress.solvedQuestions && userProgress.solvedQuestions.includes(question.id);
+        const isCorrect = userProgress.correctAnswers && userProgress.correctAnswers.includes(question.id);
+        
+        const problemRow = document.createElement('div');
+        problemRow.className = 'problem-row';
+        problemRow.setAttribute('data-id', question.id);
+        problemRow.setAttribute('data-solved', isSolved);
+        problemRow.setAttribute('data-correct', isCorrect);
+        problemRow.setAttribute('data-saved', isSaved);
+        problemRow.setAttribute('data-difficulty', question.difficulty);
+        problemRow.setAttribute('data-title', question.title.toLowerCase());
+        
+        problemRow.innerHTML = `
+          <div class="status-icon" onclick="toggleSaveQuestion('${question.id}')">
+            <i class="fas fa-bookmark ${isSaved ? 'saved-icon' : 'unsolved-icon'}"></i>
+          </div>
+          <a href="#" class="problem-title" onclick="showQuestionDetail('${question.id}'); return false;">${question.title}</a>
+          <div class="popularity-tag">${question.popularity || 'New'}</div>
+          <div class="level-tag">${question.level || 'Practice'}</div>
+          <div class="difficulty ${question.difficulty}">${question.difficulty}</div>
+          <div>
+            ${isSolved ? 
+              `<span class="difficulty ${isCorrect ? 'easy' : 'hard'}">${isCorrect ? 'Correct' : 'Wrong'}</span>` : 
+              `<button class="filter-btn" onclick="attemptQuestion('${question.id}')">Attempt</button>`
+            }
+          </div>
+        `;
+        
+        questionsContainer.appendChild(problemRow);
+      }
+      
+      // Render pagination controls for filtered results
+      renderPaginationControlsForFiltered(filteredQuestions);
+    }
+    function renderPaginationControlsForFiltered(filteredQuestions) {
+      const questionsPerPage = 8;
+      const totalPages = Math.ceil(filteredQuestions.length / questionsPerPage);
+      const paginationControls = document.getElementById('paginationControls');
+      
+      paginationControls.innerHTML = '';
+      
+      if (totalPages <= 1) return;
+      
+      const paginationContainer = document.createElement('div');
+      paginationContainer.className = 'pagination-buttons';
+      
+      // Previous button
+      if (currentPage > 1) {
+        const prevButton = document.createElement('button');
+        prevButton.className = 'pagination-btn';
+        prevButton.innerHTML = '<i class="fas fa-chevron-left"></i>';
+        prevButton.addEventListener('click', () => {
+          currentPage--;
+          renderFilteredQuestions(filteredQuestions);
+        });
+        paginationContainer.appendChild(prevButton);
+      }
+      
+      // Page number buttons
+      for (let i = 1; i <= totalPages; i++) {
+        const pageButton = document.createElement('button');
+        pageButton.className = `pagination-btn ${i === currentPage ? 'active' : ''}`;
+        pageButton.textContent = i;
+        pageButton.addEventListener('click', () => {
+          currentPage = i;
+          renderFilteredQuestions(filteredQuestions);
+        });
+        paginationContainer.appendChild(pageButton);
+      }
+      
+      // Next button
+      if (currentPage < totalPages) {
+        const nextButton = document.createElement('button');
+        nextButton.className = 'pagination-btn';
+        nextButton.innerHTML = '<i class="fas fa-chevron-right"></i>';
+        nextButton.addEventListener('click', () => {
+          currentPage++;
+          renderFilteredQuestions(filteredQuestions);
+        });
+        paginationContainer.appendChild(nextButton);
+      }
+      
+      paginationControls.appendChild(paginationContainer);
+    }
+    // Add event listeners to filter buttons
+   // Add event listeners to filter buttons
+   // Show CSV upload modal
+function showAddCSVModal() {
+      document.getElementById('addCSVModal').classList.add('show');
+    }
+
+// Process CSV file
+function processCSV() {
+  const domain = document.getElementById('csvDomain').value;
+  const fileInput = document.getElementById('csvFile');
+  const file = fileInput.files[0];
+  
+  if (!domain || !file) {
+    alert('Please select a domain and CSV file');
+    return;
+  }
+  
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const csvData = e.target.result;
+    const questions = parseCSV(csvData);
+    
+    if (questions.length === 0) {
+      alert('No valid questions found in CSV');
+      return;
+    }
+    
+    // Add questions to Firebase
+    addQuestionsFromCSV(questions, domain);
+  };
+  reader.readAsText(file);
+}
+
+// Parse CSV data
+// Parse CSV data
+function parseCSV(csvData) {
+  const questions = [];
+  const lines = csvData.split('\n');
+  
+  // Skip header row if exists
+  const startRow = lines[0].toLowerCase().includes('title') ? 1 : 0;
+  
+  for (let i = startRow; i < lines.length; i++) {
+    const line = lines[i].trim();
+    if (!line) continue;
+    
+    // Handle quoted fields that might contain commas
+    const fields = parseCSVLine(line);
+    
+    if (fields.length >= 8) {
+      const question = {
+        title: fields[0].trim(),
+        description: fields[1].trim(),
+        options: [
+          fields[2].trim(),
+          fields[3].trim(),
+          fields[4].trim(),
+          fields[5].trim()
+        ].filter(opt => opt), // Remove empty options
+        correctAnswer: fields[6].trim(),
+        difficulty: fields[7].trim().toLowerCase()
+      };
+      
+      // Validate difficulty
+      if (!['easy', 'medium', 'hard'].includes(question.difficulty)) {
+        question.difficulty = 'medium'; // Default to medium
+      }
+      
+      questions.push(question);
+    }
+  }
+  
+  return questions;
+}
+
+// Parse a CSV line, handling quoted fields
+function parseCSVLine(line) {
+  const fields = [];
+  let currentField = '';
+  let inQuotes = false;
+  
+  for (let i = 0; i < line.length; i++) {
+    const char = line[i];
+    
+    if (char === '"') {
+      inQuotes = !inQuotes;
+    } else if (char === ',' && !inQuotes) {
+      fields.push(currentField);
+      currentField = '';
+    } else {
+      currentField += char;
+    }
+  }
+  
+  fields.push(currentField); // Add the last field
+  return fields;
+}
+
+// Add questions from CSV to Firebase
+function addQuestionsFromCSV(questions, domain) {
+  let addedCount = 0;
+  let errorCount = 0;
+  
+  questions.forEach((question, index) => {
+    db.collection('questions').add({
+      domain,
+      title: question.title,
+      description: question.description,
+      options: question.options,
+      correctAnswer: question.correctAnswer,
+      difficulty: question.difficulty,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      createdBy: currentUser.uid
+    })
+    .then(() => {
+      addedCount++;
+      
+      // If this is the last question, show success message
+      if (addedCount + errorCount === questions.length) {
+        alert(`Successfully added ${addedCount} questions. ${errorCount} failed.`);
+        closeModal('addCSVModal');
+        
+        // Clear file input
+        document.getElementById('csvFile').value = '';
+        
+        // Reload questions if we're viewing this domain
+        if (currentDomain && currentDomain.id === domain) {
+          loadQuestions(domain);
+        }
+      }
+    })
+    .catch((error) => {
+      console.error('Error adding question from CSV:', error);
+      errorCount++;
+      
+      // If this is the last question, show result message
+      if (addedCount + errorCount === questions.length) {
+        alert(`Added ${addedCount} questions. ${errorCount} failed.`);
+        closeModal('addCSVModal');
+      }
+    });
+  });
+}
+    function setupFilterListeners() {
+      const filterButtons = document.querySelectorAll('.filter-btn');
+      
+      filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          const filterType = button.dataset.filter;
+          
+          // Remove active class from all buttons in the same filter group
+          const siblings = document.querySelectorAll(`.filter-btn[data-filter="${filterType}"]`);
+          siblings.forEach(btn => btn.classList.remove('active'));
+          
+          // Add active class to clicked button
+          button.classList.add('active');
+          
+          // Apply filters
+          filterQuestions();
+        });
+      });
+    }
+    // Load roadmap from Firestore
+    function loadRoadmap(domainId) {
+      db.collection('roadmaps')
+        .where('domain', '==', domainId)
+        .get()
+        .then((querySnapshot) => {
+          const roadmapContent = document.getElementById('roadmapContent');
+          roadmapContent.innerHTML = '';
+          
+          if (querySnapshot.empty) {
+            roadmapContent.innerHTML = `
+              <div class="roadmap-empty">
+                <i class="fas fa-map-marked-alt"></i>
+                <p>No roadmap available for this domain yet.</p>
+                ${currentUser && currentUser.email === 'srujansrujan@gmail.com' ? 
+                  '<p>Use the "Add Roadmap" button to create one.</p>' : ''}
+              </div>
+            `;
+            return;
+          }
+          
+          querySnapshot.forEach((doc) => {
+            const roadmap = { id: doc.id, ...doc.data() };
+            const roadmapItem = document.createElement('div');
+            roadmapItem.className = 'roadmap-item';
+            
+            // Calculate progress (this is a simple example)
+            const totalItems = roadmap.roadmapData ? roadmap.roadmapData.reduce((total, item) => 
+              total + (item.subheadings ? item.subheadings.length : 0), 0) : 0;
+            const completedItems = Math.min(totalItems, Math.floor(totalItems * 0.3)); // Example: 30% completed
+            
+            let roadmapHtml = `
+              <div class="roadmap-item-header">
+                <i class="fas fa-chevron-right roadmap-toggle-icon"></i>
+                <h3>${roadmap.title}</h3>
+              </div>
+              <div class="roadmap-progress">
+                <div class="roadmap-progress-fill" style="width: ${totalItems > 0 ? (completedItems/totalItems)*100 : 0}%"></div>
+              </div>
+              <div class="roadmap-details">
+            `;
+            
+            if (roadmap.roadmapData && roadmap.roadmapData.length > 0) {
+              roadmap.roadmapData.forEach(item => {
+                roadmapHtml += `<h4>${item.mainHeading}</h4>`;
+                if (item.subheadings && item.subheadings.length > 0) {
+                  roadmapHtml += '<ul>';
+                  item.subheadings.forEach(subheading => {
+                    roadmapHtml += `<li>${subheading}</li>`;
+                  });
+                  roadmapHtml += '</ul>';
+                }
+              });
+            }
+            
+            roadmapHtml += '</div>';
+            roadmapItem.innerHTML = roadmapHtml;
+            roadmapContent.appendChild(roadmapItem);
+          });
+          
+          // Add event listeners to roadmap items
+          const roadmapItems = document.querySelectorAll('.roadmap-item-header');
+          roadmapItems.forEach(item => {
+            item.addEventListener('click', () => {
+              const toggleIcon = item.querySelector('.roadmap-toggle-icon');
+              const details = item.nextElementSibling.nextElementSibling;
+              
+              toggleIcon.classList.toggle('rotated');
+              details.classList.toggle('show');
+            });
+          });
+        })
+        .catch((error) => {
+          console.error('Error loading roadmap:', error);
+        });
+    }
+    
+    // Load user progress
+    // Load user progress
+function loadUserProgress() {
+  if (!currentUser) return;
+  
+  db.collection('userProgress')
+    .doc(currentUser.uid)
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        userProgress = doc.data();
+        // Ensure all progress arrays exist
+        if (!userProgress.solvedQuestions) userProgress.solvedQuestions = [];
+        if (!userProgress.savedQuestions) userProgress.savedQuestions = [];
+        if (!userProgress.correctAnswers) userProgress.correctAnswers = [];
+        if (!userProgress.wrongAnswers) userProgress.wrongAnswers = [];
+        
+        // Update progress UI after loading
+        updateProgressUI();
+      } else {
+        // Initialize empty progress
+        userProgress = {
+          solvedQuestions: [],
+          savedQuestions: [],
+          correctAnswers: [],
+          wrongAnswers: []
+        };
+        updateProgressUI();
+      }
+    })
+    .catch((error) => {
+      console.error('Error loading user progress:', error);
+    });
+}
+    
+    // Update progress UI
+    // Update progress UI for current domain
+function updateProgressUI() {
+  if (!currentDomain || !questions.length) {
+    // Reset progress if no domain selected or no questions
+    document.getElementById('solvedCount').textContent = '0';
+    document.getElementById('totalCount').textContent = '0';
+    document.getElementById('progressPercent').textContent = '0%';
+    document.getElementById('progressFill').style.width = '0%';
+    return;
+  }
+  
+  // Filter solved questions for the current domain only
+  const domainQuestions = questions.filter(q => q.domain === currentDomain.id);
+  const total = domainQuestions.length;
+  
+  // Count correct answers for this domain only
+  const domainCorrectAnswers = userProgress.correctAnswers 
+    ? userProgress.correctAnswers.filter(id => {
+        const question = questions.find(q => q.id === id);
+        return question && question.domain === currentDomain.id;
+      }) 
+    : [];
+  
+  const correct = domainCorrectAnswers.length;
+  const percent = total > 0 ? Math.round((correct / total) * 100) : 0;
+  
+  document.getElementById('solvedCount').textContent = correct;
+  document.getElementById('totalCount').textContent = total;
+  document.getElementById('progressPercent').textContent = `${percent}% (${correct} correct)`;
+  document.getElementById('progressFill').style.width = `${percent}%`;
+}
+    // Show add question modal
+    function showAddQuestionModal() {
+      document.getElementById('addQuestionModal').classList.add('show');
+    }
+    
+    // Show add domain modal
+    function showAddDomainModal() {
+      document.getElementById('addDomainModal').classList.add('show');
+    }
+    
+    // Show add roadmap modal
+    function showAddRoadmapModal() {
+      document.getElementById('addRoadmapModal').classList.add('show');
+    }
+    
+    // Close modal
+    function closeModal(modalId) {
+      document.getElementById(modalId).classList.remove('show');
+    }
+    
+    // Populate domain dropdowns in modals
+    // Populate domain dropdowns in modals
+function populateDomainDropdowns() {
+  const questionDomain = document.getElementById('questionDomain');
+  const roadmapDomain = document.getElementById('roadmapDomain');
+  const deleteDomainSelect = document.getElementById('deleteDomainSelect');
+  const csvDomain = document.getElementById('csvDomain');
+  
+  questionDomain.innerHTML = '';
+  roadmapDomain.innerHTML = '';
+  deleteDomainSelect.innerHTML = '';
+  csvDomain.innerHTML = '';
+  
+  domains.forEach(domain => {
+    questionDomain.innerHTML += `<option value="${domain.id}">${domain.name}</option>`;
+    roadmapDomain.innerHTML += `<option value="${domain.id}">${domain.name}</option>`;
+    deleteDomainSelect.innerHTML += `<option value="${domain.id}">${domain.name}</option>`;
+    csvDomain.innerHTML += `<option value="${domain.id}">${domain.name}</option>`;
+  });
+}
+    
+    // Add option to question form
+    function addOption() {
+      const optionsContainer = document.getElementById('optionsContainer');
+      const optionCount = optionsContainer.children.length + 1;
+      
+      const optionRow = document.createElement('div');
+      optionRow.className = 'option-row';
+      optionRow.innerHTML = `
+        <input type="text" class="form-control option-input" placeholder="Option ${optionCount}">
+        <button class="remove-option" onclick="removeOption(this)"><i class="fas fa-times"></i></button>
+      `;
+      
+      optionsContainer.appendChild(optionRow);
+    }
+    
+    // Remove option from question form
+    function removeOption(button) {
+      const optionRow = button.parentElement;
+      if (document.getElementById('optionsContainer').children.length > 1) {
+        optionRow.remove();
+      }
+    }
+    
+    // Add question to Firestore
+    function addQuestion() {
+      const domain = document.getElementById('questionDomain').value;
+      const title = document.getElementById('questionTitle').value;
+      const description = document.getElementById('questionDescription').value;
+      const difficulty = document.getElementById('difficultySelect').value;
+      const correctAnswer = document.getElementById('correctAnswer').value;
+      
+      if (!domain || !title || !description || !correctAnswer) {
+        alert('Please fill in all required fields');
+        return;
+      }
+      
+      // Get options
+      const optionInputs = document.querySelectorAll('.option-input');
+      const options = Array.from(optionInputs).map(input => input.value).filter(val => val);
+      
+      if (options.length < 2) {
+        alert('Please add at least two options');
+        return;
+      }
+      
+      // Add question to Firestore
+      db.collection('questions').add({
+        domain,
+        title,
+        description,
+        options,
+        correctAnswer,
+        difficulty,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        createdBy: currentUser.uid
+      })
+      .then(() => {
+        alert('Question added successfully!');
+        closeModal('addQuestionModal');
+        
+        // Clear form
+        document.getElementById('questionTitle').value = '';
+        document.getElementById('questionDescription').value = '';
+        document.getElementById('correctAnswer').value = '';
+        
+        // Reload questions if we're viewing this domain
+        if (currentDomain && currentDomain.id === domain) {
+          loadQuestions(domain);
+        }
+      })
+      .catch((error) => {
+        console.error('Error adding question:', error);
+        alert('Error adding question: ' + error.message);
+      });
+    }
+    
+    // Add domain to Firestore
+    function addDomain() {
+      const name = document.getElementById('domainName').value;
+      const icon = document.getElementById('domainIcon').value;
+      const description = document.getElementById('domainDescription').value;
+      
+      if (!name || !icon) {
+        alert('Please fill in all fields');
+        return;
+      }
+      
+      db.collection('domains').add({
+        name,
+        icon,
+        description: description || "No description available",
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        createdBy: currentUser.uid
+      })
+      .then(() => {
+        alert('Domain added successfully!');
+        closeModal('addDomainModal');
+        
+        // Clear form
+        document.getElementById('domainName').value = '';
+        document.getElementById('domainIcon').value = '';
+        document.getElementById('domainDescription').value = '';
+        
+        loadDomains();
+      })
+      .catch((error) => {
+        console.error('Error adding domain:', error);
+        alert('Error adding domain: ' + error.message);
+      });
+    }
+    
+    // Add roadmap to Firestore
+    function addRoadmap() {
+      const domain = document.getElementById('roadmapDomain').value;
+      const title = document.getElementById('roadmapTitleInput').value;
+      
+      if (!domain || !title) {
+        alert('Please select a domain and enter a title');
+        return;
+      }
+      
+      // Get main headings and subheadings
+      const mainHeadingItems = document.querySelectorAll('.main-heading-item');
+      const roadmapData = [];
+      
+      let hasValidContent = false;
+      mainHeadingItems.forEach((item) => {
+        const mainHeading = item.querySelector('.main-heading-input').value;
+        const subheadings = Array.from(item.querySelectorAll('.subheading-input'))
+          .map(input => input.value)
+          .filter(val => val.trim() !== '');
+        
+        if (mainHeading.trim() !== '' || subheadings.length > 0) {
+          hasValidContent = true;
+          roadmapData.push({
+            mainHeading: mainHeading.trim(),
+            subheadings
+          });
+        }
+      });
+      
+      if (!hasValidContent) {
+        alert('Please add at least one main heading or subheading');
+        return;
+      }
+      
+      db.collection('roadmaps').add({
+        domain,
+        title,
+        roadmapData,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        createdBy: currentUser.uid
+      })
+      .then(() => {
+        alert('Roadmap added successfully!');
+        closeModal('addRoadmapModal');
+        
+        // Clear form
+        document.getElementById('roadmapTitleInput').value = '';
+        clearRoadmapForm();
+        
+        // Reload roadmap if we're viewing this domain
+        if (currentDomain && currentDomain.id === domain) {
+          loadRoadmap(domain);
+        }
+      })
+      .catch((error) => {
+        console.error('Error adding roadmap:', error);
+        alert('Error adding roadmap: ' + error.message);
+      });
+    }
+    function toggleRoadmap() {
+  const roadmapContainer = document.getElementById('roadmapContainer');
+  const headerToggleBtn = document.getElementById('headerRoadmapToggle');
+  const icon = headerToggleBtn.querySelector('i');
+  const span = headerToggleBtn.querySelector('span');
+  
+  roadmapContainer.classList.toggle('show');
+  document.body.classList.toggle('roadmap-visible');
+  
+  if (roadmapContainer.classList.contains('show')) {
+    icon.className = 'fas fa-times';
+    span.textContent = 'Hide Roadmap';
+  } else {
+    icon.className = 'fas fa-road';
+    span.textContent = 'Show Roadmap';
+  }
+}
+
+// Initialize the roadmap toggle button
+function initRoadmapToggle() {
+  const headerToggleBtn = document.getElementById('headerRoadmapToggle');
+  if (headerToggleBtn) {
+    headerToggleBtn.addEventListener('click', toggleRoadmap);
+  }
+}
+
+    // Toggle save question
+    function toggleSaveQuestion(questionId) {
+      if (!userProgress.savedQuestions) {
+        userProgress.savedQuestions = [];
+      }
+      
+      const index = userProgress.savedQuestions.indexOf(questionId);
+      if (index > -1) {
+        userProgress.savedQuestions.splice(index, 1);
+      } else {
+        userProgress.savedQuestions.push(questionId);
+      }
+      
+      // Update in Firestore
+      db.collection('userProgress')
+        .doc(currentUser.uid)
+        .set(userProgress, { merge: true })
+        .then(() => {
+          // Update the UI directly
+          const problemRow = document.querySelector(`.problem-row[data-id="${questionId}"]`);
+          if (problemRow) {
+            const isSaved = userProgress.savedQuestions.includes(questionId);
+            problemRow.setAttribute('data-saved', isSaved);
+            
+            // Update the icon
+            const icon = problemRow.querySelector('.status-icon i');
+            icon.className = isSaved ? 'fas fa-bookmark saved-icon' : 'fas fa-bookmark unsolved-icon';
+            
+            // Reapply filters
+            filterQuestions();
+          }
+        })
+        .catch((error) => {
+          console.error('Error updating saved questions:', error);
+        });
+    }
+    
+    // Show question detail
+    function showQuestionDetail(questionId) {
+      const question = questions.find(q => q.id === questionId);
+      if (!question) return;
+      
+      // Hide main content and roadmap
+      document.querySelector('.main-content').style.display = 'none';
+      document.getElementById('roadmapContainer').style.display = 'none';
+      
+      // Show backdrop
+      document.getElementById('questionDetailBackdrop').classList.add('show');
+      
+      // Set question details
+      document.getElementById('detailQuestionTitle').textContent = question.title;
+      document.getElementById('detailQuestionDescription').textContent = question.description;
+      
+      // Set difficulty
+      const difficultyEl = document.getElementById('detailQuestionDifficulty');
+      difficultyEl.textContent = question.difficulty;
+      difficultyEl.className = `difficulty ${question.difficulty}`;
+      
+      // Populate options
+      const optionsContainer = document.getElementById('detailQuestionOptions');
+      optionsContainer.innerHTML = '';
+      
+      if (question.options && question.options.length > 0) {
+        question.options.forEach((option, index) => {
+          const optionElement = document.createElement('div');
+          optionElement.className = 'option-item';
+          optionElement.innerHTML = `
+            <div class="option-text">${option}</div>
+          `;
+          optionElement.addEventListener('click', () => selectOption(optionElement, option));
+          optionsContainer.appendChild(optionElement);
+        });
+      }
+      
+      // Reset feedback and selected option
+      document.getElementById('feedbackMessage').style.display = 'none';
+      document.getElementById('submitAnswerBtn').disabled = false;
+      currentSelectedOption = null;
+      currentQuestionId = questionId;
+      
+      // Show question detail
+      document.getElementById('questionDetailView').classList.add('show');
+    }
+    
+    function hideQuestionDetail() {
+      // Hide question detail view and backdrop
+      document.getElementById('questionDetailView').classList.remove('show');
+      document.getElementById('questionDetailBackdrop').classList.remove('show');
+      
+      // Show the main content and roadmap section
+      document.querySelector('.main-content').style.display = 'block';
+      
+      if (currentDomain) {
+        document.getElementById('roadmapContainer').style.display = 'block';
+      }
+    }
+    
+    function selectOption(optionElement, optionValue) {
+      // Remove selected class from all options
+      const allOptions = document.querySelectorAll('.option-item');
+      allOptions.forEach(opt => {
+        opt.classList.remove('selected');
+        opt.classList.remove('correct');
+        opt.classList.remove('incorrect');
+      });
+      
+      // Add selected class to clicked option
+      optionElement.classList.add('selected');
+      currentSelectedOption = optionValue;
+    }
+
+    function checkAnswer() {
+      if (!currentSelectedOption) {
+        alert('Please select an answer');
+        return;
+      }
+      
+      const question = questions.find(q => q.id === currentQuestionId);
+      const isCorrect = currentSelectedOption.trim().toLowerCase() === question.correctAnswer.toLowerCase();
+      const feedbackEl = document.getElementById('feedbackMessage');
+      
+      // Disable submit button and options
+      document.getElementById('submitAnswerBtn').disabled = true;
+      const allOptions = document.querySelectorAll('.option-item');
+      allOptions.forEach(opt => {
+        opt.style.cursor = 'default';
+        opt.removeEventListener('click', () => {});
+      });
+      
+      // Mark correct/incorrect options
+      allOptions.forEach(opt => {
+        const optionText = opt.querySelector('.option-text').textContent;
+        if (optionText.trim().toLowerCase() === question.correctAnswer.toLowerCase()) {
+          opt.classList.add('correct');
+        } else if (opt.classList.contains('selected')) {
+          opt.classList.add('incorrect');
+        }
+      });
+      
+      // Show feedback
+      feedbackEl.style.display = 'block';
+      if (isCorrect) {
+        feedbackEl.textContent = 'Correct! Well done!';
+        feedbackEl.className = 'feedback-message feedback-correct';
+        
+        // Update user progress
+        updateUserProgress(true);
+      } else {
+        feedbackEl.textContent = 'Incorrect. Try again or review the concepts.';
+        feedbackEl.className = 'feedback-message feedback-incorrect';
+        
+        // Update user progress
+        updateUserProgress(false);
+      }
+    }
+
+    function updateUserProgress(isCorrect) {
+      if (!userProgress.solvedQuestions) userProgress.solvedQuestions = [];
+      if (!userProgress.correctAnswers) userProgress.correctAnswers = [];
+      if (!userProgress.wrongAnswers) userProgress.wrongAnswers = [];
+      
+      if (!userProgress.solvedQuestions.includes(currentQuestionId)) {
+        userProgress.solvedQuestions.push(currentQuestionId);
+      }
+      
+      if (isCorrect) {
+        if (!userProgress.correctAnswers.includes(currentQuestionId)) {
+          userProgress.correctAnswers.push(currentQuestionId);
+        }
+        
+        // Remove from wrong answers if it was there
+        if (userProgress.wrongAnswers.includes(currentQuestionId)) {
+          const index = userProgress.wrongAnswers.indexOf(currentQuestionId);
+          userProgress.wrongAnswers.splice(index, 1);
+        }
+      } else {
+        if (!userProgress.wrongAnswers.includes(currentQuestionId)) {
+          userProgress.wrongAnswers.push(currentQuestionId);
+        }
+        
+        // Remove from correct answers if it was there
+        if (userProgress.correctAnswers.includes(currentQuestionId)) {
+          const index = userProgress.correctAnswers.indexOf(currentQuestionId);
+          userProgress.correctAnswers.splice(index, 1);
+        }
+      }
+      
+      // Update in Firestore
+      db.collection('userProgress')
+        .doc(currentUser.uid)
+        .set(userProgress, { merge: true })
+        .then(() => {
+          // Update progress UI
+          updateProgressUI();
+          
+          // Update the problem row status
+          const problemRow = document.querySelector(`.problem-row[data-id="${currentQuestionId}"]`);
+          if (problemRow) {
+            problemRow.setAttribute('data-solved', 'true');
+            problemRow.setAttribute('data-correct', isCorrect);
+            
+            // Update the action column
+            const actionCol = problemRow.querySelector('div:last-child');
+            actionCol.innerHTML = `<span class="difficulty ${isCorrect ? 'easy' : 'hard'}">${isCorrect ? 'Correct' : 'Wrong'}</span>`;
+            
+            // Reapply filters
+            filterQuestions();
+          }
+        })
+        .catch((error) => {
+          console.error('Error updating user progress:', error);
+        });
+    }
+    
+    // Attempt question (shortcut to show detail)
+    function attemptQuestion(questionId) {
+      showQuestionDetail(questionId);
+    }
+
+    // Show delete modals
+    function showDeleteQuestionModal() {
+      const select = document.getElementById('deleteQuestionSelect');
+      select.innerHTML = '';
+      
+      questions.forEach(question => {
+        const option = document.createElement('option');
+        option.value = question.id;
+        option.textContent = question.title;
+        select.appendChild(option);
+      });
+      
+      document.getElementById('deleteQuestionModal').classList.add('show');
+    }
+
+    function showDeleteDomainModal() {
+      const select = document.getElementById('deleteDomainSelect');
+      select.innerHTML = '';
+      
+      domains.forEach(domain => {
+        const option = document.createElement('option');
+        option.value = domain.id;
+        option.textContent = domain.name;
+        select.appendChild(option);
+      });
+      
+      document.getElementById('deleteDomainModal').classList.add('show');
+    }
+
+    function showDeleteRoadmapModal() {
+      const select = document.getElementById('deleteRoadmapSelect');
+      select.innerHTML = '';
+      
+      // Load roadmaps for current domain
+      if (currentDomain) {
+        db.collection('roadmaps')
+          .where('domain', '==', currentDomain.id)
+          .get()
+          .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+              const roadmap = { id: doc.id, ...doc.data() };
+              const option = document.createElement('option');
+              option.value = roadmap.id;
+              option.textContent = roadmap.title;
+              select.appendChild(option);
+            });
+          });
+      }
+      
+      document.getElementById('deleteRoadmapModal').classList.add('show');
+    }
+
+    // Delete functions
+    function deleteQuestion() {
+      const questionId = document.getElementById('deleteQuestionSelect').value;
+      
+      db.collection('questions').doc(questionId).delete()
+        .then(() => {
+          alert('Question deleted successfully!');
+          closeModal('deleteQuestionModal');
+          if (currentDomain) loadQuestions(currentDomain.id);
+        })
+        .catch((error) => {
+          alert('Error deleting question: ' + error.message);
+        });
+    }
+
+    function deleteDomain() {
+      const domainId = document.getElementById('deleteDomainSelect').value;
+      
+      db.collection('domains').doc(domainId).delete()
+        .then(() => {
+          alert('Domain deleted successfully!');
+          closeModal('deleteDomainModal');
+          loadDomains();
+        })
+        .catch((error) => {
+          alert('Error deleting domain: ' + error.message);
+        });
+    }
+
+    function deleteRoadmap() {
+      const roadmapId = document.getElementById('deleteRoadmapSelect').value;
+      
+      db.collection('roadmaps').doc(roadmapId).delete()
+        .then(() => {
+          alert('Roadmap deleted successfully!');
+          closeModal('deleteRoadmapModal');
+          if (currentDomain) loadRoadmap(currentDomain.id);
+        })
+        .catch((error) => {
+          alert('Error deleting roadmap: ' + error.message);
+        });
+    }
+    
+    // Add main heading to roadmap form
+    function addMainHeading() {
+      const container = document.getElementById('mainHeadingsContainer');
+      const headingCount = container.children.length + 1;
+      
+      const mainHeadingItem = document.createElement('div');
+      mainHeadingItem.className = 'main-heading-item';
+      mainHeadingItem.innerHTML = `
+        <div class="form-group">
+          <label>Main Heading ${headingCount}</label>
+          <input type="text" class="form-control main-heading-input" placeholder="Enter main heading">
+        </div>
+        <div class="subheadings-container">
+          <div class="form-group">
+            <label>Subheading 1</label>
+            <input type="text" class="form-control subheading-input" placeholder="Enter subheading">
+          </div>
+          <div class="form-group">
+            <label>Subheading 2</label>
+            <input type="text" class="form-control subheading-input" placeholder="Enter subheading">
+          </div>
+        </div>
+        <button class="add-subheading-btn" onclick="addSubheading(this)">
+          <i class="fas fa-plus"></i> Add Subheading
+        </button>
+        <button class="remove-heading-btn" onclick="removeHeading(this)">
+          <i class="fas fa-times"></i> Remove Heading
+        </button>
+      `;
+      
+      container.appendChild(mainHeadingItem);
+    }
+
+    // Add subheading to a main heading
+    function addSubheading(button) {
+      const subheadingsContainer = button.previousElementSibling;
+      const subheadingCount = subheadingsContainer.children.length + 1;
+      
+      const subheadingDiv = document.createElement('div');
+      subheadingDiv.className = 'form-group';
+      subheadingDiv.innerHTML = `
+        <label>Subheading ${subheadingCount}</label>
+        <input type="text" class="form-control subheading-input" placeholder="Enter subheading">
+      `;
+      
+      subheadingsContainer.appendChild(subheadingDiv);
+    }
+
+    // Remove a heading
+    function removeHeading(button) {
+      const mainHeadingItem = button.closest('.main-heading-item');
+      if (document.getElementById('mainHeadingsContainer').children.length > 1) {
+        mainHeadingItem.remove();
+      }
+    }
+
+    // Clear roadmap form
+    function clearRoadmapForm() {
+      document.getElementById('mainHeadingsContainer').innerHTML = `
+        <div class="main-heading-item">
+          <div class="form-group">
+            <label>Main Heading 1</label>
+            <input type="text" class="form-control main-heading-input" placeholder="Enter main heading">
+          </div>
+          <div class="subheadings-container">
+            <div class="form-group">
+              <label>Subheading 1</label>
+              <input type="text" class="form-control subheading-input" placeholder="Enter subheading">
+            </div>
+            <div class="form-group">
+              <label>Subheading 2</label>
+              <input type="text" class="form-control subheading-input" placeholder="Enter subheading">
+            </div>
+          </div>
+          <button class="add-subheading-btn" onclick="addSubheading(this)">
+            <i class="fas fa-plus"></i> Add Subheading
+            </button>
+          <button class="remove-heading-btn" onclick="removeHeading(this)">
+            <i class="fas fa-times"></i> Remove Heading
+          </button>
+        </div>
+      `;
+    }
+
+    // Show delete CSV modal
+function showDeleteCSVModal() {
+  // Populate domain dropdown
+  const deleteCsvDomain = document.getElementById('deleteCsvDomain');
+  deleteCsvDomain.innerHTML = '';
+  domains.forEach(domain => {
+    deleteCsvDomain.innerHTML += `<option value="${domain.id}">${domain.name}</option>`;
+  });
+  
+  // Reset results
+  document.getElementById('deleteCsvResults').style.display = 'none';
+  document.getElementById('deleteCsvFile').value = '';
+  
+  document.getElementById('deleteCSVModal').classList.add('show');
+}
+
+// Process CSV file for deletion
+function processDeleteCSV() {
+  const domain = document.getElementById('deleteCsvDomain').value;
+  const fileInput = document.getElementById('deleteCsvFile');
+  const file = fileInput.files[0];
+  
+  if (!domain || !file) {
+    alert('Please select a domain and CSV file');
+    return;
+  }
+  
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const csvData = e.target.result;
+    const questionsToDelete = parseCSV(csvData);
+    
+    if (questionsToDelete.length === 0) {
+      alert('No valid questions found in CSV');
+      return;
+    }
+    
+    // Delete questions from Firebase
+    deleteQuestionsFromCSV(questionsToDelete, domain);
+  };
+  reader.readAsText(file);
+}
+
+// Delete questions from CSV
+function deleteQuestionsFromCSV(questionsToDelete, domain) {
+  let deletedCount = 0;
+  let notFoundCount = 0;
+  let notFoundList = [];
+  let processedCount = 0;
+  
+  // First, get all questions from the domain
+  db.collection('questions')
+    .where('domain', '==', domain)
+    .get()
+    .then((querySnapshot) => {
+      const allQuestions = [];
+      querySnapshot.forEach((doc) => {
+        allQuestions.push({ id: doc.id, ...doc.data() });
+      });
+      
+      // Process each question from CSV
+      questionsToDelete.forEach((csvQuestion) => {
+        // Find matching question in database
+        const matchingQuestion = allQuestions.find(dbQuestion => 
+          dbQuestion.title.toLowerCase().trim() === csvQuestion.title.toLowerCase().trim() &&
+          dbQuestion.correctAnswer.toLowerCase().trim() === csvQuestion.correctAnswer.toLowerCase().trim()
+        );
+        
+        if (matchingQuestion) {
+          // Delete the question
+          db.collection('questions').doc(matchingQuestion.id).delete()
+            .then(() => {
+              deletedCount++;
+              processedCount++;
+              
+              // If this is the last question, show results
+              if (processedCount === questionsToDelete.length) {
+                showDeleteResults(deletedCount, notFoundCount, notFoundList);
+                
+                // Reload questions if we're viewing this domain
+                if (currentDomain && currentDomain.id === domain) {
+                  loadQuestions(domain);
+                }
+              }
+            })
+            .catch((error) => {
+              console.error('Error deleting question:', error);
+              processedCount++;
+              
+              // If this is the last question, show results
+              if (processedCount === questionsToDelete.length) {
+                showDeleteResults(deletedCount, notFoundCount, notFoundList);
+              }
+            });
+        } else {
+          notFoundCount++;
+          notFoundList.push(csvQuestion.title);
+          processedCount++;
+          
+          // If this is the last question, show results
+          if (processedCount === questionsToDelete.length) {
+            showDeleteResults(deletedCount, notFoundCount, notFoundList);
+          }
+        }
+      });
+    })
+    .catch((error) => {
+      console.error('Error loading questions:', error);
+      alert('Error loading questions: ' + error.message);
+    });
+}
+
+// Show deletion results
+function showDeleteResults(deletedCount, notFoundCount, notFoundList) {
+  const resultsDiv = document.getElementById('deleteCsvResults');
+  const deletedCountDiv = document.getElementById('deletedCount');
+  const notFoundCountDiv = document.getElementById('notFoundCount');
+  const notFoundListDiv = document.getElementById('notFoundList');
+  
+  resultsDiv.style.display = 'block';
+  deletedCountDiv.textContent = `Successfully deleted: ${deletedCount} questions`;
+  notFoundCountDiv.textContent = `Not found: ${notFoundCount} questions`;
+  
+  if (notFoundCount > 0) {
+    notFoundListDiv.innerHTML = '<strong>Questions not found:</strong><ul>';
+    notFoundList.forEach(question => {
+      notFoundListDiv.innerHTML += `<li>${question}</li>`;
+    });
+    notFoundListDiv.innerHTML += '</ul>';
+  } else {
+    notFoundListDiv.innerHTML = '';
+  }
+  
+  // Scroll to results
+  resultsDiv.scrollIntoView({ behavior: 'smooth' });
+}
+  </script>
+</body>
+</html>

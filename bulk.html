@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bulk Question Upload Quiz</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #f4f4f9;
+    }
+    h2 {
+      color: #333;
+    }
+    .quiz-container {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 600px;
+      margin: auto;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .options label {
+      display: block;
+      margin-bottom: 8px;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px 15px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:disabled {
+      background: #ccc;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Upload Questions (CSV)</h2>
+  <input type="file" id="csvFile" accept=".csv" />
+  <button onclick="loadCSV()">Load Questions</button>
+
+  <div class="quiz-container" id="quizContainer" style="display:none;">
+    <div id="questionBox"></div>
+    <div class="options" id="optionsBox"></div>
+    <button onclick="submitAnswer()">Submit</button>
+    <button onclick="prevQuestion()">Previous</button>
+    <button onclick="nextQuestion()">Next</button>
+  </div>
+
+  <script>
+    let questions = [];
+    let currentIndex = 0;
+    let userAnswers = {};
+
+    function loadCSV() {
+      const fileInput = document.getElementById("csvFile");
+      if (fileInput.files.length === 0) {
+        alert("Please select a CSV file.");
+        return;
+      }
+
+      Papa.parse(fileInput.files[0], {
+        header: true,
+        skipEmptyLines: true,
+        complete: function(results) {
+          questions = results.data;
+          currentIndex = 0;
+          if (questions.length > 0) {
+            document.getElementById("quizContainer").style.display = "block";
+            showQuestion();
+          } else {
+            alert("No questions found in CSV!");
+          }
+        }
+      });
+    }
+
+    function showQuestion() {
+      const q = questions[currentIndex];
+      document.getElementById("questionBox").innerHTML = `<h3>Q${currentIndex+1}: ${q["Question"]}</h3>`;
+      const optionsBox = document.getElementById("optionsBox");
+      optionsBox.innerHTML = "";
+
+      ["Option A","Option B","Option C","Option D"].forEach((opt, i) => {
+        if (q[opt]) {
+          const checked = userAnswers[currentIndex] === opt ? "checked" : "";
+          optionsBox.innerHTML += `
+            <label>
+              <input type="radio" name="option" value="${opt}" ${checked}>
+              ${q[opt]}
+            </label>`;
+        }
+      });
+    }
+
+    function submitAnswer() {
+      const selected = document.querySelector('input[name="option"]:checked');
+      if (!selected) {
+        alert("Please select an option!");
+        return;
+      }
+      userAnswers[currentIndex] = selected.value;
+      alert("Answer saved!");
+    }
+
+    function nextQuestion() {
+      if (currentIndex < questions.length - 1) {
+        currentIndex++;
+        showQuestion();
+      } else {
+        alert("You reached the end of the quiz!");
+      }
+    }
+
+    function prevQuestion() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        showQuestion();
+      }
+    }
+  </script>
+
+</body>
+</html>

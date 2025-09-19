@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Animated Manual Mindmap</title>
+<style>
+body {
+  margin:0; font-family:'Segoe UI', sans-serif; background:#f7faff; overflow:hidden;
+}
+.toolbar {
+  position:fixed; top:10px; left:10px; z-index:1000;
+  background:white; padding:12px; border-radius:8px; box-shadow:0 3px 10px rgba(0,0,0,0.2);
+}
+.toolbar button { margin:2px; }
+.mindmap-wrapper { width:100vw; height:100vh; position:relative; overflow:hidden; }
+.mindmap { position:absolute; top:0; left:0; width:2000px; height:2000px; }
+.node {
+  padding:10px 18px; border-radius:8px; cursor:pointer; position:absolute;
+  text-align:center; white-space:nowrap; font-weight:500; user-select:none;
+  max-width:150px; overflow:hidden; text-overflow:ellipsis;
+  opacity:1; transition: transform 0.6s ease, opacity 0.6s ease;
+}
+.node.dragging { opacity:0.7; cursor:grabbing; }
+.node.level-0 { background:#c3c3e9; color:black; }
+.node.level-1 { background:lightsteelblue; color:#033d19; }
+.node.level-2 { background:mediumaquamarine; color:#5a3200; }
+.node.level-3 { background:peachpuff; color:#2d3436; }
+.node.level-4 { background:lightpink; color:#2d3436; }
+.node.level-5 { background:lightgreen; color:#2d3436; }
+.node.level-6 { background:khaki; color:#2d3436; }
+.node.level-7 { background:thistle; color:#2d3436; }
+.node.level-8 { background:lavender; color:#2d3436; }
+.hidden {
+  opacity:0;
+  pointer-events:none;
+  transform: translateX(40px);
+}
+svg { position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; }
+path {
+  stroke:#6b6b6b;
+  stroke-width:2;
+  fill:none;
+  stroke-dasharray:1000;
+  stroke-dashoffset:1000;
+  animation: draw 0.6s forwards;
+}
+@keyframes draw { to { stroke-dashoffset:0; } }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <button onclick="addNode(0)">Add Main Node</button>
+  <button onclick="addNode(1)">Add Level 1</button>
+  <button onclick="addNode(2)">Add Level 2</button>
+  <button onclick="addNode(3)">Add Level 3</button>
+  <button onclick="addNode(4)">Add Level 4</button>
+  <button onclick="addNode(5)">Add Level 5</button>
+  <button onclick="addNode(6)">Add Level 6</button>
+  <button onclick="addNode(7)">Add Level 7</button>
+  <button onclick="addNode(8)">Add Level 8</button>
+  <button onclick="startConnect()">Connect Nodes</button>
+  <button onclick="publishMindmap()">Publish</button>
+</div>
+
+<div class="mindmap-wrapper">
+  <div class="mindmap" id="mindmap">
+    <svg id="connections"></svg>
+  </div>
+</div>
+
+<script>
+let nodes = [];
+let connectionsList = [];
+let nodeId = 1;
+let editMode = true;
+let connectMode = false;
+let tempParent = null;
+
+const mindmap = document.getElementById("mindmap");
+const connections = document.getElementById("connections");
+
+function addNode(level){
+  if(!editMode) return;
+  const id = 'node-'+nodeId++;
+  const text = prompt("Enter node text:");
+  if(!text) return;
+  const node = {id,text,level,x:100+Math.random()*400,y:100+Math.random()*300,children:[],visible:true};
+  nodes.push(node);
+  renderNode(node);
+  updateConnections();
+}
+
+function renderNode(node){
+  const div = document.createElement("div");
+  div.id=node.id;
+  div.className='node level-'+node.level;
+  div.textContent=node.text;
+  div.style.left=node.x+'px';
+  div.style.top=node.y+'px';
+  mindmap.appendChild(div);
+
+  if(editMode) makeDraggable(div,node);
+
+  div.addEventListener('click',(e)=>{
+    if(!editMode){
+      toggleChildren(node.id);
+    } else if(connectMode){
+      if(!tempParent) tempParent=node.id;
+      else{
+        if(tempParent===node.id){ alert("Cannot connect node to itself"); tempParent=null; return;}
+        connectionsList.push({parentId:tempParent, childId:node.id});
+        tempParent=null;
+        updateConnections();
+      }
+    }
+  });
+
+  div.addEventListener('contextmenu',(e)=>{
+    e.preventDefault();
+    if(editMode && confirm("Delete this node?")){
+      nodes=nodes.filter(n=>n.id!==node.id);
+      connectionsList=connectionsList.filter(c=>c.parentId!==node.id && c.childId!==node.id);
+      div.remove();
+      updateConnections();
+    }
+  });
+}
+
+function makeDraggable(el,node){
+  let offsetX,offsetY;
+  el.addEventListener('mousedown',(e)=>{
+    el.classList.add('dragging');
+    offsetX=e.clientX-el.offsetLeft;
+    offsetY=e.clientY-el.offsetTop;
+
+    function mouseMoveHandler(e){
+      node.x=e.clientX-offsetX;
+      node.y=e.clientY-offsetY;
+      el.style.left=node.x+'px';
+      el.style.top=node.y+'px';
+      updateConnections();
+    }
+    function mouseUpHandler(){
+      el.classList.remove('dragging');
+      document.removeEventListener('mousemove',mouseMoveHandler);
+      document.removeEventListener('mouseup',mouseUpHandler);
+    }
+
+    document.addEventListener('mousemove',mouseMoveHandler);
+    document.addEventListener('mouseup',mouseUpHandler);
+  });
+}
+
+function startConnect(){
+  if(!editMode) return;
+  connectMode=true;
+  tempParent=null;
+  alert("Connect mode: Click parent node then child node to create connection");
+}
+
+function updateConnections(){
+  connections.innerHTML='';
+  connectionsList.forEach(c=>{
+    const parent=nodes.find(n=>n.id===c.parentId);
+    const child=nodes.find(n=>n.id===c.childId);
+    if(!parent || !child) return;
+    if(!parent.visible || !child.visible) return;
+    const path=document.createElementNS("http://www.w3.org/2000/svg","path");
+    path.setAttribute("d",`M${parent.x+75},${parent.y+25} C${parent.x+150},${parent.y+25} ${child.x},${child.y+25} ${child.x+75},${child.y+25}`);
+    path.setAttribute("stroke","#6b6b6b");
+    path.setAttribute("stroke-width","2");
+    path.setAttribute("fill","none");
+    path.style.transition="all 0.6s ease";
+    connections.appendChild(path);
+  });
+}
+
+// Publish mindmap
+function publishMindmap(){
+  editMode=false;
+  connectMode=false;
+  document.querySelectorAll('.node').forEach(n=>n.style.cursor='pointer');
+  nodes.forEach(n=>{
+    const el=document.getElementById(n.id);
+    if(n.level===0){
+      n.visible=true;
+      el.classList.remove('hidden'); // MAIN NODE stays visible
+    } else{
+      n.visible=false;
+      el.classList.add('hidden'); // hide all children initially
+    }
+  });
+  updateConnections();
+  alert("Published! Click a main node to expand its children with animation");
+}
+
+// Toggle children with animation
+function toggleChildren(nodeId){
+  const children=connectionsList.filter(c=>c.parentId===nodeId).map(c=>c.childId);
+  children.forEach(id=>{
+    const node=nodes.find(n=>n.id===id);
+    const el=document.getElementById(id);
+    if(node){
+      node.visible=!node.visible;
+      if(node.visible){
+        el.classList.remove('hidden');
+      } else {
+        el.classList.add('hidden');
+      }
+    }
+  });
+  updateConnections();
+}
+</script>
+
+</body>
+</html>

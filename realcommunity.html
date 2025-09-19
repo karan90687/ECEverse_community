@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ECEverse - Community Feed</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #6C63FF;
+      --secondary: #4D44DB;
+      --accent: #FF6584;
+      --light: #F8F9FF;
+      --dark: #2E2E48;
+      --gray: #8C8CA1;
+      --card-bg: #FFFFFF;
+      --section-bg: #F9FAFF;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; font-family: 'Inter', sans-serif; }
+    body { background: var(--section-bg); color: var(--dark); display:flex; min-height:100vh; }
+
+    /* Community Selection */
+    #community-selection {
+      width:100%;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:30px;
+      padding:50px;
+    }
+    .community-card {
+      background: var(--card-bg);
+      padding:2rem;
+      border-radius:16px;
+      box-shadow:0 4px 12px rgba(0,0,0,0.08);
+      cursor:pointer;
+      transition:0.3s;
+      text-align:center;
+      width:200px;
+    }
+    .community-card:hover { transform:scale(1.05); background:var(--light); }
+
+    /* Sidebar */
+    .sidebar {
+      width: 250px;
+      background: var(--card-bg);
+      border-right: 1px solid #eee;
+      padding: 1rem;
+    }
+    .sidebar h2 { font-size: 1.3rem; color: var(--primary); margin-bottom: 1rem; }
+    .sidebar ul { list-style:none; }
+    .sidebar li { margin-bottom:1rem; }
+    .sidebar a {
+      display:flex; align-items:center; text-decoration:none;
+      color:var(--dark); font-weight:500; padding:0.6rem 0.8rem;
+      border-radius:8px; transition:background 0.3s;
+    }
+    .sidebar a:hover { background: var(--light); }
+    .online-dot { color:green; font-size:0.8rem; margin-left:5px; }
+
+    /* Feed */
+    .feed-container { flex:1; display:flex; flex-direction:column; }
+    .feed-header { padding:1rem 1.5rem; display:flex; justify-content:space-between; align-items:center; }
+    .feed-header h1 { font-size:1.4rem; }
+    .feed-list { flex:1; padding:1rem 1.5rem; overflow-y:auto; }
+    .feed-item {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+    .message-bar {
+      display:flex; padding:10px; background:#fff; border-top:1px solid #ddd;
+    }
+    .message-bar input { flex:1; padding:8px; border:1px solid #ccc; border-radius:5px; }
+    .message-bar button { margin-left:8px; padding:8px 12px; border:none; background:var(--primary); color:white; border-radius:5px; cursor:pointer; }
+
+  </style>
+</head>
+<body>
+  <!-- Community Selection -->
+  <div id="community-selection">
+    <div class="community-card" onclick="openCommunity('general')">
+      <h2>General Community</h2>
+    </div>
+    <div class="community-card" onclick="openCommunity('industry')">
+      <h2>Industry Community</h2>
+    </div>
+  </div>
+
+  <!-- Main Community Layout -->
+  <div id="community-layout" style="display:none; width:100%;">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <h2 id="sidebarTitle">Community</h2>
+      <ul>
+        <li><a href="#">My Discussion</a></li>
+        <li><a href="#">Saved Problems</a></li>
+        <li><a href="#" onclick="showMembers()">Members</a></li>
+      </ul>
+      <h3>Online Members</h3>
+      <ul id="onlineList"></ul>
+    </div>
+
+    <!-- Feed -->
+    <div class="feed-container">
+      <div class="feed-header">
+        <h1 id="communityName"></h1>
+        <div>
+          <button onclick="joinCommunity()">Join</button>
+          <button onclick="clearChat()">Clear Chat</button>
+        </div>
+      </div>
+      <div class="feed-list" id="feedList"></div>
+      <div class="message-bar">
+        <input type="text" id="messageInput" placeholder="Type a message..." disabled />
+        <button onclick="sendMessage()" id="sendBtn" disabled>Send</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+    import { getFirestore, collection, addDoc, serverTimestamp, query, orderBy, onSnapshot, deleteDoc, doc, getDocs, setDoc } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+
+    // 🔹 Replace with your Firebase config
+   const firebaseConfig = {
+  apiKey: "AIzaSyDvuHF3zAU9XJtoPyxpXDoyF3-FbyznPiE",
+  authDomain: "coreverse-cadd5.firebaseapp.com",
+  databaseURL: "https://coreverse-cadd5-default-rtdb.firebaseio.com",
+  projectId: "coreverse-cadd5",
+  storageBucket: "coreverse-cadd5.firebasestorage.app",
+  messagingSenderId: "484740921978",
+  appId: "1:484740921978:web:e882314214032bfbc2d9c3",
+  measurementId: "G-TJEW9MRPH0"
+};
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    let currentCommunity = null;
+    let unsubscribe = null;
+    let joined = false;
+    let user = { uid: "demo123", email: "demo@user.com" }; // 👈 Replace with real auth later
+
+    // 🔹 Open selected community
+    window.openCommunity = (name) => {
+      currentCommunity = name;
+      document.getElementById("community-selection").style.display = "none";
+      document.getElementById("community-layout").style.display = "flex";
+      document.getElementById("communityName").innerText = name.toUpperCase()+" Community";
+      document.getElementById("sidebarTitle").innerText = name.toUpperCase();
+      loadMessages();
+      loadOnlineMembers();
+    };
+
+    // 🔹 Join community
+    window.joinCommunity = async () => {
+      joined = true;
+      document.getElementById("messageInput").disabled = false;
+      document.getElementById("sendBtn").disabled = false;
+
+      await setDoc(doc(db, "communities", currentCommunity, "members", user.uid), {
+        email: user.email,
+        online: true
+      });
+    };
+
+    // 🔹 Show all members
+    window.showMembers = async () => {
+      const snap = await getDocs(collection(db, "communities", currentCommunity, "members"));
+      let members = "Members:\n";
+      snap.forEach(d => members += d.data().email + "\n");
+      alert(members);
+    };
+
+    // 🔹 Load online members
+    function loadOnlineMembers() {
+      const q = collection(db, "communities", currentCommunity, "members");
+      onSnapshot(q, snap => {
+        const onlineList = document.getElementById("onlineList");
+        onlineList.innerHTML = "";
+        snap.forEach(d => {
+          const m = d.data();
+          const li = document.createElement("li");
+          li.textContent = m.email;
+          if(m.online) li.innerHTML += ' <span class="online-dot">●</span>';
+          onlineList.appendChild(li);
+        });
+      });
+    }
+
+    // 🔹 Load messages
+    function loadMessages() {
+      if (unsubscribe) unsubscribe();
+      const q = query(collection(db, "communities", currentCommunity, "messages"), orderBy("timestamp","asc"));
+      unsubscribe = onSnapshot(q, snap => {
+        const feed = document.getElementById("feedList");
+        feed.innerHTML = "";
+        snap.forEach(docu => {
+          const msg = docu.data();
+          const div = document.createElement("div");
+          div.className = "feed-item";
+          div.innerHTML = `<h3>${msg.username}</h3><p>${msg.message}</p>`;
+          feed.appendChild(div);
+        });
+      });
+    }
+
+    // 🔹 Send message
+    window.sendMessage = async () => {
+      if (!joined) { alert("You must join the community first!"); return; }
+      const text = document.getElementById("messageInput").value;
+      if (!text) return;
+      await addDoc(collection(db, "communities", currentCommunity, "messages"), {
+        username: user.email,
+        message: text,
+        timestamp: serverTimestamp()
+      });
+      document.getElementById("messageInput").value = "";
+    };
+
+    // 🔹 Clear chat
+    window.clearChat = async () => {
+      const snap = await getDocs(collection(db, "communities", currentCommunity, "messages"));
+      snap.forEach(async d => await deleteDoc(doc(db, "communities", currentCommunity, "messages", d.id)));
+    };
+  </script>
+</body>
+</html>

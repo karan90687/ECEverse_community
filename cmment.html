@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Feed with Comments</title>
+  <script type="module">
+    // Import Firebase
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+    import { 
+      getFirestore, collection, addDoc, query, orderBy, onSnapshot, 
+      doc, updateDoc, arrayUnion 
+    } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+
+    // Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyCNMLk945Iadc59XrVstpaEpoA7IGZpve0",
+      authDomain: "tejaswini-62357.firebaseapp.com",
+      projectId: "tejaswini-62357",
+      storageBucket: "tejaswini-62357.appspot.com",
+      messagingSenderId: "183966632879",
+      appId: "1:183966632879:web:261259d1b05fdd5a53bd5a"
+    };
+
+    // Init Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // DOM Elements
+    const feedDiv = document.getElementById("feed");
+    const msgInput = document.getElementById("messageInput");
+    const sendBtn = document.getElementById("sendBtn");
+
+    // --- Functions ---
+    async function sendMessage() {
+      const text = msgInput.value.trim();
+      if (!text) return;
+      await addDoc(collection(db, "messages"), {
+        text,
+        comments: [],
+        createdAt: Date.now()
+      });
+      msgInput.value = "";
+    }
+
+    function renderMessage(id, data) {
+      const div = document.createElement("div");
+      div.style.border = "1px solid #ccc";
+      div.style.margin = "10px 0";
+      div.style.padding = "5px";
+
+      div.innerHTML = `
+        <p><b>Message:</b> ${data.text}</p>
+        <button data-id="${id}" class="commentBtn">Comment</button>
+      `;
+
+      if (data.comments && data.comments.length > 0) {
+        const ul = document.createElement("ul");
+        data.comments.forEach(c => {
+          const li = document.createElement("li");
+          li.textContent = c;
+          ul.appendChild(li);
+        });
+        div.appendChild(ul);
+      }
+      return div;
+    }
+
+    function loadFeed(withCommentsOnly = false) {
+      const q = query(collection(db, "messages"), orderBy("createdAt", "desc"));
+      onSnapshot(q, (snapshot) => {
+        feedDiv.innerHTML = withCommentsOnly ? "<h3>Messages with Comments</h3>" : "<h3>All Messages</h3>";
+        snapshot.forEach(docSnap => {
+          const data = docSnap.data();
+          if (withCommentsOnly && (!data.comments || data.comments.length === 0)) return;
+          const msgDiv = renderMessage(docSnap.id, data);
+          feedDiv.appendChild(msgDiv);
+        });
+
+        // attach comment button events
+        document.querySelectorAll(".commentBtn").forEach(btn => {
+          btn.onclick = async () => {
+            const comment = prompt("Enter comment:");
+            if (comment) {
+              const ref = doc(db, "messages", btn.getAttribute("data-id"));
+              await updateDoc(ref, { comments: arrayUnion(comment) });
+            }
+          };
+        });
+      });
+    }
+
+    // --- Event Listeners ---
+    sendBtn.addEventListener("click", sendMessage);
+    document.getElementById("feedBtn").addEventListener("click", () => loadFeed(false));
+    document.getElementById("commentsBtn").addEventListener("click", () => loadFeed(true));
+
+    // Default load
+    loadFeed(false);
+  </script>
+</head>
+<body>
+  <div style="display:flex; height:100vh;">
+    <!-- Sidebar -->
+    <div style="width:200px; border-right:1px solid #ccc; padding:10px;">
+      <h3>Menu</h3>
+      <button id="feedBtn">Feed</button><br><br>
+      <button id="commentsBtn">Comments</button>
+    </div>
+
+    <!-- Feed Section -->
+    <div style="flex:1; padding:10px;">
+      <h2>Feed</h2>
+      <input id="messageInput" placeholder="Type message..." />
+      <button id="sendBtn">Send</button>
+      <div id="feed"></div>
+    </div>
+  </div>
+</body>
+</html>

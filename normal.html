@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LearnVerse - Domain Learning Platform</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Your exact CSS remains unchanged */
+    :root {
+      --primary: #03DAC6;
+      --primary-dark: #018786;
+      --primary-light: #cefff9;
+      --secondary: #6200EE;
+      --accent: #FF5252;
+      --text-primary: #2D3748;
+      --text-secondary: #718096;
+      --bg-primary: #FFFFFF;
+      --bg-secondary: #F7FAFC;
+      --border-color: #E2E8F0;
+      --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.04);
+      --success: #48BB78;
+      --warning: #ECC94B;
+    }
+
+    [data-theme="dark"] {
+      --primary: #03DAC6;
+      --primary-dark: #cefff9;
+      --primary-light: #015450;
+      --secondary: #BB86FC;
+      --accent: #FF5252;
+      --text-primary: #EDF2F7;
+      --text-secondary: #A0AEC0;
+      --bg-primary: #1A202C;
+      --bg-secondary: #2D3748;
+      --border-color: #4A5568;
+      --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --success: #68D391;
+      --warning: #FAF089;
+    }
+
+    * { 
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box; 
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
+    }
+    
+    body { 
+      background: var(--bg-secondary); 
+      color: var(--text-primary); 
+      line-height: 1.6;
+      font-size: 14px;
+    }
+    
+    /* Header */
+    header {
+      background: var(--bg-primary);
+      border-bottom: 1px solid var(--border-color);
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .logo {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    nav {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+    
+    nav a {
+      color: var(--text-primary);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 14px;
+      transition: color 0.2s;
+    }
+    
+    nav a:hover {
+      color: var(--primary);
+    }
+    
+    .theme-toggle {
+      background: none;
+      border: none;
+      color: var(--text-primary);
+      cursor: pointer;
+      font-size: 16px;
+      padding: 6px;
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+    
+    .theme-toggle:hover {
+      background: var(--bg-secondary);
+    }
+    
+    /* Main container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px;
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 24px;
+    }
+    
+    /* Sidebar */
+    .sidebar {
+      background: var(--bg-primary);
+      border-radius: 8px;
+      padding: 16px;
+      box-shadow: var(--card-shadow);
+      height: fit-content;
+      position: sticky;
+      top: 80px;
+    }
+    
+    .sidebar-section {
+      margin-bottom: 24px;
+    }
+    
+    .sidebar-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .domain-list {
+      list-style: none;
+    }
+    
+    .domain-item {
+      margin-bottom: 4px;
+    }
+    
+    .domain-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      color: var(--text-primary);
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    
+    .domain-link:hover {
+      background: var(--bg-secondary);
+    }
+    
+    .domain-link.active {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+    
+    .filter-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+    
+    .filter-btn {
+      padding: 6px 12px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-primary);
+      color: var(--text-secondary);
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .filter-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    
+    .filter-btn.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+    }
+    
+    /* Main content */
+    .main-content {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    
+    .content-header {
+      background: var(--bg-primary);
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: var(--card-shadow);
+    }
+    
+    .content-header h1 {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--text-primary);
+    }
+    
+    .domain-description {
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+    
+    /* Problem list */
+    .problems-table {
+      background: var(--bg-primary);
+      border-radius: 8px;
+      box-shadow: var(--card-shadow);
+      overflow: hidden;
+    }
+    
+    .table-header {
+      display: grid;
+      grid-template-columns: 40px 1fr 100px 100px 100px;
+      padding: 12px 16px;
+      background: var(--bg-secondary);
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    .problem-row {
+      display: grid;
+      grid-template-columns: 40px 1fr 100px 100px 100px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-color);
+      align-items: center;
+      transition: background 0.2s;
+    }
+    
+    .problem-row:hover {
+      background: var(--bg-secondary);
+    }
+    
+    .problem-title {
+      font-weight: 500;
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+    
+    .problem-title:hover {
+      color: var(--primary);
+    }
+    
+    .difficulty {
+      font-size: 12px;
+      font-weight: 500;
+      padding: 4px 8px;
+      border-radius: 4px;
+      text-align: center;
+    }
+    
+    .difficulty.easy {
+      color: var(--success);
+      background-color: rgba(72, 187, 120, 0.1);
+    }
+    
+    .difficulty.medium {
+      color: var(--warning);
+      background-color: rgba(236, 201, 75, 0.1);
+    }
+    
+    .difficulty.hard {
+      color: var(--accent);
+      background-color: rgba(255, 82, 82, 0.1);
+    }
+    
+    .status-icon {
+      font-size: 16px;
+      text-align: center;
+    }
+    
+    .solved-icon {
+      color: var(--success);
+    }
+    
+    .unsolved-icon {
+      color: var(--text-secondary);
+    }
+    
+    .saved-icon {
+      color: var(--warning);
+    }
+    
+    .popularity-tag, .level-tag {
+      font-size: 12px;
+      padding: 4px 8px;
+      border-radius: 4px;
+      background-color: var(--bg-secondary);
+      text-align: center;
+    }
+    
+    /* Search container */
+    .search-container {
+      position: relative;
+      margin-top: 16px;
+    }
+    
+    .search-container i {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-secondary);
+    }
+    
+    .search-input {
+      width: 100%;
+      padding: 10px 16px 10px 40px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 14px;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+    }
+    
+    .search-input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+    
+    /* Progress container */
+    .progress-container {
+      background: var(--bg-primary);
+      border-radius: 8px;
+      padding: 16px;
+      box-shadow: var(--card-shadow);
+      margin-bottom: 24px;
+    }
+    
+    .progress-text {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+    
+    .progress-text strong {
+      color: var(--text-primary);
+      margin: 0 4px;
+    }
+    
+    .progress-bar {
+      height: 8px;
+      background: var(--bg-secondary);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: var(--primary);
+      border-radius: 4px;
+      width: 33%;
+    }
+    
+    /* Pagination */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 24px;
+    }
+    
+    .pagination-btn {
+      padding: 8px 12px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+    
+    .pagination-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    
+    .pagination-btn.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+    }
+    
+    .pagination-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    /* Roadmap section */
+    .roadmap-section {
+      background: var(--bg-primary);
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: var(--card-shadow);
+    }
+    
+    .roadmap-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    
+    .roadmap-header h2 {
+      font-size: 18px;
+      font-weight: 600;
+    }
+    
+    .toggle-roadmap {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    
+    .toggle-roadmap:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    
+    .roadmap-content {
+      display: none;
+      margin-top: 16px;
+    }
+    
+    .roadmap-content.show {
+      display: block;
+    }
+    
+    .roadmap-item {
+      margin-bottom: 16px;
+      padding-left: 20px;
+      border-left: 2px solid var(--primary);
+      position: relative;
+    }
+    
+    .roadmap-item:last-child {
+      border-left: 2px solid transparent;
+    }
+    
+    .roadmap-item-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+      cursor: pointer;
+    }
+    
+    .roadmap-toggle {
+      margin-right: 8px;
+      color: var(--primary);
+      transition: transform 0.2s;
+    }
+    
+    .roadmap-toggle.rotated {
+      transform: rotate(90deg);
+    }
+    
+    .roadmap-item h3 {
+      font-size: 14px;
+      font-weight: 600;
+    }
+    
+    .roadmap-details {
+      display: none;
+      margin-left: 20px;
+    }
+    
+    .roadmap-details.show {
+      display: block;
+    }
+    
+    .roadmap-details ul {
+      list-style: none;
+    }
+    
+    .roadmap-details li {
+      padding: 4px 0;
+      color: var(--text-secondary);
+      position: relative;
+      padding-left: 16px;
+      font-size: 14px;
+    }
+    
+    .roadmap-details li:before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: var(--primary);
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .container {
+        grid-template-columns: 1fr;
+        padding: 16px;
+      }
+      
+      .sidebar {
+        position: static;
+        margin-bottom: 16px;
+      }
+      
+      .table-header, .problem-row {
+        grid-template-columns: 30px 1fr 80px 80px 80px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <i class="fas fa-brain"></i>
+      <span>LearnVerse</span>
+    </div>
+    <nav>
+      <a href="#">Problems</a>
+      <a href="#">Study Plans</a>
+      <a href="#">Community</a>
+      <button class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon"></i>
+      </button>
+    </nav>
+  </header>
+
+  <div class="container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-title">Learning Domains</div>
+        <ul class="domain-list">
+          <li class="domain-item">
+            <a href="#" class="domain-link active">
+              <i class="fas fa-microchip"></i>
+              <span>VLSI Design</span>
+            </a>
+          </li>
+          <li class="domain-item">
+            <a href="#" class="domain-link">
+              <i class="fas fa-microcontroller"></i>
+              <span>Embedded Systems</span>
+            </a>
+          </li>
+          <li class="domain-item">
+            <a href="#" class="domain-link">
+              <i class="fas fa-wifi"></i>
+              <span>IoT & Sensors</span>
+            </a>
+          </li>
+          <li class="domain-item">
+            <a href="#" class="domain-link">
+              <i class="fas fa-robot"></i>
+              <span>AI & ML</span>
+            </a>
+          </li>
+          <li class="domain-item">
+            <a href="#" class="domain-link">
+              <i class="fas fa-cog"></i>
+              <span>Robotics</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      
+      <!-- Progress Summary -->
+      <div class="progress-container">
+        <div class="progress-text">
+          <i class="fas fa-check-circle solved-icon"></i>
+          Solved: <strong>2</strong> / <strong>6</strong> (<strong>33%</strong>)
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill"></div>
+        </div>
+      </div>
+      
+      <div class="sidebar-section">
+        <div class="sidebar-title">Difficulty</div>
+        <div class="filter-options">
+          <button class="filter-btn active" data-filter="difficulty" data-value="all">All</button>
+          <button class="filter-btn" data-filter="difficulty" data-value="easy">Easy</button>
+          <button class="filter-btn" data-filter="difficulty" data-value="medium">Medium</button>
+          <button class="filter-btn" data-filter="difficulty" data-value="hard">Hard</button>
+        </div>
+      </div>
+      
+      <div class="sidebar-section">
+        <div class="sidebar-title">Status</div>
+        <div class="filter-options">
+          <button class="filter-btn active" data-filter="status" data-value="all">All</button>
+          <button class="filter-btn" data-filter="status" data-value="solved">Attempted</button>
+          <button class="filter-btn" data-filter="status" data-value="unsolved">Unsolved</button>
+        </div>
+      </div>
+      
+      <div class="sidebar-section">
+        <div class="sidebar-title">Lists</div>
+        <div class="filter-options">
+          <button class="filter-btn active" data-filter="list" data-value="all">All</button>
+          <button class="filter-btn" data-filter="list" data-value="practice">Practice</button>
+          <button class="filter-btn" data-filter="list" data-value="interview">Interview</button>
+          <button class="filter-btn" data-filter="list" data-value="saved">Saved</button>
+        </div>
+      </div>
+      
+      <div class="sidebar-section">
+        <div class="sidebar-title">Popularity</div>
+        <div class="filter-options">
+          <button class="filter-btn active" data-filter="popularity" data-value="all">All</button>
+          <button class="filter-btn" data-filter="popularity" data-value="popular">Popular</button>
+          <button class="filter-btn" data-filter="popularity" data-value="nonpopular">Nonpopular</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Main content -->
+    <div class="main-content">
+      <div class="content-header">
+        <h1>VLSI Design Problems</h1>
+        <p class="domain-description">Practice problems on Very-Large-Scale Integration, chip design, and semiconductor technology</p>
+        
+        <!-- Search input -->
+        <div class="search-container">
+          <i class="fas fa-search"></i>
+          <input type="text" class="search-input" placeholder="Search problems...">
+        </div>
+      </div>
+      
+      <!-- Problems list -->
+      <div class="problems-table">
+        <div class="table-header">
+          <div></div>
+          <div>Title</div>
+          <div>Popularity</div>
+          <div>Level</div>
+          <div>Difficulty</div>
+        </div>
+        
+        <div class="problem-row">
+          <div class="status-icon">
+            <i class="fas fa-check-circle solved-icon"></i>
+          </div>
+          <a href="#" class="problem-title">CMOS Inverter Characteristics</a>
+          <div class="popularity-tag">Popular</div>
+          <div class="level-tag">Practice</div>
+          <div class="difficulty easy">Easy</div>
+        </div>
+        
+        <div class="problem-row">
+          <div class="status-icon">
+            <i class="fas fa-times-circle unsolved-icon"></i>
+          </div>
+          <a href="#" class="problem-title">NAND Gate Layout Design</a>
+          <div class="popularity-tag">Nonpopular</div>
+          <div class="level-tag">Interview</div>
+          <div class="difficulty easy">Easy</div>
+        </div>
+        
+        <div class="problem-row">
+          <div class="status-icon">
+            <i class="fas fa-times-circle unsolved-icon"></i>
+          </div>
+          <a href="#" class="problem-title">Clock Skew Analysis</a>
+          <div class="popularity-tag">Popular</div>
+          <div class="level-tag">Practice</div>
+          <div class="difficulty medium">Medium</div>
+        </div>
+        
+        <div class="problem-row">
+          <div class="status-icon">
+            <i class="fas fa-check-circle solved-icon"></i>
+          </div>
+          <a href="#" class="problem-title">Power Dissipation Calculation</a>
+          <div class="popularity-tag">Nonpopular</div>
+          <div class="level-tag">Interview</div>
+          <div class="difficulty medium">Medium</div>
+        </div>
+        
+        <div class="problem-row">
+          <div class="status-icon">
+            <i class="fas fa-times-circle unsolved-icon"></i>
+          </div>
+          <a href="#" class="problem-title">VLSI Floorplanning Optimization</a>
+          <div class="popularity-tag">Popular</div>
+          <div class="level-tag">Practice</div>
+          <div class="difficulty hard">Hard</div>
+        </div>
+        
+        <div class="problem-row">
+          <div class="status-icon">
+            <i class="fas fa-bookmark saved-icon"></i>
+          </div>
+          <a href="#" class="problem-title">DRAM Cell Design</a>
+          <div class="popularity-tag">Nonpopular</div>
+          <div class="level-tag">Interview</div>
+          <div class="difficulty hard">Hard</div>
+        </div>
+      </div>
+      
+      <!-- Pagination -->
+      <div class="pagination">
+        <button class="pagination-btn" disabled>
+          <i class="fas fa-chevron-left"></i> Previous
+        </button>
+        <button class="pagination-btn active">1</button>
+        <button class="pagination-btn">2</button>
+        <button class="pagination-btn">3</button>
+        <button class="pagination-btn">
+          Next <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+      
+      <!-- Roadmap section -->
+      <div class="roadmap-section">
+        <div class="roadmap-header">
+          <h2>VLSI Learning Roadmap</h2>
+          <button class="toggle-roadmap" id="toggleRoadmap">
+            <i class="fas fa-chevron-down"></i>
+            <span>Show Roadmap</span>
+          </button>
+        </div>
+        
+        <div class="roadmap-content" id="roadmapContent">
+          <div class="roadmap-item">
+            <div class="roadmap-item-header">
+              <i class="fas fa-chevron-right roadmap-toggle"></i>
+              <h3>Digital Electronics Fundamentals</h3>
+            </div>
+            <div class="roadmap-details">
+              <ul>
+                <li>Boolean algebra and logic gates</li>
+                <li>Combinational and sequential circuits</li>
+                <li>Number systems and codes</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="roadmap-item">
+            <div class="roadmap-item-header">
+              <i class="fas fa-chevron-right roadmap-toggle"></i>
+              <h3>CMOS Technology</h3>
+            </div>
+            <div class="roadmap-details">
+              <ul>
+                <li>MOS transistor operation</li>
+                <li>CMOS fabrication process</li>
+                <li>Layout design rules</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="roadmap-item">
+            <div class="roadmap-item-header">
+              <i class="fas fa-chevron-right roadmap-toggle"></i>
+              <h3>VLSI Design Methodologies</h3>
+            </div>
+            <div class="roadmap-details">
+              <ul>
+                <li>RTL design and verification</li>
+                <li>Synthesis and optimization</li>
+                <li>Physical design and floorplanning</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Theme toggle functionality
+    const themeToggle = document.getElementById('themeToggle');
+    
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark-theme');
+      
+      if (document.body.classList.contains('dark-theme')) {
+        document.body.setAttribute('data-theme', 'dark');
+        themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        localStorage.setItem('theme', 'dark');
+      } else {
+        document.body.removeAttribute('data-theme');
+        themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+        localStorage.setItem('theme', 'light');
+      }
+    });
+    
+    // Check for saved theme preference
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.setAttribute('data-theme', 'dark');
+      themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+    }
+    
+    // Roadmap toggle functionality
+    const toggleRoadmapBtn = document.getElementById('toggleRoadmap');
+    const roadmapContent = document.getElementById('roadmapContent');
+    
+    toggleRoadmapBtn.addEventListener('click', () => {
+      roadmapContent.classList.toggle('show');
+      
+      if (roadmapContent.classList.contains('show')) {
+        toggleRoadmapBtn.innerHTML = '<i class="fas fa-chevron-up"></i><span>Hide Roadmap</span>';
+      } else {
+        toggleRoadmapBtn.innerHTML = '<i class="fas fa-chevron-down"></i><span>Show Roadmap</span>';
+      }
+    });
+    
+    // Roadmap item toggle functionality
+    const roadmapItems = document.querySelectorAll('.roadmap-item-header');
+    
+    roadmapItems.forEach(item => {
+      item.addEventListener('click', () => {
+        const toggleIcon = item.querySelector('.roadmap-toggle');
+        const details = item.nextElementSibling;
+        
+        toggleIcon.classList.toggle('rotated');
+        details.classList.toggle('show');
+      });
+    });
+    
+    // Filter button functionality
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    
+    filterButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        // Remove active class from all buttons in the same filter group
+        const filterType = button.getAttribute('data-filter');
+        const siblings = document.querySelectorAll(`.filter-btn[data-filter="${filterType}"]`);
+        siblings.forEach(btn => btn.classList.remove('active'));
+        
+        // Add active class to clicked button
+        button.classList.add('active');
+        
+        // Here you would typically filter the problems based on the selected filters
+        console.log(`Filter: ${filterType} = ${button.getAttribute('data-value')}`);
+      });
+    });
+  </script>
+</body>
+</html>

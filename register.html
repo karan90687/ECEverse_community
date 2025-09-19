@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ECEverse - Register</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #f5f7fa; height: 100vh; display: flex; justify-content: center; align-items: center; }
+    .register-card { background: white; border-radius: 12px; padding: 2.5rem; width: 100%; max-width: 450px; border: 1px solid #e1e5ee; }
+    h2 { color: #3a7bd5; font-weight: 600; text-align: center; margin-bottom: 2rem; }
+    .btn-primary { background-color: #3a7bd5; border: none; padding: 12px; border-radius: 8px; width: 100%; }
+    .google-btn, .github-btn { display: flex; align-items: center; justify-content: center; background-color: #fff; border: 1px solid #ddd; padding: 12px; border-radius: 8px; width: 100%; margin-top: 10px; cursor: pointer; transition: 0.2s; }
+    .google-btn:hover, .github-btn:hover { background-color: #f7f7f7; }
+    .google-btn img, .github-btn img { height: 20px; margin-right: 8px; }
+    .form-outline { position: relative; margin-bottom: 1.5rem; }
+    .form-outline input { border: 1px solid #e1e5ee; border-radius: 8px; padding:1rem 0.75rem 0.25rem 0.75rem; width: 100%; outline: none; background-color: #f9fafb; }
+    .form-label { position: absolute; top: 1rem; left: 0.75rem; color: #6b7280; font-size: 0.95rem; pointer-events: none; }
+    .form-outline input:focus + .form-label, .form-outline input:not(:placeholder-shown) + .form-label { top: 0.3rem; font-size: 0.8rem; color: #3a7bd5; font-weight: 500; }
+    #message-container { margin-bottom: 1rem; }
+    .auth-footer { text-align:center; margin-top:1.5rem; padding-top:1.5rem; border-top:1px solid #ddd; color:#8C8CA1; }
+    .auth-footer a { color: #3a7bd5; font-weight: 600; text-decoration:none; }
+    .auth-footer a:hover { color:#4D44DB; text-decoration:underline; }
+  </style>
+</head>
+<body>
+  <div class="register-card">
+    <div id="message-container"></div>
+    <h2>Create an Account</h2>
+    <form id="register-form">
+      <div class="form-outline">
+        <input type="text" id="username" name="username" class="form-control" required placeholder=" " />
+        <label class="form-label" for="username">Username</label>
+      </div>
+      <div class="form-outline">
+        <input type="email" id="email" name="email" class="form-control" required placeholder=" " />
+        <label class="form-label" for="email">Email</label>
+      </div>
+      <div class="form-outline">
+        <input type="password" id="password" name="password" class="form-control" required placeholder=" " />
+        <label class="form-label" for="password">Password</label>
+      </div>
+      <div class="form-outline">
+        <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" required placeholder=" " />
+        <label class="form-label" for="confirmPassword">Confirm Password</label>
+      </div>
+      <button type="submit" class="btn btn-primary">Register</button>
+    </form>
+
+    <button id="google-login" type="button" class="google-btn">
+      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg">
+      Continue with Google
+    </button>
+
+    <button id="github-login" type="button" class="github-btn">
+      <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png">
+      Continue with GitHub
+    </button>
+
+    <div class="auth-footer">
+      <p>Already have an account? <a href="login.html">Login here</a></p>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, setPersistence, browserLocalPersistence, GoogleAuthProvider, GithubAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+    import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyD4T6rAV2npex-ZOJuu5IKQ1bDUkD7o9Oc",
+      authDomain: "eceverse-adeac.firebaseapp.com",
+      databaseURL: "https://eceverse-adeac-default-rtdb.firebaseio.com",
+      projectId: "eceverse-adeac",
+      storageBucket: "eceverse-adeac.firebasestorage.app",
+      messagingSenderId: "55835462054",
+      appId: "1:55835462054:web:9ca23a5817ed40f2842767",
+      measurementId: "G-KTV3P359DX"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getDatabase(app);
+
+    const form = document.getElementById('register-form');
+    const messageDiv = document.getElementById('message-container');
+
+    // Check if email exists in DB for Email/Google
+    async function isEmailRegistered(email) {
+      const usersRef = ref(db, 'users');
+      const snapshot = await get(usersRef);
+      if(snapshot.exists()){
+        const users = snapshot.val();
+        // check if provider is email/google
+        return Object.values(users).some(user => user.email === email && (user.provider === "email" || user.provider === "google"));
+      }
+      return false;
+    }
+
+    async function isUsernameTaken(username){
+      const snapshot = await get(ref(db, `usernames/${username}`));
+      return snapshot.exists();
+    }
+
+    // Email/password registration
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      messageDiv.innerHTML = '';
+
+      const username = document.getElementById('username').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+
+      if(password !== confirmPassword){
+        messageDiv.innerHTML = '<div class="alert alert-danger">Passwords do not match</div>';
+        return;
+      }
+
+      if(username.length < 3){
+        messageDiv.innerHTML = '<div class="alert alert-danger">Username must be at least 3 characters</div>';
+        return;
+      }
+
+      if(await isUsernameTaken(username)){
+        messageDiv.innerHTML = '<div class="alert alert-danger">Username already taken</div>';
+        return;
+      }
+
+      if(await isEmailRegistered(email)){
+        messageDiv.innerHTML = '<div class="alert alert-danger">Email already registered with Email or Google</div>';
+        return;
+      }
+
+      try {
+        await setPersistence(auth, browserLocalPersistence);
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        await set(ref(db, `usernames/${username}`), {
+          email: email,
+          userId: user.uid
+        });
+
+        await set(ref(db, `users/${user.uid}`), {
+          username: username,
+          email: email,
+          provider: "email",
+          createdAt: new Date().toISOString()
+        });
+
+        messageDiv.innerHTML = '<div class="alert alert-success">Registration successful! Redirecting to login...</div>';
+        setTimeout(() => window.location.href = "login.html", 1500);
+
+      } catch(err){
+        messageDiv.innerHTML = `<div class="alert alert-danger">${err.message}</div>`;
+      }
+    });
+
+    // Google Sign-In
+    const googleBtn = document.getElementById('google-login');
+    const googleProvider = new GoogleAuthProvider();
+
+    googleBtn.addEventListener('click', async () => {
+      messageDiv.innerHTML = '';
+      try {
+        const result = await signInWithPopup(auth, googleProvider);
+        const user = result.user;
+
+        if(await isEmailRegistered(user.email)){
+          messageDiv.innerHTML = '<div class="alert alert-danger">This Google email is already registered with Email or Google</div>';
+          return;
+        }
+
+        const username = user.displayName || "GoogleUser";
+
+        if(await isUsernameTaken(username)){
+          messageDiv.innerHTML = '<div class="alert alert-danger">Username already taken</div>';
+          return;
+        }
+
+        await set(ref(db, `usernames/${username}`), {
+          email: user.email,
+          userId: user.uid
+        });
+
+        await set(ref(db, `users/${user.uid}`), {
+          username: username,
+          email: user.email,
+          provider: "google",
+          createdAt: new Date().toISOString()
+        });
+
+        messageDiv.innerHTML = '<div class="alert alert-success">Google login successful! Redirecting to homepage...</div>';
+        setTimeout(() => window.location.href = "homepage.html", 1500);
+
+      } catch(err){
+        messageDiv.innerHTML = `<div class="alert alert-danger">${err.message}</div>`;
+      }
+    });
+
+    // GitHub Sign-In
+    const githubBtn = document.getElementById('github-login');
+    const githubProvider = new GithubAuthProvider();
+
+    githubBtn.addEventListener('click', async () => {
+      messageDiv.innerHTML = '';
+      try {
+        const result = await signInWithPopup(auth, githubProvider);
+        const user = result.user;
+
+        const username = user.displayName || "GitHubUser";
+
+        if(await isUsernameTaken(username)){
+          messageDiv.innerHTML = '<div class="alert alert-danger">Username already taken</div>';
+          return;
+        }
+
+        // GitHub can coexist with Email/Google for same email
+        await set(ref(db, `usernames/${username}`), {
+          email: user.email,
+          userId: user.uid
+        });
+
+        await set(ref(db, `users/${user.uid}`), {
+          username: username,
+          email: user.email,
+          provider: "github",
+          createdAt: new Date().toISOString()
+        });
+
+        messageDiv.innerHTML = '<div class="alert alert-success">GitHub login successful! Redirecting to homepage...</div>';
+        setTimeout(() => window.location.href = "homepage.html", 1500);
+
+      } catch(err){
+        messageDiv.innerHTML = `<div class="alert alert-danger">${err.message}</div>`;
+      }
+    });
+  </script>
+</body>
+</html>

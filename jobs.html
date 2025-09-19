@@ -1,0 +1,2164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECEVerse - Jobs</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<style>
+    :root {
+      --primary: #0f0f10;
+      --primary-dark: #423d7b;
+      --primary-light: #C7D2FE;
+      --secondary: #10B981;
+      --accent: #F59E0B;
+      --text-primary: #1F2937;
+      --text-secondary: #4B5563;
+      --bg-primary: #F9FAFB;
+      --bg-secondary: #FFFFFF;
+      --bg-tertiary: #F3F4F6;
+      --border-color: #0a0a0b;
+      --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+      --success: #10B981;
+      --warning: #F59E0B;
+      --gradient: linear-gradient(135deg, #0d0d0d 0%, #141219 100%);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * { 
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box; 
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
+    }
+
+    body { 
+      background: var(--bg-primary); 
+      color: var(--text-primary); 
+      line-height: 1.6;
+      font-size: 14px;
+      transition: var(--transition);
+    }
+
+    /* Header */
+    header {
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-color);
+      padding: 16px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 6px -1px rgba(236, 201, 75, 0.1)
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .logo span {
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .logo i {
+      font-size: 28px;
+      color: var(--primary);
+    }
+
+    nav {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+    }
+
+    nav a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 15px;
+      transition: var(--transition);
+      position: relative;
+      padding: 8px 0;
+    }
+
+    nav a:hover {
+      color: var(--text-primary);
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--gradient);
+      transition: var(--transition);
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    nav a.active {
+      color: var(--text-primary);
+    }
+
+    nav a.active::after {
+      width: 100%;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      padding: 8px 16px;
+      border-radius: 12px;
+      transition: var(--transition);
+      background: var(--bg-tertiary);
+    }
+
+    .user-info:hover {
+      background: rgb(11, 10, 10);
+      color: white;
+    }
+
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      color: white;
+      font-size: 16px;
+    }
+    /* .user-avatar:hover{
+      background-color: #ed1010;
+      color: black;
+      
+    } */
+
+    .theme-toggle {
+      background: var(--bg-tertiary);
+      border: none;
+      color: var(--text-primary);
+      cursor: pointer;
+      font-size: 18px;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .theme-toggle:hover {
+      background: var(--border-color);
+      transform: rotate(15deg);
+    }
+
+    /* Container */
+    .container {
+      display: flex;
+      min-height: calc(100vh - 80px);
+    }
+
+    /* Sidebar */
+   .sidebar {
+  width: 320px;
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border-color);
+  padding: 24px;
+  overflow-y: auto;
+  transition: var(--transition);
+  position: sticky;
+  top: 80px;
+  height: calc(100vh - 80px);
+}
+
+.sidebar-section {
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border-color);
+  max-height: 200px; /* Limit height of each section */
+  overflow-y: auto; /* Enable scrolling within each section */
+}
+
+.sidebar-section:last-child {
+  border-bottom: none;
+}
+.sidebar-search {
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.sidebar-search i {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-secondary);
+  z-index: 2;
+}
+
+.sidebar-search-input {
+  width: 100%;
+  padding: 10px 10px 10px 36px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 14px;
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+/* Remove icons from filter buttons */
+.filter-btn i {
+  display: none;
+}
+
+/* Adjust filter button text alignment */
+.filter-btn {
+  justify-content: center;
+  text-align: center;
+}
+
+    .sidebar-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .sidebar-title i {
+      color: var(--primary);
+      font-size: 18px;
+    }
+
+    /* Main content */
+    .main-content {
+      flex: 1;
+      padding: 32px;
+      overflow-y: auto;
+      width: calc(100% - 320px);
+      transition: var(--transition);
+      background: var(--bg-primary);
+    }
+
+    /* Search container */
+    .search-container {
+      position: relative;
+      margin-bottom: 28px;
+    }
+
+    .search-container i {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-secondary);
+      z-index: 2;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 16px 20px 16px 52px;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      font-size: 16px;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      transition: var(--transition);
+      box-shadow: var(--card-shadow);
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    }
+
+    /* Jobs Section Styles */
+    .jobs-header {
+      margin-bottom: 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .jobs-header h1 {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--text-primary);
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .jobs-description {
+      color: var(--text-secondary);
+      font-size: 16px;
+      max-width: 600px;
+      line-height: 1.7;
+    }
+
+    .admin-btn {
+      padding: 14px 24px;
+      background: var(--gradient);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: var(--transition);
+      box-shadow: 0 4px 6px rgba(99, 102, 241, 0.3);
+      font-size: 15px;
+    }
+
+    .admin-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(99, 102, 241, 0.4);
+    }
+
+    /* Jobs Filters */
+    .jobs-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .filter-btn {
+      padding: 12px 20px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .filter-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      box-shadow: 0 2px 6px rgba(99, 102, 241, 0.1);
+    }
+
+    .filter-btn.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+      box-shadow: 0 4px 8px rgba(99, 102, 241, 0.2);
+    }
+
+    /* Jobs Grid */
+    /* Jobs Grid */
+.jobs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 28px;
+  align-items: start; /* This is the key change - makes cards independent */
+}
+
+  .job-card {
+  background: var(--bg-secondary);
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: var(--card-shadow);
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border-color);
+  height: auto; /* Ensure it's auto */
+  min-height: 280px; /* Keep minimum height */
+  /* Remove any fixed height property if present */
+}
+
+    .job-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: var(--gradient);
+      z-index: 1;
+    }
+
+    .job-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+      border-color: var(--primary);
+    }
+
+    .job-role {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+      line-height: 1.3;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .job-skills {
+      margin-bottom: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .skill-tag {
+      display: inline-block;
+      background: rgba(99, 101, 241, 0.11);
+      color: var(--primary-dark);
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      transition: var(--transition);
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      white-space: nowrap;
+    }
+
+    .skill-tag:hover {
+      background: rgba(99, 102, 241, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .job-salary {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--success);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .job-salary i {
+      font-size: 16px;
+    }
+
+    .job-companies {
+      margin-top: auto;
+      margin-bottom: 16px;
+    }
+
+    .companies-title {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 10px;
+      font-weight: 500;
+    }
+
+    .company-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .company-tag {
+      display: inline-block;
+      background: rgba(16, 185, 129, 0.162);
+      color: var(--success);
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      transition: var(--transition);
+      border: 1px solid rgba(1, 19, 13, 0.171);
+      white-space: nowrap;
+      
+    }
+
+    .company-tag:hover {
+      background: rgba(16, 185, 129, 0.2);
+      transform: translateY(-2px);
+    }
+
+    /* Job actions (edit/delete buttons) */
+    .job-actions {
+      margin-top: auto;
+      display: flex;
+      gap: 10px;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: var(--transition);
+    }
+
+    .job-card:hover .job-actions {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .edit-job-btn {
+      flex: 1;
+      padding: 10px;
+      background: var(--gradient);
+      border: none;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: var(--transition);
+      font-weight: 500;
+    }
+
+    .edit-job-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(99, 102, 241, 0.3);
+    }
+
+    .delete-job-btn {
+      flex: 1;
+      padding: 10px;
+      background: #DC2626;
+      border: none;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: var(--transition);
+      font-weight: 500;
+    }
+
+    .delete-job-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(220, 38, 38, 0.3);
+    }
+
+    /* Range Slider */
+    .range-slider {
+      margin: 20px 0;
+    }
+
+    .range-slider label {
+      display: block;
+      margin-bottom: 14px;
+      color: var(--text-primary);
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .slider-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .slider-value {
+      min-width: 50px;
+      text-align: center;
+      font-weight: 600;
+      color: var(--primary-dark);
+      background: rgba(99, 102, 241, 0.1);
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(99, 102, 241, 0.2);
+    }
+
+    input[type="range"] {
+      flex: 1;
+      -webkit-appearance: none;
+      height: 6px;
+      background: var(--bg-tertiary);
+      border-radius: 6px;
+      outline: none;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--primary);
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(99, 102, 241, 0.3);
+      transition: var(--transition);
+      border: 2px solid var(--bg-secondary);
+    }
+
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.1);
+      background: var(--primary-dark);
+    }
+
+    /* Admin Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(5px);
+      padding: 20px;
+    }
+
+    .modal.show {
+      display: flex;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .modal-content {
+      background: var(--bg-secondary);
+      border-radius: 16px;
+      width: 540px;
+      max-width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 32px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--border-color);
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 28px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .modal-header h2 {
+      font-size: 24px;
+      color: var(--text-primary);
+      font-weight: 600;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .close-modal {
+      background: none;
+      border: none;
+      font-size: 28px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .close-modal:hover {
+      color: var(--accent);
+      transform: rotate(90deg);
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: 500;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      background: var(--bg-tertiary);
+      color: var(--text-primary);
+      transition: var(--transition);
+      font-size: 15px;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    }
+
+    .multi-input-container {
+      display: flex;
+      gap: 12px;
+    }
+
+    .multi-input-container input {
+      flex: 1;
+    }
+
+    .add-item-btn {
+      padding: 14px;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .add-item-btn:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    .items-list {
+      margin-top: 14px;
+      max-height: 150px;
+      overflow-y: auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .item-tag {
+      display: inline-flex;
+      align-items: center;
+      background: var(--bg-tertiary);
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      color: var(--text-primary);
+      gap: 8px;
+      border: 1px solid var(--border-color);
+    }
+
+    .remove-item {
+      color: var(--accent);
+      cursor: pointer;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+
+    .remove-item:hover {
+      transform: scale(1.2);
+    }
+
+    .submit-btn {
+      padding: 16px 24px;
+      background: var(--gradient);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 500;
+      width: 100%;
+      margin-top: 24px;
+      transition: var(--transition);
+      font-size: 16px;
+      box-shadow: 0 4px 6px rgba(99, 102, 241, 0.3);
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(99, 102, 241, 0.4);
+    }
+
+    /* Salary Range Inputs */
+    .salary-inputs {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .salary-inputs input {
+      flex: 1;
+    }
+
+    .salary-inputs span {
+      color: var(--text-secondary);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 1200px) {
+      .jobs-grid {
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      }
+    }
+
+    @media (max-width: 992px) {
+      .jobs-grid {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      }
+      
+      .sidebar {
+        width: 280px;
+      }
+      
+      .main-content {
+        width: calc(100% - 280px);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+      
+      .main-content {
+        width: 100%;
+        padding: 24px;
+      }
+      
+      .jobs-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+      }
+      
+      .jobs-filters {
+        overflow-x: auto;
+        padding-bottom: 10px;
+      }
+      
+      header {
+        padding: 12px 20px;
+      }
+      
+      nav {
+        gap: 20px;
+      }
+      
+      .job-actions {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 576px) {
+      header {
+        flex-direction: column;
+        gap: 16px;
+        padding: 16px;
+      }
+      
+      nav {
+        gap: 16px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      
+      .header-right {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      .jobs-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .modal-content {
+        padding: 24px;
+      }
+      
+      .jobs-header h1 {
+        font-size: 28px;
+      }
+      
+      .job-skills, .company-tags {
+        gap: 6px;
+      }
+      
+      .skill-tag, .company-tag {
+        padding: 6px 10px;
+        font-size: 12px;
+      }
+    }
+
+    /* Scrollbar styling */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg-tertiary);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border-color);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--primary);
+    }
+
+.filter-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  max-height: 120px; /* Shorter height */
+  overflow-y: auto;
+}
+
+.filter-options .filter-btn {
+  justify-content: center;
+  text-align: center;
+  margin: 0;
+  padding: 8px 12px; /* Smaller padding */
+  flex: 1 0 calc(50% - 3px); /* Two items per row */
+  min-width: calc(50% - 3px);
+  font-size: 12px; /* Smaller font */
+}
+
+/* Remove icons from filter buttons */
+.filter-btn i {
+  display: none;
+}
+.filter-options::-webkit-scrollbar {
+  width: 0px;
+}
+
+.filter-options::-webkit-scrollbar-thumb {
+  border-radius: 0px;
+}
+
+    /* Animation for job cards */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .job-card {
+      animation: fadeInUp 0.5s ease-out;
+    }
+
+    /* Loading animation */
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 200px;
+    }
+
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid var(--bg-tertiary);
+      border-top: 4px solid var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Search input placeholder styling */
+    .search-input::placeholder {
+      color: var(--text-secondary);
+      opacity: 0.8;
+    }
+
+    .search-input:-ms-input-placeholder {
+      color: var(--text-secondary);
+    }
+
+    .search-input::-ms-input-placeholder {
+      color: var(--text-secondary);
+    }
+    
+    /* Auth button styling */
+    .auth-btn {
+      padding: 10px 20px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-tertiary);
+      color: var(--text-primary);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .auth-btn:hover {
+      background: var(--primary);
+      color: white;
+    }
+</style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <i class="fas fa-microchip"></i>
+            <span>ECEVerse</span>
+        </div>
+        <nav>
+            <a href="#">Learn</a>
+            <a href="#">Practice</a>
+            <a href="#" class="active">Jobs</a>
+            <a href="#">Community</a>
+        </nav>
+       <div class="header-right">
+    <button class="theme-toggle">
+        <i class="fas fa-moon"></i>
+    </button>
+    <div class="user-info">
+        <div class="user-avatar">U</div>
+        <span id="user-name">User</span>
+    </div>
+
+   </div>
+    </header>
+
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <h3 class="sidebar-title"><i class="fas fa-chart-line"></i> Experience Level</h3>
+                <div class="range-slider">
+                    <label for="experience-slider"><i class="fas fa-user-tie"></i> Years of Experience: <span class="slider-value" id="experience-value">0</span></label>
+                    <div class="slider-container">
+                        <span>0</span>
+                        <input type="range" id="experience-slider" min="0" max="15" value="0">
+                        <span>15</span>
+                    </div>
+                </div>
+            </div>
+            <div class="sidebar-search">
+  <i class="fas fa-search"></i>
+  <input type="text" class="sidebar-search-input" placeholder="Search filters..." autocomplete="off">
+</div>
+            
+            <div class="sidebar-section">
+                <h3 class="sidebar-title"><i class="fas fa-tools"></i> Skills</h3>
+                <div id="skills-container" class="filter-options">
+                    <!-- Skills will be loaded dynamically -->
+                </div>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3 class="sidebar-title"><i class="fas fa-map-marker-alt"></i> Locations</h3>
+                <div id="locations-container" class="filter-options">
+                    <!-- Locations will be loaded dynamically -->
+                </div>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3 class="sidebar-title"><i class="fas fa-money-bill-wave"></i> Salary Range</h3>
+                <div id="salary-container" class="filter-options">
+                    <!-- Salary ranges will be loaded dynamically -->
+                </div>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3 class="sidebar-title"><i class="fas fa-briefcase"></i> Job Type</h3>
+                <div id="jobtype-container" class="filter-options">
+                    <!-- Job types will be loaded dynamically -->
+                </div>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3 class="sidebar-title"><i class="fas fa-building"></i> Companies</h3>
+                <div id="companies-container" class="filter-options">
+                    <!-- Companies will be loaded dynamically -->
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="jobs-header">
+                <div>
+                    <h1>ECE Job Opportunities</h1>
+                    <p class="jobs-description">Discover your dream career in Electronics and Communication Engineering with top companies worldwide</p>
+                </div>
+                <button id="admin-btn" class="admin-btn" style="display: none;">
+                    <i class="fas fa-cog"></i> Admin Settings
+                </button>
+            </div>
+
+            <div class="search-container">
+                <i class="fas fa-search"></i>
+              <input type="text" class="search-input" placeholder="Search jobs by role, skill, or company..." autocomplete="off" id="main-search-input">
+            </div>
+
+            <!-- <div class="jobs-filters">
+                <button class="filter-btn active"><i class="fas fa-layer-group"></i> All Jobs</button>
+                <button class="filter-btn"><i class="fas fa-laptop-house"></i> Remote</button>
+                <button class="filter-btn"><i class="fas fa-map-pin"></i> Bangalore</button>
+                <button class="filter-btn"><i class="fas fa-map-pin"></i> Hyderabad</button>
+                <button class="filter-btn"><i class="fas fa-map-pin"></i> Chennai</button>
+            </div> -->
+
+            <div class="jobs-grid" id="jobs-container">
+                <!-- Jobs will be loaded dynamically from Firebase -->
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                </div>
+            </div>
+            
+            <button id="add-job-btn" class="admin-btn" style="margin-top: 32px; display: none;">
+                <i class="fas fa-plus"></i> Add Job Card
+            </button>
+        </main>
+    </div>
+
+    <!-- Add Job Modal -->
+    <div class="modal" id="add-job-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add New Job</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            
+            <div class="form-group">
+                <label for="job-role"><i class="fas fa-user-tie"></i> Job Role</label>
+                <input type="text" id="job-role" class="form-control" placeholder="Enter job role">
+            </div>
+            
+            <div class="form-group">
+                <label for="job-skills"><i class="fas fa-tools"></i> Skills (Add one at a time)</label>
+                <div class="multi-input-container">
+                    <input type="text" id="job-skills" class="form-control" placeholder="Enter a skill">
+                    <button class="add-item-btn" data-target="job-skills-list"><i class="fas fa-plus"></i></button>
+                </div>
+                <div id="job-skills-list" class="items-list"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="salary-min"><i class="fas fa-money-bill-wave"></i> Salary Range (LPA)</label>
+                <div class="salary-inputs">
+                    <input type="number" id="salary-min" class="form-control" placeholder="Min" min="0">
+                    <span>-</span>
+                    <input type="number" id="salary-max" class="form-control" placeholder="Max" min="0">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="job-companies"><i class="fas fa-building"></i> Companies (Add one at a time)</label>
+                <div class="multi-input-container">
+                    <input type="text" id="job-companies" class="form-control" placeholder="Enter a company">
+                    <button class="add-item-btn" data-target="job-companies-list"><i class="fas fa-plus"></i></button>
+                </div>
+                <div id="job-companies-list" class="items-list"></div>
+            </div>
+            
+            <button class="submit-btn" id="save-job">Save Job</button>
+        </div>
+    </div>
+
+    <!-- Admin Modal -->
+    <div class="modal" id="admin-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Admin Settings - Filter Management</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            
+            <div class="form-group">
+                <label for="skills-input"><i class="fas fa-tools"></i> Skills (Add one at a time)</label>
+                <div class="multi-input-container">
+                    <input type="text" id="skills-input" class="form-control" placeholder="Enter a skill">
+                    <button class="add-item-btn" data-target="skills-list"><i class="fas fa-plus"></i></button>
+                </div>
+                <div id="skills-list" class="items-list"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="locations-input"><i class="fas fa-map-marker-alt"></i> Locations (Add one at a time)</label>
+                <div class="multi-input-container">
+                    <input type="text" id="locations-input" class="form-control" placeholder="Enter a location">
+                    <button class="add-item-btn" data-target="locations-list"><i class="fas fa-plus"></i></button>
+                </div>
+                <div id="locations-list" class="items-list"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="salary-min-input"><i class="fas fa-money-bill-wave"></i> Salary Range (Min - Max in LPA)</label>
+                <div class="multi-input-container">
+                    <input type="number" id="salary-min-input" class="form-control" placeholder="Min" min="0">
+                    <span>-</span>
+                    <input type="number" id="salary-max-input" class="form-control" placeholder="Max" min="0">
+                    <button class="add-item-btn" data-target="salary-list"><i class="fas fa-plus"></i></button>
+                </div>
+                <div id="salary-list" class="items-list"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="companies-input"><i class="fas fa-building"></i> Companies (Add one at a time)</label>
+                <div class="multi-input-container">
+                    <input type="text" id="companies-input" class="form-control" placeholder="Enter a company">
+                    <button class="add-item-btn" data-target="companies-list"><i class="fas fa-plus"></i></button>
+                </div>
+                <div id="companies-list" class="items-list"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="jobtype-input"><i class="fas fa-briefcase"></i> Job Types (Add one at a time)</label>
+                <div class="multi-input-container">
+                    <input type="text" id="jobtype-input" class="form-control" placeholder="Enter job type">
+                    <button class="add-item-btn" data-target="jobtype-list"><i class="fas fa-plus"></i></button>
+                </div>
+                <div id="jobtype-list" class="items-list"></div>
+            </div>
+            
+            <button class="submit-btn" id="save-filters">Save Filters</button>
+        </div>
+    </div>
+
+    <script>
+    // Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyD4T6rAV2npex-ZOJuu5IKQ1bDUkD7o9Oc",
+        authDomain: "eceverse-adeac.firebaseapp.com",
+        databaseURL: "https://eceverse-adeac-default-rtdb.firebaseio.com",
+        projectId: "eceverse-adeac",
+        storageBucket: "eceverse-adeac.firebasestorage.app",
+        messagingSenderId: "55835462054",
+        appId: "1:55835462054:web:9ca23a5817ed40f2842767",
+        measurementId: "G-KTV3P359DX"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const auth = firebase.auth();
+
+    // DOM elements
+    const addJobBtn = document.getElementById('add-job-btn');
+    const addJobModal = document.getElementById('add-job-modal');
+    const saveJobBtn = document.getElementById('save-job');
+    const experienceSlider = document.getElementById('experience-slider');
+    const experienceValue = document.getElementById('experience-value');
+    const adminBtn = document.getElementById('admin-btn');
+    const adminModal = document.getElementById('admin-modal');
+    const closeModalButtons = document.querySelectorAll('.close-modal');
+    const addItemBtns = document.querySelectorAll('.add-item-btn');
+    const saveFiltersBtn = document.getElementById('save-filters');
+    const jobsContainer = document.getElementById('jobs-container');
+    const skillsContainer = document.getElementById('skills-container');
+    const locationsContainer = document.getElementById('locations-container');
+    const salaryContainer = document.getElementById('salary-container');
+    const jobtypeContainer = document.getElementById('jobtype-container');
+    const companiesContainer = document.getElementById('companies-container');
+    const searchInput = document.querySelector('.search-input');
+    const sidebarSearchInput = document.querySelector('.sidebar-search-input');
+    // Add these with your other DOM element references
+const loginBtn = document.getElementById('login-btn');
+const logoutBtn = document.getElementById('logout-btn');
+const loginModal = document.getElementById('login-modal');
+const registerModal = document.getElementById('register-modal');
+const loginSubmit = document.getElementById('login-submit');
+const registerSubmit = document.getElementById('register-submit');
+const showRegister = document.getElementById('show-register');
+const showLogin = document.getElementById('show-login');
+
+
+
+
+    // Current user and filters data
+    let currentUser = null;
+    let filtersData = {
+        skills: [],
+        locations: [],
+        salaryRanges: [],
+        jobTypes: [],
+        companies: []
+    };
+    
+    // Job form data
+    let jobFormData = {
+        skills: [],
+        companies: []
+    };
+
+    // All jobs data
+    let allJobs = [];
+
+    // Add job button event
+    addJobBtn.addEventListener('click', () => {
+        addJobModal.classList.add('show');
+        // Clear any previous inputs
+        document.getElementById('job-role').value = '';
+        document.getElementById('salary-min').value = '';
+        document.getElementById('salary-max').value = '';
+        document.getElementById('job-skills-list').innerHTML = '';
+        document.getElementById('job-companies-list').innerHTML = '';
+        jobFormData.skills = [];
+        jobFormData.companies = [];
+    });
+
+    // Close modal events
+    closeModalButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            addJobModal.classList.remove('show');
+            adminModal.classList.remove('show');
+        });
+    });
+
+    // Save job event
+    saveJobBtn.addEventListener('click', saveJob);
+
+    // Experience slider event
+    experienceSlider.addEventListener('input', () => {
+        experienceValue.textContent = experienceSlider.value;
+        filterJobs();
+    });
+
+    // Admin button event
+    adminBtn.addEventListener('click', () => {
+        adminModal.classList.add('show');
+        loadFiltersToModal();
+    });
+
+    // Add item buttons events for both modals
+    addItemBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const target = btn.getAttribute('data-target');
+            if (target.includes('job-')) {
+                // This is for the job modal
+                addItemToJobForm(target);
+            } else {
+                // This is for the admin modal
+                addItemToList(target);
+            }
+        });
+    });
+
+    // Save filters event
+    saveFiltersBtn.addEventListener('click', saveFilters);
+
+    // Search input event
+    searchInput.addEventListener('input', filterJobs);
+
+    // Sidebar search event
+    sidebarSearchInput.addEventListener('input', filterSidebarItems);
+
+    // Initialize the app
+function init() {
+    // Load saved theme preference
+
+    
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    document.body.setAttribute('data-theme', savedTheme);
+
+    // Set correct icon based on saved theme
+    if (savedTheme === 'light') {
+        document.querySelector('.theme-toggle').innerHTML = '<i class="fas fa-sun"></i>';
+        // Apply light theme variables
+        document.documentElement.style.setProperty('--bg-primary', '#F3F4F6');
+        document.documentElement.style.setProperty('--bg-secondary', '#FFFFFF');
+        document.documentElement.style.setProperty('--bg-tertiary', '#E5E7EB');
+        document.documentElement.style.setProperty('--text-primary', '#111827');
+        document.documentElement.style.setProperty('--text-secondary', '#4B5563');
+        document.documentElement.style.setProperty('--border-color', '#D1D5DB');
+    } else {
+        document.querySelector('.theme-toggle').innerHTML = '<i class="fas fa-moon"></i>';
+    }
+    
+    // Set up Firebase auth state listener
+    auth.onAuthStateChanged((user) => {
+        onAuthStateChanged(user);
+    });
+    
+    // Load filters and jobs
+    loadFilters();
+    loadJobs();
+    
+    // Theme toggle functionality
+    const themeToggle = document.querySelector('.theme-toggle');
+    themeToggle.addEventListener('click', () => {
+        const body = document.body;
+        const isDark = body.getAttribute('data-theme') === 'dark';
+        body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+        themeToggle.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+        
+        // Save theme preference
+        localStorage.setItem('theme', isDark ? 'light' : 'dark');
+    });
+
+    // Clear search inputs on page load
+    window.addEventListener('load', function() {
+        document.querySelector('.search-input').value = '';
+        document.querySelector('.sidebar-search-input').value = '';
+    });
+}
+// Auth state change handler
+function onAuthStateChanged(user) {
+    currentUser = user;
+    const userName = document.getElementById('user-name');
+    
+    if (user) {
+        userName.textContent = user.displayName || user.email;
+        
+        // Show admin button only for srujansrujan@gmail.com
+        if (user.email === "srujansrujan@gmail.com") {
+            adminBtn.style.display = 'flex';
+            addJobBtn.style.display = 'flex';
+        } else {
+            adminBtn.style.display = 'none';
+            addJobBtn.style.display = 'none';
+        }
+    } else {
+        // No user is signed in
+        userName.textContent = "Guest";
+        adminBtn.style.display = 'none';
+        addJobBtn.style.display = 'none';
+    }
+    
+    // Re-render jobs to show/hide edit/delete buttons based on auth status
+    renderJobs(allJobs);
+}
+
+    // Load filters from Firestore
+    async function loadFilters() {
+        try {
+            const doc = await db.collection('settings').doc('filters').get();
+            
+            if (doc.exists) {
+                filtersData = doc.data();
+                renderFilters();
+            } else {
+                // Use default mock data if no filters exist
+                filtersData = {
+                    skills: ["Verilog", "SystemVerilog", "C/C++", "MATLAB", "Python", "ASIC Design", "RTOS", "VHDL", "Embedded C", "PCB Design"],
+                    locations: ["Bangalore", "Hyderabad", "Chennai", "Pune", "Remote", "Mumbai", "Delhi NCR"],
+                    salaryRanges: ["0-5 LPA", "5-10 LPA", "10-20 LPA", "20+ LPA"],
+                    jobTypes: ["Full-time", "Part-time", "Internship", "Contract"],
+                    companies: ["Intel", "Qualcomm", "NVIDIA", "Tesla", "Samsung", "Ericsson", "Texas Instruments", "AMD", "MediaTek", "Broadcom"]
+                };
+                // Save default filters to Firestore
+                await db.collection('settings').doc('filters').set(filtersData);
+                renderFilters();
+            }
+        } catch (error) {
+            console.error("Error loading filters:", error);
+            // Fallback to mock data
+            filtersData = {
+                skills: ["Verilog", "SystemVerilog", "C/C++", "MATLAB", "Python", "ASIC Design", "RTOS", "VHDL", "Embedded C", "PCB Design"],
+                locations: ["Bangalore", "Hyderabad", "Chennai", "Pune", "Remote", "Mumbai", "Delhi NCR"],
+                salaryRanges: ["0-5 LPA", "5-10 LPA", "10-20 LPA", "20+ LPA"],
+                jobTypes: ["Full-time", "Part-time", "Internship", "Contract"],
+                companies: ["Intel", "Qualcomm", "NVIDIA", "Tesla", "Samsung", "Ericsson", "Texas Instruments", "AMD", "MediaTek", "Broadcom"]
+            };
+            renderFilters();
+        }
+    }
+
+    // Render filters to sidebar
+    function renderFilters() {
+        renderFilterList(skillsContainer, filtersData.skills, "skill");
+        renderFilterList(locationsContainer, filtersData.locations, "location");
+        renderFilterList(salaryContainer, filtersData.salaryRanges, "salary");
+        renderFilterList(jobtypeContainer, filtersData.jobTypes, "jobtype");
+        renderFilterList(companiesContainer, filtersData.companies, "company");
+    }
+
+    // Render a single filter list
+    function renderFilterList(container, items, type) {
+        container.innerHTML = '';
+        items.forEach(item => {
+            const btn = document.createElement('button');
+            btn.className = 'filter-btn';
+            btn.innerHTML = `<i class="fas fa-${getIconForType(type)}"></i> ${item}`;
+            btn.setAttribute('data-type', type);
+            btn.setAttribute('data-value', item);
+            btn.addEventListener('click', () => {
+                btn.classList.toggle('active');
+                filterJobs();
+            });
+            container.appendChild(btn);
+        });
+    }
+
+    // Get icon for filter type
+    function getIconForType(type) {
+        const icons = {
+            skill: 'tools',
+            location: 'map-marker-alt',
+            salary: 'money-bill-wave',
+            jobtype: 'briefcase',
+            company: 'building'
+        };
+        return icons[type] || 'circle';
+    }
+
+    // Load jobs from Firestore
+    async function loadJobs() {
+        try {
+            const snapshot = await db.collection('jobs').orderBy('timestamp', 'desc').get();
+            
+            if (!snapshot.empty) {
+                allJobs = [];
+                snapshot.forEach(doc => {
+                    const job = doc.data();
+                    job.id = doc.id;
+                    allJobs.push(job);
+                });
+                renderJobs(allJobs);
+            } else {
+                // Show empty state if no jobs exist
+                renderJobs([]);
+            }
+            
+            // Remove loading spinner
+            document.querySelector('.loading').style.display = 'none';
+        } catch (error) {
+            console.error("Error loading jobs:", error);
+            // Show empty state
+            renderJobs([]);
+            document.querySelector('.loading').style.display = 'none';
+        }
+    }
+
+// Render jobs to the grid
+// Render jobs to the grid
+function renderJobs(jobs) {
+    jobsContainer.innerHTML = '';
+    
+    if (jobs.length === 0) {
+        jobsContainer.innerHTML = `
+            <div class="no-jobs" style="grid-column: 1 / -1; text-align: center; padding: 60px 20px;">
+                <i class="fas fa-search" style="font-size: 56px; color: var(--text-secondary); margin-bottom: 20px;"></i>
+                <h3 style="color: var(--text-secondary); margin-bottom: 12px; font-size: 20px;">No jobs found</h3>
+                <p style="color: var(--text-secondary); font-size: 16px;">Try adjusting your filters or search terms</p>
+            </div>
+        `;
+        return;
+    }
+    
+    jobs.forEach(job => {
+        const card = document.createElement('div');
+        card.className = 'job-card';
+        
+        card.innerHTML = `
+            <h3 class="job-role">${job.role}</h3>
+            <div class="job-skills">
+                ${job.skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('')}
+            </div>
+            <div class="job-salary"><i class="fas fa-money-bill-wave"></i> ₹${job.salary}</div>
+            <div class="job-companies">
+                <div class="companies-title">Top Hiring Companies:</div>
+                <div class="company-tags">
+                    ${job.companies.map(company => `<span class="company-tag">${company}</span>`).join('')}
+                </div>
+            </div>
+            ${
+                currentUser && currentUser.email === "srujansrujan@gmail.com" 
+                ? `
+                <div class="job-actions">
+                    <button class="edit-job-btn" data-id="${job.id}">
+                        <i class="fas fa-edit"></i> Edit
+                    </button>
+                    <button class="delete-job-btn" data-id="${job.id}">
+                        <i class="fas fa-trash"></i> Delete
+                    </button>
+                </div>
+                ` 
+                : ''
+            }
+        `;
+        
+        jobsContainer.appendChild(card);
+    });
+
+    // Attach events for edit & delete
+    if (currentUser && currentUser.email === "srujansrujan@gmail.com") {
+        document.querySelectorAll('.delete-job-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation(); // Prevent event bubbling
+                deleteJob(btn.getAttribute('data-id'));
+            });
+        });
+
+        document.querySelectorAll('.edit-job-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation(); // Prevent event bubbling
+                editJob(btn.getAttribute('data-id'));
+            });
+        });
+    }
+}
+
+    // Filter jobs based on selected filters
+// Filter jobs based on selected filters
+function filterJobs() {
+    const experienceValue = parseInt(experienceSlider.value);
+    const searchText = searchInput.value.toLowerCase();
+    const activeFilters = {
+        skills: Array.from(document.querySelectorAll('#skills-container .filter-btn.active')).map(btn => btn.getAttribute('data-value')),
+        locations: Array.from(document.querySelectorAll('#locations-container .filter-btn.active')).map(btn => btn.getAttribute('data-value')),
+        salary: Array.from(document.querySelectorAll('#salary-container .filter-btn.active')).map(btn => btn.getAttribute('data-value')),
+        companies: Array.from(document.querySelectorAll('#companies-container .filter-btn.active')).map(btn => btn.getAttribute('data-value')),
+        jobtype: Array.from(document.querySelectorAll('#jobtype-container .filter-btn.active')).map(btn => btn.getAttribute('data-value'))
+    };
+    
+    // Check if any filters are active (excluding experience slider at 0 and empty search)
+    const hasActiveFilters = experienceValue > 0 || 
+                            searchText.length > 0 || 
+                            activeFilters.skills.length > 0 || 
+                            activeFilters.locations.length > 0 || 
+                            activeFilters.salary.length > 0 || 
+                            activeFilters.companies.length > 0 || 
+                            activeFilters.jobtype.length > 0;
+    
+    // If no filters are active, show all jobs
+    if (!hasActiveFilters) {
+        renderJobs(allJobs);
+        return;
+    }
+    
+    const filteredJobs = allJobs.filter(job => {
+        // Filter by experience
+        if (experienceValue > 0) {
+            // Simple assumption: higher salary jobs require more experience
+            const minSalary = parseInt(job.salary.split('-')[0]);
+            if (minSalary < experienceValue * 1.5) {
+                return false;
+            }
+        }
+        
+        // Filter by search text
+        if (searchText) {
+            const searchableText = `${job.role} ${job.skills.join(' ')} ${job.companies.join(' ')}`.toLowerCase();
+            if (!searchableText.includes(searchText)) {
+                return false;
+            }
+        }
+        
+        // Filter by skills
+        if (activeFilters.skills.length > 0) {
+            const hasMatchingSkill = activeFilters.skills.some(filterSkill => 
+                job.skills.some(skill => skill.toLowerCase().includes(filterSkill.toLowerCase()))
+            );
+            if (!hasMatchingSkill) return false;
+        }
+        
+        // Filter by companies
+        if (activeFilters.companies.length > 0) {
+            const hasMatchingCompany = activeFilters.companies.some(filterCompany => 
+                job.companies.some(company => company.toLowerCase().includes(filterCompany.toLowerCase()))
+            );
+            if (!hasMatchingCompany) return false;
+        }
+        
+        // Filter by salary
+        if (activeFilters.salary.length > 0) {
+            let salaryMatch = false;
+            const jobSalary = job.salary;
+            const jobMinSalary = parseInt(jobSalary.split('-')[0]);
+            
+            for (const range of activeFilters.salary) {
+                if (range.includes('+')) {
+                    const min = parseInt(range);
+                    if (jobMinSalary >= min) {
+                        salaryMatch = true;
+                        break;
+                    }
+                } else {
+                    const [min, max] = range.split('-').map(num => parseInt(num));
+                    if (jobMinSalary >= min && jobMinSalary <= max) {
+                        salaryMatch = true;
+                        break;
+                    }
+                }
+            }
+            
+            if (!salaryMatch) return false;
+        }
+        
+        return true;
+    });
+    
+    renderJobs(filteredJobs);
+}
+
+    // Load filters to admin modal
+    function loadFiltersToModal() {
+        loadItemsToList('skills-list', filtersData.skills);
+        loadItemsToList('locations-list', filtersData.locations);
+        loadItemsToList('salary-list', filtersData.salaryRanges);
+        loadItemsToList('companies-list', filtersData.companies);
+        loadItemsToList('jobtype-list', filtersData.jobTypes);
+    }
+
+    // Load items to a list in the modal
+    function loadItemsToList(listId, items) {
+        const list = document.getElementById(listId);
+        list.innerHTML = '';
+        
+        items.forEach(item => {
+            const span = document.createElement('span');
+            span.className = 'item-tag';
+            span.innerHTML = `${item} <span class="remove-item" data-item="${item}">&times;</span>`;
+            list.appendChild(span);
+        });
+        
+        // Add event listeners to remove buttons
+        document.querySelectorAll('.remove-item').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const item = e.target.getAttribute('data-item');
+                removeItemFromList(listId, item);
+            });
+        });
+    }
+
+    // Add item to a list in the modal
+    function addItemToList(target) {
+        let inputId, listId, arrayName;
+        
+        switch(target) {
+            case 'skills-list':
+                inputId = 'skills-input';
+                listId = 'skills-list';
+                arrayName = 'skills';
+                break;
+            case 'locations-list':
+                inputId = 'locations-input';
+                listId = 'locations-list';
+                arrayName = 'locations';
+                break;
+            case 'salary-list':
+                const min = document.getElementById('salary-min-input').value;
+                const max = document.getElementById('salary-max-input').value;
+                if (!min || !max) return;
+                
+                const salaryRange = `${min}-${max} LPA`;
+                filtersData.salaryRanges.push(salaryRange);
+                loadItemsToList('salary-list', filtersData.salaryRanges);
+                
+                // Clear inputs
+                document.getElementById('salary-min-input').value = '';
+                document.getElementById('salary-max-input').value = '';
+                return;
+            case 'companies-list':
+                inputId = 'companies-input';
+                listId = 'companies-list';
+                arrayName = 'companies';
+                break;
+            case 'jobtype-list':
+                inputId = 'jobtype-input';
+                listId = 'jobtype-list';
+                arrayName = 'jobTypes';
+                break;
+        }
+        
+        const input = document.getElementById(inputId);
+        const value = input.value.trim();
+        
+        if (value && !filtersData[arrayName].includes(value)) {
+            filtersData[arrayName].push(value);
+            loadItemsToList(listId, filtersData[arrayName]);
+            input.value = '';
+        }
+    }
+
+    // Add item to job form
+    function addItemToJobForm(target) {
+        let inputId, arrayName;
+        
+        switch(target) {
+            case 'job-skills-list':
+                inputId = 'job-skills';
+                arrayName = 'skills';
+                break;
+            case 'job-companies-list':
+                inputId = 'job-companies';
+                arrayName = 'companies';
+                break;
+        }
+        
+        const input = document.getElementById(inputId);
+        const value = input.value.trim();
+        
+        if (value && !jobFormData[arrayName].includes(value)) {
+            jobFormData[arrayName].push(value);
+            
+            // Add to the list visually
+            const list = document.getElementById(target);
+            const span = document.createElement('span');
+            span.className = 'item-tag';
+            span.innerHTML = `${value} <span class="remove-item" data-item="${value}">&times;</span>`;
+            list.appendChild(span);
+            
+            // Add event listener to remove button
+            span.querySelector('.remove-item').addEventListener('click', (e) => {
+                const item = e.target.getAttribute('data-item');
+                const index = jobFormData[arrayName].indexOf(item);
+                if (index > -1) {
+                    jobFormData[arrayName].splice(index, 1);
+                }
+                span.remove();
+            });
+            
+            input.value = '';
+        }
+    }
+
+    // Remove item from a list in the modal
+    function removeItemFromList(listId, item) {
+        let arrayName;
+        
+        switch(listId) {
+            case 'skills-list':
+                arrayName = 'skills';
+                break;
+            case 'locations-list':
+                arrayName = 'locations';
+                break;
+            case 'salary-list':
+                arrayName = 'salaryRanges';
+                break;
+            case 'companies-list':
+                arrayName = 'companies';
+                break;
+            case 'jobtype-list':
+                arrayName = 'jobTypes';
+                break;
+        }
+        
+        const index = filtersData[arrayName].indexOf(item);
+        if (index > -1) {
+            filtersData[arrayName].splice(index, 1);
+            loadItemsToList(listId, filtersData[arrayName]);
+        }
+    }
+
+    // Save filters to Firestore
+    async function saveFilters() {
+        try {
+            await db.collection('settings').doc('filters').set(filtersData);
+            alert("Filters saved successfully!");
+            adminModal.classList.remove('show');
+            renderFilters();
+        } catch (error) {
+            console.error("Error saving filters:", error);
+            alert("Error saving filters. Please try again.");
+        }
+    }
+
+    // Save job to Firestore
+    async function saveJob() {
+        const role = document.getElementById('job-role').value;
+        const salaryMin = document.getElementById('salary-min').value;
+        const salaryMax = document.getElementById('salary-max').value;
+        
+        if (!role || !salaryMin || !salaryMax || jobFormData.skills.length === 0 || jobFormData.companies.length === 0) {
+            alert("Please fill all fields");
+            return;
+        }
+        
+        const salary = `${salaryMin}-${salaryMax} LPA`;
+        
+        // Create job object
+        const job = {
+            role,
+            skills: jobFormData.skills,
+            salary,
+            companies: jobFormData.companies,
+            timestamp: new Date()
+        };
+        
+        try {
+            // Save to Firestore
+            const docRef = await db.collection('jobs').add(job);
+            job.id = docRef.id;
+            
+            // Add to local array
+            allJobs.unshift(job);
+            
+            alert("Job added successfully!");
+            addJobModal.classList.remove('show');
+            renderJobs(allJobs);
+            filterJobs();
+        } catch (error) {
+            console.error("Error saving job:", error);
+            alert("Error saving job. Please try again.");
+        }
+    }
+
+    // Filter sidebar items
+    function filterSidebarItems() {
+        const searchText = sidebarSearchInput.value.toLowerCase();
+        
+        document.querySelectorAll('.filter-options').forEach(container => {
+            let hasVisibleItems = false;
+            
+            container.querySelectorAll('.filter-btn').forEach(btn => {
+                const btnText = btn.textContent.toLowerCase();
+                if (btnText.includes(searchText)) {
+                    btn.style.display = 'flex';
+                    hasVisibleItems = true;
+                } else {
+                    btn.style.display = 'none';
+                }
+            });
+            
+            // Show/hide section based on whether it has visible items
+            const section = container.closest('.sidebar-section');
+            if (section) {
+                section.style.display = hasVisibleItems ? 'block' : 'none';
+            }
+        });
+    }
+
+    // Delete job
+function deleteJob(jobId) {
+    if (!confirm("Are you sure you want to delete this job?")) return;
+    
+    db.collection("jobs").doc(jobId).delete()
+        .then(() => {
+            alert("Job deleted successfully!");
+            // Remove from local array
+            allJobs = allJobs.filter(job => job.id !== jobId);
+            renderJobs(allJobs);
+        })
+        .catch((error) => {
+            console.error("Error deleting job: ", error);
+            alert("Error deleting job. Please try again.");
+        });
+}
+
+// Edit job
+function editJob(jobId) {
+    const job = allJobs.find(j => j.id === jobId);
+    if (!job) return;
+
+    // Store the original save function
+    const originalSaveFunction = saveJobBtn.onclick;
+
+    // Open modal with pre-filled data
+    addJobModal.classList.add('show');
+    document.getElementById('job-role').value = job.role;
+    document.getElementById('salary-min').value = job.salary.split('-')[0];
+    document.getElementById('salary-max').value = job.salary.split('-')[1].replace(" LPA", "");
+
+    // Fill skills
+    jobFormData.skills = [...job.skills];
+    const skillsList = document.getElementById('job-skills-list');
+    skillsList.innerHTML = '';
+    job.skills.forEach(skill => {
+        const span = document.createElement('span');
+        span.className = 'item-tag';
+        span.innerHTML = `${skill} <span class="remove-item" data-item="${skill}">&times;</span>`;
+        skillsList.appendChild(span);
+        
+        // Add event listener to remove button
+        span.querySelector('.remove-item').addEventListener('click', (e) => {
+            const item = e.target.getAttribute('data-item');
+            const index = jobFormData.skills.indexOf(item);
+            if (index > -1) {
+                jobFormData.skills.splice(index, 1);
+            }
+            span.remove();
+        });
+    });
+
+    // Fill companies
+    jobFormData.companies = [...job.companies];
+    const companiesList = document.getElementById('job-companies-list');
+    companiesList.innerHTML = '';
+    job.companies.forEach(company => {
+        const span = document.createElement('span');
+        span.className = 'item-tag';
+        span.innerHTML = `${company} <span class="remove-item" data-item="${company}">&times;</span>`;
+        companiesList.appendChild(span);
+        
+        // Add event listener to remove button
+        span.querySelector('.remove-item').addEventListener('click', (e) => {
+            const item = e.target.getAttribute('data-item');
+            const index = jobFormData.companies.indexOf(item);
+            if (index > -1) {
+                jobFormData.companies.splice(index, 1);
+            }
+            span.remove();
+        });
+    });
+
+    // Set up edit mode save function
+    saveJobBtn.onclick = function() {
+        const role = document.getElementById('job-role').value;
+        const salaryMin = document.getElementById('salary-min').value;
+        const salaryMax = document.getElementById('salary-max').value;
+        
+        if (!role || !salaryMin || !salaryMax || jobFormData.skills.length === 0 || jobFormData.companies.length === 0) {
+            alert("Please fill all fields");
+            return;
+        }
+
+        const salary = `${salaryMin}-${salaryMax} LPA`;
+        
+        db.collection("jobs").doc(jobId).update({
+            role,
+            skills: jobFormData.skills,
+            salary,
+            companies: jobFormData.companies,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        })
+        .then(() => {
+            alert("Job updated successfully!");
+            addJobModal.classList.remove('show');
+            
+            // Update local array
+            const index = allJobs.findIndex(j => j.id === jobId);
+            if (index !== -1) {
+                allJobs[index] = {
+                    ...allJobs[index],
+                    role,
+                    skills: jobFormData.skills,
+                    salary,
+                    companies: jobFormData.companies
+                };
+            }
+            
+            renderJobs(allJobs);
+            
+            // Reset the form data
+            document.getElementById('job-role').value = '';
+            document.getElementById('salary-min').value = '';
+            document.getElementById('salary-max').value = '';
+            document.getElementById('job-skills-list').innerHTML = '';
+            document.getElementById('job-companies-list').innerHTML = '';
+            jobFormData = { skills: [], companies: [] };
+            
+            // Restore the original save function
+            saveJobBtn.onclick = originalSaveFunction;
+        })
+        .catch((error) => {
+            console.error("Error updating job: ", error);
+            alert("Error updating job. Please try again.");
+        });
+    };
+    
+    // Add event listener to close button to restore original function
+    const closeModalBtn = document.querySelector('#add-job-modal .close-modal');
+    const originalCloseHandler = closeModalBtn.onclick;
+    
+    closeModalBtn.onclick = function() {
+        // Restore the original save function when modal is closed
+        saveJobBtn.onclick = originalSaveFunction;
+        // Reset the form
+        document.getElementById('job-role').value = '';
+        document.getElementById('salary-min').value = '';
+        document.getElementById('salary-max').value = '';
+        document.getElementById('job-skills-list').innerHTML = '';
+        document.getElementById('job-companies-list').innerHTML = '';
+        jobFormData = { skills: [], companies: [] };
+        // Call the original close handler
+        if (originalCloseHandler) originalCloseHandler.call(this);
+    };
+}
+
+    // Initialize the app when DOM is loaded
+    document.addEventListener('DOMContentLoaded', init);
+</script>
+
+<!-- Login Modal -->
+<div class="modal" id="login-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Login</h2>
+            <button class="close-modal">&times;</button>
+        </div>
+        
+        <div class="form-group">
+            <label for="login-email"><i class="fas fa-envelope"></i> Email</label>
+            <input type="email" id="login-email" class="form-control" placeholder="Enter your email">
+        </div>
+        
+        <div class="form-group">
+            <label for="login-password"><i class="fas fa-lock"></i> Password</label>
+            <input type="password" id="login-password" class="form-control" placeholder="Enter your password">
+        </div>
+        
+        <button class="submit-btn" id="login-submit">Login</button>
+        
+        <p style="text-align: center; margin-top: 16px; color: var(--text-secondary);">
+            Don't have an account? <a href="#" id="show-register" style="color: var(--primary);">Register</a>
+        </p>
+    </div>
+</div>
+
+<!-- Register Modal -->
+<div class="modal" id="register-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Register</h2>
+            <button class="close-modal">&times;</button>
+        </div>
+        
+        <div class="form-group">
+            <label for="register-name"><i class="fas fa-user"></i> Full Name</label>
+            <input type="text" id="register-name" class="form-control" placeholder="Enter your full name">
+        </div>
+        
+        <div class="form-group">
+            <label for="register-email"><i class="fas fa-envelope"></i> Email</label>
+            <input type="email" id="register-email" class="form-control" placeholder="Enter your email">
+        </div>
+        
+        <div class="form-group">
+            <label for="register-password"><i class="fas fa-lock"></i> Password</label>
+            <input type="password" id="register-password" class="form-control" placeholder="Create a password">
+        </div>
+        
+        <button class="submit-btn" id="register-submit">Register</button>
+        
+        <p style="text-align: center; margin-top: 16px; color: var(--text-secondary);">
+            Already have an account? <a href="#" id="show-login" style="color: var(--primary);">Login</a>
+        </p>
+    </div>
+</div>
+</body>
+</html>
