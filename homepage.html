@@ -4,29 +4,183 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ECEverse - Dashboard</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
-      --primary: #6C63FF;
-      --secondary: #4D44DB;
-      --accent: #FF6584;
-      --light: #F8F9FF;
-      --dark: #2E2E48;
-      --gray: #8C8CA1;
-      --card-bg: #FFFFFF;
-      --section-bg: #F9FAFF;
-      --success: #4ADE80;
-      --warning: #FACC15;
+      --primary: #000000;
+      --primary-dark: #423d7b;
+      --primary-light: #d7161600;
+      --secondary: #10B981;
+      --accent: #F59E0B;
+      --text-primary: #1F2937;
+      --text-secondary: #4B5563;
+      --bg-primary: #ebeaea5a;  
+      --bg-secondary: #fdfafa; 
+      --bg-tertiary: #ffffff;
+      --border-color: #0a0a0b;
+      --card-shadow: 0 4px 6px rgba(247, 244, 244, 0.952), 0 1px 3px rgba(230, 221, 221, 0.947);
+      --success: #10B981;
+      --warning: #F59E0B;
+      --gradient: linear-gradient(135deg, #0d0d0d 0%, #141219 100%);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    * { margin:0; padding:0; box-sizing:border-box; font-family: 'Inter', sans-serif;}
-    body { background: var(--section-bg); color: var(--dark); overflow-x: hidden; }
-    header { position: fixed; top:0; left:0; right:0; display:flex; justify-content:space-between; align-items:center; padding:1.2rem 5%; background-color: rgba(255,255,255,0.98); box-shadow:0 2px 30px rgba(108,99,255,0.08); z-index:1000;}
-    .logo { font-size:1.4rem; font-weight:700; color: var(--primary); display:flex; align-items:center;}
-    .logo i { margin-right:0.5rem;}
-    nav a { margin-left:1.2rem; text-decoration:none; color:var(--dark); font-weight:500; }
-    nav a:hover { color: var(--primary); }
-    .container { padding: 120px 5% 50px; max-width:1400px; margin:0 auto; }
+
+    * { 
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box; 
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
+    }
+
+    body { 
+      background: var(--bg-primary); 
+      color: var(--text-primary); 
+      line-height: 1.6;
+      font-size: 14px;
+      transition: var(--transition);
+    }
+
+    /* Header */
+    header {
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-color);
+      padding: 16px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 6px -1px rgba(236, 201, 75, 0.1)
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .logo span {
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .logo i {
+      font-size: 28px;
+      color: var(--primary);
+    }
+
+    nav {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+    }
+
+    nav a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 15px;
+      transition: var(--transition);
+      position: relative;
+      padding: 8px 0;
+    }
+
+    nav a:hover {
+      color: var(--text-primary);
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--gradient);
+      transition: var(--transition);
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    nav a.active {
+      color: var(--text-primary);
+    }
+
+    nav a.active::after {
+      width: 100%;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      padding: 8px 16px;
+      border-radius: 12px;
+      transition: var(--transition);
+      background: var(--bg-tertiary);
+    }
+
+    .user-info:hover {
+      background: rgb(11, 10, 10);
+      color: white;
+    }
+
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      color: white;
+      font-size: 16px;
+    }
+
+    .theme-toggle {
+      background: var(--bg-tertiary);
+      border: none;
+      color: var(--text-primary);
+      cursor: pointer;
+      font-size: 18px;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .theme-toggle:hover {
+      background: var(--border-color);
+      transform: rotate(15deg);
+    }
+
+    .container {
+      padding: 120px 5% 50px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
     .welcome-section { 
       display: flex; 
       justify-content: space-between; 
@@ -34,7 +188,12 @@
       margin-bottom: 2rem; 
       flex-wrap: wrap;
     }
-    .welcome { font-size:2rem; font-weight:600; }
+
+    .welcome { 
+      font-size: 2rem; 
+      font-weight: 600; 
+      color: var(--text-primary);
+    }
     
     .quick-links { 
       display: grid; 
@@ -42,19 +201,99 @@
       gap: 1.5rem; 
       margin-bottom: 2.5rem; 
     }
-    .card { background: var(--card-bg); padding:2rem; border-radius:16px; box-shadow:0 5px 25px rgba(0,0,0,0.05); transition:0.3s; position: relative; overflow: hidden; }
-    .card:hover { transform: translateY(-6px); box-shadow:0 12px 30px rgba(108,99,255,0.15); }
-    .card h3 { margin-bottom:0.8rem; font-size:1.2rem; font-weight:600; }
-    .card p { color: var(--gray); font-size:0.95rem; margin-bottom:1rem; }
-    .card a { color: var(--primary); font-weight:600; text-decoration:none; display: flex; align-items: center; }
-    .card a:hover { color: var(--secondary); }
-    .card a i { margin-left: 0.5rem; transition: 0.3s; }
-    .card a:hover i { transform: translateX(4px); }
     
-    .quote { text-align:center; font-style:italic; color: var(--gray); margin-top:3rem; padding: 1.5rem; background: var(--light); border-radius: 16px; }
+    .card { 
+    background: rgba(218, 218, 223, 0.126);
+    color: #01010554;
+    border: 1px solid rgba(99, 102, 241, 0.2);
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 2px 2px black;
+      /* border: 1px solid var(--border-color); */
+      position: relative;
+      overflow: hidden;
+      transition: var(--transition);
+    }
     
-    .floating-elements { position:absolute; width:100%; height:100%; top:0; left:0; pointer-events:none; z-index:0; }
-    .floating-element { position:absolute; border-radius:50%; background: rgba(108,99,255,0.08); animation: float 15s infinite linear; }
+    .card:hover { 
+      transform: translateY(-6px); 
+    background: rgba(99, 101, 241, 0.085);
+    color: #6366F1;
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    }
+    
+    .card::before {
+      content: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: var(--gradient);
+      z-index: 1;
+    }
+    
+    .card h3 { 
+      margin-bottom: 0.8rem; 
+      font-size: 1.2rem; 
+      font-weight: 600; 
+      color: var(--text-primary);
+    }
+    
+    .card p { 
+      color: var(--text-secondary); 
+      font-size: 0.95rem; 
+      margin-bottom: 1rem; 
+    }
+    
+    .card a { 
+      color: var(--primary); 
+      font-weight: 600; 
+      text-decoration: none; 
+      display: flex; 
+      align-items: center; 
+    }
+    
+    .card a:hover { 
+      color: var(--primary-dark); 
+    }
+    
+    .card a i { 
+      margin-left: 0.5rem; 
+      transition: 0.3s; 
+    }
+    
+    .card a:hover i { 
+      transform: translateX(4px); 
+    }
+    
+    .quote { 
+      text-align: center; 
+      font-style: italic; 
+      color: var(--text-secondary); 
+      margin-top: 3rem; 
+      padding: 1.5rem; 
+      background: var(--bg-secondary); 
+      border-radius: 16px; 
+      border: 0px solid var(--border-color);
+    }
+    
+    .floating-elements { 
+      position: absolute; 
+      width: 100%; 
+      height: 100%; 
+      top: 0; 
+      left: 0; 
+      pointer-events: none; 
+      z-index: 0; 
+    }
+    
+    .floating-element { 
+      position: absolute; 
+      border-radius: 50%; 
+      background: rgba(0, 0, 0, 0.08); 
+      animation: float 15s infinite linear; 
+    }
     
     @keyframes float { 
       0% { transform: translateY(0) rotate(0deg); } 
@@ -81,8 +320,11 @@
         padding: 1rem 4%;
       }
       
+      nav {
+        gap: 16px;
+      }
+      
       nav a {
-        margin-left: 0.8rem;
         font-size: 0.9rem;
       }
       
@@ -98,13 +340,25 @@
 </head>
 <body>
   <header>
-    <div class="logo"><i class="fas fa-bolt"></i> ECEverse</div>
+    <div class="logo">
+      <i class="fas fa-bolt"></i>
+      <span>ECEverse</span>
+    </div>
     <nav>
       <a href="problems.html">Problems</a>
       <a href="solidcommunity.html">Community</a>
       <a href="skilltree1.html">Jobs Roles</a>
       <a href="#" id="logoutBtn">Logout</a>
     </nav>
+    <div class="header-right">
+      <button class="theme-toggle">
+        <i class="fas fa-moon"></i>
+      </button>
+      <div class="user-info">
+        <div class="user-avatar" id="userAvatar">U</div>
+        <span id="usernameHeader"></span>
+      </div>
+    </div>
   </header>
 
   <div class="container">
@@ -147,23 +401,40 @@
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
     import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-database.js";
 
-   const firebaseConfig = {
-     apiKey: "AIzaSyD4T6rAV2npex-ZOJuu5IKQ1bDUkD7o9Oc",
-    authDomain: "eceverse-adeac.firebaseapp.com",
-    databaseURL: "https://eceverse-adeac-default-rtdb.firebaseio.com",
-    projectId: "eceverse-adeac",
-    storageBucket: "eceverse-adeac.firebasestorage.app",
-    messagingSenderId: "55835462054",
-    appId: "1:55835462054:web:9ca23a5817ed40f2842767",
-    measurementId: "G-KTV3P359DX"
-  };
+    const firebaseConfig = {
+      apiKey: "AIzaSyD4T6rAV2npex-ZOJuu5IKQ1bDUkD7o9Oc",
+      authDomain: "eceverse-adeac.firebaseapp.com",
+      databaseURL: "https://eceverse-adeac-default-rtdb.firebaseio.com",
+      projectId: "eceverse-adeac",
+      storageBucket: "eceverse-adeac.firebasestorage.app",
+      messagingSenderId: "55835462054",
+      appId: "1:55835462054:web:9ca23a5817ed40f2842767",
+      measurementId: "G-KTV3P359DX"
+    };
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getDatabase(app);
 
     const usernameDisplay = document.getElementById('usernameDisplay');
+    const usernameHeader = document.getElementById('usernameHeader');
+    const userAvatar = document.getElementById('userAvatar');
     const logoutBtn = document.getElementById('logoutBtn');
+    const themeToggle = document.querySelector('.theme-toggle');
+
+    // Theme toggle functionality
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark-theme');
+      const icon = themeToggle.querySelector('i');
+      
+      if (document.body.classList.contains('dark-theme')) {
+        icon.classList.remove('fa-moon');
+        icon.classList.add('fa-sun');
+      } else {
+        icon.classList.remove('fa-sun');
+        icon.classList.add('fa-moon');
+      }
+    });
 
     // Check if user is logged in
     onAuthStateChanged(auth, async (user) => {
@@ -176,14 +447,23 @@
           if(snapshot.exists()){
             const userData = snapshot.val();
             // Get username directly from user data
-            usernameDisplay.textContent = userData.username || user.email.split('@')[0];
+            const username = userData.username || user.email.split('@')[0];
+            usernameDisplay.textContent = username;
+            usernameHeader.textContent = username;
+            userAvatar.textContent = username.substring(0, 2).toUpperCase();
           } else {
             // Fallback to email username if no user data found
-            usernameDisplay.textContent = user.email.split('@')[0];
+            const username = user.email.split('@')[0];
+            usernameDisplay.textContent = username;
+            usernameHeader.textContent = username;
+            userAvatar.textContent = username.substring(0, 2).toUpperCase();
           }
         } catch (err) {
           console.error(err);
-          usernameDisplay.textContent = user.email.split('@')[0];
+          const username = user.email.split('@')[0];
+          usernameDisplay.textContent = username;
+          usernameHeader.textContent = username;
+          userAvatar.textContent = username.substring(0, 2).toUpperCase();
         }
       } else {
         // Not logged in, redirect to login page
