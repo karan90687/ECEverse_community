@@ -11,20 +11,21 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    
 <style>
     :root {
-      --primary: #0f0f10;
+      --primary: #000000;
       --primary-dark: #423d7b;
-      --primary-light: #C7D2FE;
+      --primary-light: #d7161600;
       --secondary: #10B981;
       --accent: #F59E0B;
       --text-primary: #1F2937;
       --text-secondary: #4B5563;
-      --bg-primary: #cbcae2;
-      --bg-secondary: #fafafd;
-      --bg-tertiary: #F3F4F6;
+      --bg-primary: #ebeaea5a;  
+      --bg-secondary: #fdfafa; 
+      --bg-tertiary: #ffffff;
       --border-color: #0a0a0b;
-      --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+      --card-shadow: 0 4px 6px rgba(247, 244, 244, 0.952), 0 1px 3px rgba(230, 221, 221, 0.947);
       --success: #10B981;
       --warning: #F59E0B;
       --gradient: linear-gradient(135deg, #0d0d0d 0%, #141219 100%);
@@ -1562,8 +1563,6 @@ function onAuthStateChanged(user) {
         }
     }
 
-// Render jobs to the grid
-// Render jobs to the grid
 function renderJobs(jobs) {
     jobsContainer.innerHTML = '';
     
@@ -1581,6 +1580,7 @@ function renderJobs(jobs) {
     jobs.forEach(job => {
         const card = document.createElement('div');
         card.className = 'job-card';
+        card.setAttribute('data-jobid', job.id); // Add job ID as data attribute
         
         card.innerHTML = `
             <h3 class="job-role">${job.role}</h3>
@@ -1609,6 +1609,17 @@ function renderJobs(jobs) {
                 : ''
             }
         `;
+        
+        // Add click event to redirect to jobroles.html with job ID
+        card.addEventListener('click', (e) => {
+            // Don't redirect if user clicked on edit/delete buttons
+            if (!e.target.closest('.job-actions')) {
+                // Store the job ID in localStorage and redirect
+                localStorage.setItem('selectedJobId', job.id);
+                localStorage.setItem('selectedJobRole', job.role);
+                window.location.href = 'jobroles.html';
+            }
+        });
         
         jobsContainer.appendChild(card);
     });
@@ -1889,44 +1900,47 @@ function filterJobs() {
     }
 
     // Save job to Firestore
-    async function saveJob() {
-        const role = document.getElementById('job-role').value;
-        const salaryMin = document.getElementById('salary-min').value;
-        const salaryMax = document.getElementById('salary-max').value;
-        
-        if (!role || !salaryMin || !salaryMax || jobFormData.skills.length === 0 || jobFormData.companies.length === 0) {
-            alert("Please fill all fields");
-            return;
-        }
-        
-        const salary = `${salaryMin}-${salaryMax} LPA`;
-        
-        // Create job object
-        const job = {
-            role,
-            skills: jobFormData.skills,
-            salary,
-            companies: jobFormData.companies,
-            timestamp: new Date()
-        };
-        
-        try {
-            // Save to Firestore
-            const docRef = await db.collection('jobs').add(job);
-            job.id = docRef.id;
-            
-            // Add to local array
-            allJobs.unshift(job);
-            
-            alert("Job added successfully!");
-            addJobModal.classList.remove('show');
-            renderJobs(allJobs);
-            filterJobs();
-        } catch (error) {
-            console.error("Error saving job:", error);
-            alert("Error saving job. Please try again.");
-        }
+   // In the saveJob function, add empty content fields
+// In the saveJob function, remove the content fields
+async function saveJob() {
+    const role = document.getElementById('job-role').value;
+    const salaryMin = document.getElementById('salary-min').value;
+    const salaryMax = document.getElementById('salary-max').value;
+    
+    if (!role || !salaryMin || !salaryMax || jobFormData.skills.length === 0 || jobFormData.companies.length === 0) {
+        alert("Please fill all fields");
+        return;
     }
+    
+    const salary = `${salaryMin}-${salaryMax} LPA`;
+    
+    // Create job object WITHOUT content fields
+    const job = {
+        role,
+        skills: jobFormData.skills,
+        salary,
+        companies: jobFormData.companies,
+        timestamp: new Date()
+        // REMOVE the content fields that were here before
+    };
+    
+    try {
+        // Save to Firestore
+        const docRef = await db.collection('jobs').add(job);
+        job.id = docRef.id;
+        
+        // Add to local array
+        allJobs.unshift(job);
+        
+        alert("Job added successfully!");
+        addJobModal.classList.remove('show');
+        renderJobs(allJobs);
+        filterJobs();
+    } catch (error) {
+        console.error("Error saving job:", error);
+        alert("Error saving job. Please try again.");
+    }
+}
 
     // Filter sidebar items
     function filterSidebarItems() {
@@ -1970,7 +1984,7 @@ function deleteJob(jobId) {
         });
 }
 
-// Edit job
+// In the editJob function, make sure we preserve existing content
 function editJob(jobId) {
     const job = allJobs.find(j => j.id === jobId);
     if (!job) return;
@@ -2039,11 +2053,18 @@ function editJob(jobId) {
 
         const salary = `${salaryMin}-${salaryMax} LPA`;
         
+        // Preserve existing content when updating
         db.collection("jobs").doc(jobId).update({
             role,
             skills: jobFormData.skills,
             salary,
             companies: jobFormData.companies,
+            // Keep the existing content fields
+            description: job.description || "",
+            skillsDetails: job.skillsDetails || "",
+            tools: job.tools || [],
+            salaryInfo: job.salaryInfo || "",
+            hiringCompanies: job.hiringCompanies || [],
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
         })
         .then(() => {
@@ -2058,7 +2079,13 @@ function editJob(jobId) {
                     role,
                     skills: jobFormData.skills,
                     salary,
-                    companies: jobFormData.companies
+                    companies: jobFormData.companies,
+                    // Preserve content
+                    description: job.description || "",
+                    skillsDetails: job.skillsDetails || "",
+                    tools: job.tools || [],
+                    salaryInfo: job.salaryInfo || "",
+                    hiringCompanies: job.hiringCompanies || []
                 };
             }
             

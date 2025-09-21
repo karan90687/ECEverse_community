@@ -8,29 +8,37 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #6C63FF;
-            --secondary: #4D44DB;
-            --accent: #FF6584;
-            --light: #F8F9FF;
-            --dark: #2E2E48;
-            --gray: #8C8CA1;
-            --success: #4CC9F0;
-            --card-bg: #FFFFFF;
-            --section-bg: #F9FAFF;
+            --primary: #000000;
+            --primary-dark: #423d7b;
+            --primary-light: #d7161600;
+            --secondary: #10B981;
+            --accent: #F59E0B;
+            --text-primary: #1F2937;
+            --text-secondary: #4B5563;
+            --bg-primary: #ffffff5a;  
+            --bg-secondary: #fdfafa; 
+            --bg-tertiary: #ffffff;
+            --border-color: #0a0a0b;
+            --card-shadow: 0 4px 6px rgba(247, 244, 244, 0.952), 0 1px 3px rgba(230, 221, 221, 0.947);
+            --success: #10B981;
+            --warning: #F59E0B;
+            --gradient: linear-gradient(135deg, #0d0d0d 0%, #141219 100%);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
         }
         
         body {
-            background-color: #ffffff;
-            color: var(--dark);
+            background: var(--bg-primary); 
+            color: var(--text-primary); 
             line-height: 1.6;
-            overflow-x: hidden;
+            font-size: 14px;
+            transition: var(--transition);
         }
         
         /* Header */
@@ -43,49 +51,49 @@
             justify-content: space-between;
             align-items: center;
             padding: 1.2rem 5%;
-            background-color: rgba(255, 255, 255, 0.98);
-            box-shadow: 0 2px 30px rgba(108, 99, 255, 0.08);
+            background-color: var(--bg-secondary);
+            box-shadow: var(--card-shadow);
             z-index: 1000;
             backdrop-filter: blur(8px);
-            transition: all 0.3s ease;
+            transition: var(--transition);
+            border-bottom: 1px solid var(--border-color);
         }
         
         header.scrolled {
             padding: 0.8rem 5%;
-            box-shadow: 0 4px 20px rgba(108, 99, 255, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         }
         
         .logo {
             font-size: 1.6rem;
             font-weight: 700;
-            color: var(--primary);
+            color: var(--text-primary);
             display: flex;
             align-items: center;
-            transition: all 0.3s;
+            transition: var(--transition);
         }
         
         .logo i {
             margin-right: 0.5rem;
-            color: var(--primary);
+            color: var(--text-primary);
         }
         
         nav {
             display: flex;
             gap: 2rem;
-            color: transparent;
         }
         
         nav a {
             text-decoration: none;
-            color: var(--dark);
+            color: var(--text-secondary);
             font-weight: 500;
             font-size: 0.95rem;
             position: relative;
-            transition: color 0.3s;
+            transition: var(--transition);
         }
         
         nav a:hover {
-            color: var(--primary);
+            color: var(--text-primary);
         }
         
         nav a::after {
@@ -95,8 +103,8 @@
             left: 0;
             width: 0;
             height: 2px;
-            background-color: var(--accent);
-            transition: width 0.3s;
+            background: var(--gradient);
+            transition: var(--transition);
         }
         
         nav a:hover::after {
@@ -110,11 +118,11 @@
         
         .btn {
             padding: 0.7rem 1.5rem;
-            border-radius: 50px;
+            border-radius: 12px;
             font-weight: 600;
             font-size: 0.95rem;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: var(--transition);
             border: none;
             display: inline-flex;
             align-items: center;
@@ -123,27 +131,28 @@
         
         .btn-outline {
             background: transparent;
-            border: 2px solid var(--primary);
-            color: var(--primary);
+            border: 2px solid var(--text-primary);
+            color: var(--text-primary);
+            box-shadow: 2px 2px  black;
         }
         
         .btn-outline:hover {
-            background: var(--primary);
+            background: var(--text-primary);
             color: white;
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(108, 99, 255, 0.3);
+            box-shadow: var(--card-shadow);
         }
         
         .btn-solid {
-            background: var(--primary);
+            background: black;
             color: white;
-            box-shadow: 0 4px 15px rgba(108, 99, 255, 0.3);
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
         }
         
         .btn-solid:hover {
-            background: var(--secondary);
+            background: var(--text-primary);
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(108, 99, 255, 0.4);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
         }
         
         .btn i {
@@ -162,7 +171,7 @@
             display: flex;
             align-items: center;
             padding: 0 5%;
-            background: linear-gradient(135deg, #f8f9ff 0%, #f0f2ff 100%);
+            background: var(--bg-primary);
             position: relative;
             overflow: hidden;
         }
@@ -174,7 +183,7 @@
             right: -50%;
             width: 100%;
             height: 200%;
-            background: radial-gradient(circle, rgba(108, 99, 255, 0.08) 0%, rgba(108, 99, 255, 0) 70%);
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.08) 0%, rgba(16, 185, 129, 0) 70%);
             z-index: 0;
         }
         
@@ -190,11 +199,11 @@
             font-weight: 700;
             margin-bottom: 1.5rem;
             line-height: 1.2;
-            color: var(--dark);
+            color: var(--text-primary);
         }
         
         .hero h1 span {
-            color: var(--primary);
+            color: var(--secondary);
             position: relative;
             display: inline-block;
         }
@@ -206,14 +215,14 @@
             left: 0;
             width: 100%;
             height: 8px;
-            background-color: rgba(108, 99, 255, 0.2);
+            background-color: rgba(16, 185, 129, 0.2);
             z-index: -1;
             border-radius: 4px;
         }
         
         .hero p {
             font-size: 1.15rem;
-            color: var(--gray);
+            color: var(--text-secondary);
             margin-bottom: 2.5rem;
             max-width: 500px;
             line-height: 1.7;
@@ -237,7 +246,6 @@
         
         .hero-image img {
             width: 90%;
-            margin-trim: 30%;
             height: 50%;
             margin-top: 0px;
             filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.1));
@@ -257,19 +265,8 @@
         /* Features Section */
         .features {
             padding: 8rem 5%;
-            background-color: var(--section-bg);
+            background-color: var(--bg-tertiary);
             position: relative;
-        }
-        
-        .features::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0icmdiYSgxMDgsOTksMjU1LDAuMDMpIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCBmaWxsPSJ1cmwoI3BhdHRlcm4pIiB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIi8+PC9zdmc+');
-            opacity: 0.5;
         }
         
         .section-header {
@@ -281,7 +278,7 @@
         .section-header h2 {
             font-size: 2.3rem;
             font-weight: 700;
-            color: var(--dark);
+            color: var(--text-primary);
             margin-bottom: 1rem;
             position: relative;
             display: inline-block;
@@ -295,13 +292,13 @@
             transform: translateX(-50%);
             width: 60px;
             height: 3px;
-            background: linear-gradient(to right, var(--primary), var(--accent));
+            background: var(--gradient);
             border-radius: 3px;
         }
         
         .section-header p {
             font-size: 1.1rem;
-            color: var(--gray);
+            color: var(--text-secondary);
             max-width: 700px;
             margin: 0 auto;
             line-height: 1.7;
@@ -319,12 +316,12 @@
         .feature-card {
             display: flex;
             align-items: center;
-            background: var(--card-bg);
+            background: var(--bg-secondary);
             border-radius: 16px;
             padding: 2rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
-            border: 1px solid rgba(0, 0, 0, 0.03);
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            border: 1px solid var(--border-color);
             position: relative;
             overflow: hidden;
             z-index: 1;
@@ -337,10 +334,10 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, rgba(108, 99, 255, 0.03) 0%, rgba(255, 101, 132, 0.03) 100%);
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.03) 0%, rgba(245, 158, 11, 0.03) 100%);
             z-index: -1;
             opacity: 0;
-            transition: opacity 0.3s;
+            transition: var(--transition);
         }
         
         .feature-card:hover {
@@ -355,7 +352,7 @@
         .feature-icon {
             width: 60px;
             height: 60px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            background: var(--gradient);
             border-radius: 16px;
             display: flex;
             align-items: center;
@@ -363,7 +360,7 @@
             margin-right: 1.5rem;
             color: white;
             font-size: 1.6rem;
-            box-shadow: 0 8px 20px rgba(108, 99, 255, 0.3);
+            box-shadow: var(--card-shadow);
             flex-shrink: 0;
         }
         
@@ -375,11 +372,11 @@
             font-size: 1.3rem;
             font-weight: 600;
             margin-bottom: 0.5rem;
-            color: var(--dark);
+            color: var(--text-primary);
         }
         
         .feature-card p {
-            color: var(--gray);
+            color: var(--text-secondary);
             margin-bottom: 1rem;
             line-height: 1.7;
             font-family: 'Roboto Mono', monospace;
@@ -389,15 +386,15 @@
         .feature-link {
             display: inline-flex;
             align-items: center;
-            color: var(--primary);
+            color: var(--secondary);
             font-weight: 600;
             text-decoration: none;
-            transition: all 0.3s;
+            transition: var(--transition);
             font-size: 0.95rem;
         }
         
         .feature-link:hover {
-            color: var(--secondary);
+            color: var(--text-primary);
         }
         
         .feature-link i {
@@ -416,7 +413,7 @@
             margin-left: 1.5rem;
             border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            box-shadow: var(--card-shadow);
             flex-shrink: 0;
         }
         
@@ -426,27 +423,16 @@
             object-fit: cover;
         }
         
-        .typewriter p::after {
-            content: '|';
-            display: inline-block;
-            animation: blink 0.75s step-end infinite;
-            margin-left: 2px;
-        }
-        
-        @keyframes blink {
-            50% { opacity: 0; }
-        }
-        
         /* Mission Sections */
         .mission {
             padding: 6rem 5%;
-            background-color: white;
+            background-color: var(--bg-secondary);
             position: relative;
             overflow: hidden;
         }
         
         .mission:nth-child(even) {
-            background-color: var(--section-bg);
+            background-color: var(--bg-tertiary);
         }
         
         .mission-container {
@@ -456,18 +442,15 @@
             margin: 0 auto;
             gap: 5rem;
             position: relative;
-            border: black;
         }
         
         .mission-image {
             flex: 1;
             border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
-            transition: transform 0.5s;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
             position: relative;
-            background: transparent;
-
         }
         
         .mission-image::before {
@@ -477,39 +460,40 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, rgba(108, 99, 255, 0.1) 0%, rgba(255, 101, 132, 0.1) 100%);
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(245, 158, 11, 0.1) 100%);
             opacity: 0;
-            transition: opacity 0.3s;
-            background: transparent;
+            transition: var(--transition);
             z-index: 1;
         }
         
         .mission-image:hover::before {
             opacity: 1;
-            background: transparent;
         }
         
         .mission-image:hover {
             transform: scale(1.02);
-            background: transparent;
         }
         
         .mission-image img {
             width: 100%;
             height: auto;
             display: block;
-            transition: transform 0.5s;
-            background: transparent;
+            transition: var(--transition);
         }
         
         .mission-image:hover img {
             transform: scale(1.05);
-            background: transparent;
         }
         
         .mission-content {
             flex: 1;
             animation: fadeInUp 0.8s ease-out forwards;
+            background: var(--bg-secondary);            
+            box-shadow:   3px 4.5px black;
+
+            border-radius: 16px;
+            padding: 2rem;
+            border: 0.3px solid black;
         }
         
         .mission-number {
@@ -518,7 +502,7 @@
             color: var(--accent);
             margin-bottom: 1rem;
             display: inline-block;
-            background: rgba(255, 101, 132, 0.1);
+            background: rgba(245, 158, 11, 0.1);
             padding: 0.5rem 1.2rem;
             border-radius: 50px;
         }
@@ -527,13 +511,13 @@
             font-size: 2.2rem;
             font-weight: 700;
             margin-bottom: 1.5rem;
-            color: var(--dark);
+            color: var(--text-primary);
             line-height: 1.3;
         }
         
         .mission-content p {
             font-size: 1.1rem;
-            color: var(--gray);
+            color: var(--text-secondary);
             margin-bottom: 2rem;
             line-height: 1.7;
         }
@@ -546,13 +530,127 @@
         
         .stat-item {
             text-align: center;
-            background: white;
+             background: rgba(99, 102, 241, 0.11);
+    color: #6366F1;
+    border: 1px solid rgba(99, 102, 241, 0.2);
             padding: 1.5rem;
             border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
             min-width: 100px;
+            border: 0px solid var(--border-color);
         }
+        .stat-item-projects {
+           background: rgba(239, 68, 68, 0.11);
+    color: #EF4444;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+            text-align: center;
+            padding: 1.5rem;
+            border-radius: 12px;
+            transition: var(--transition);
+            min-width: 100px;
+            border: 0px solid var(--border-color);
+        }
+
+        .stat-item-community {
+            text-align: center;
+            background: rgba(100, 205, 170, 0.327);
+    color: #0df3a6;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            min-width: 100px;
+            border: 0px solid var(--border-color);
+        }
+        .stat-item-projects-community {
+           background: rgba(245, 158, 11, 0.11);
+           color: #F59E0B;
+           border: 1px solid rgba(245, 158, 11, 0.2);
+            text-align: center;
+            padding: 1.5rem;
+            border-radius: 12px;
+            transition: var(--transition);
+            min-width: 100px;
+            border: 0px solid var(--border-color);
+        }
+        .stat-item-profile {
+            text-align: center;
+             background: rgba(99, 102, 241, 0.11);
+    color: #6366F1;
+    border: 1px solid rgba(99, 102, 241, 0.2);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            min-width: 100px;
+            border: 0px solid var(--border-color);
+        }
+        .stat-item-profile-projects {
+             
+      background: rgba(100, 205, 170, 0.327);
+    color: #0df3a6;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+
+            text-align: center;
+            padding: 1.5rem;
+            border-radius: 12px;
+            transition: var(--transition);
+            min-width: 100px;
+            border: 0px solid var(--border-color);
+        }
+
+        .stat-item-explore{
+            text-align: center;
+              background: rgba(239, 68, 68, 0.11);
+    color: #EF4444;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            min-width: 100px;
+            border: 0px solid var(--border-color);
+        }
+        .stat-item-explore-projects {
+       background: rgba(245, 158, 11, 0.11);
+    color: #F59E0B;
+    border: 1px solid rgba(245, 158, 11, 0.2);
+
+            text-align: center;
+            padding: 1.5rem;
+            border-radius: 12px;
+            transition: var(--transition);
+            min-width: 100px;
+            border: 0px solid var(--border-color);
+        }
+
+        .stat-item-roles{
+            text-align: center;
+              background: rgba(16, 185, 129, 0.11);
+    color: #10B981;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            min-width: 100px;
+            border: 0px solid var(--border-color);
+        }
+        .stat-item-roles-projects {
+      background: rgba(239, 68, 68, 0.11);
+    color: #EF4444;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+
+            text-align: center;
+            padding: 1.5rem;
+            border-radius: 12px;
+            transition: var(--transition);
+            min-width: 100px;
+            border: 0px solid var(--border-color);
+        }
+        
         
         .stat-item:hover {
             transform: translateY(-5px);
@@ -561,16 +659,15 @@
         .stat-number {
             font-size: 2rem;
             font-weight: 700;
-            color: var(--primary);
             margin-bottom: 0.5rem;
-            background: linear-gradient(to right, var(--primary), var(--accent));
+            background: var(--gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
         
         .stat-label {
             font-size: 0.9rem;
-            color: var(--gray);
+            color: var(--text-secondary);
             font-weight: 500;
         }
         
@@ -582,22 +679,11 @@
         /* CTA Section */
         .cta {
             padding: 8rem 5%;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            background: var(--gradient);
             color: white;
             text-align: center;
             position: relative;
             overflow: hidden;
-        }
-        
-        .cta::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg4NSkiPjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSI2MCIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjA1KSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3QgZmlsbD0idXJsKCNwYXR0ZXJuKSIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIvPjwvc3ZnPg==');
-            opacity: 0.3;
         }
         
         .cta-content {
@@ -622,7 +708,7 @@
         
         .cta .btn {
             background: white;
-            color: var(--primary);
+            color: var(--text-primary);
             font-size: 1.1rem;
             padding: 1rem 2.5rem;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
@@ -661,7 +747,7 @@
         
         /* Footer */
         footer {
-            background-color: var(--dark);
+            background-color: var(--text-primary);
             color: white;
             padding: 5rem 5% 2rem;
             position: relative;
@@ -684,11 +770,6 @@
             display: inline-block;
             color: white;
         }
-
-        .logo{
-
-            background: transparent;
-        }
         
         .footer-about p {
             opacity: 0.7;
@@ -710,11 +791,11 @@
             align-items: center;
             justify-content: center;
             color: white;
-            transition: all 0.3s;
+            transition: var(--transition);
         }
         
         .social-links a:hover {
-            background: var(--primary);
+            background: var(--secondary);
             transform: translateY(-3px);
         }
         
@@ -865,9 +946,8 @@
         }
 
         a.btn {
-    text-decoration: none;
-}
-
+            text-decoration: none;
+        }
     </style>
 </head>
 <body>
@@ -883,7 +963,6 @@
         <div class="auth-buttons">
            <a href="login.html" class="btn btn-outline">Login</a>
            <a href="register.html" class="btn btn-solid">Sign Up <i class="fas fa-arrow-right"></i></a>
-
         </div>
     </header>
     
@@ -906,29 +985,63 @@
         </div>
     </section>
     
-    <section class="features" id= "features">
+    <section class="features" id="features">
         <div class="section-header">
             <h2>Why Choose ECEverse?</h2>
             <p>Discover the tools and resources that make learning electronics engaging and effective.</p>
         </div>
-         
-
+<!--         
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-laptop-code"></i>
+                </div>
+                <div class="feature-content">
+                    <h3>Interactive Learning</h3>
+                    <p>Engage with hands-on simulations and virtual labs that bring electronics concepts to life.</p>
+                    <a href="#" class="feature-link">Explore Labs <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-project-diagram"></i>
+                </div>
+                <div class="feature-content">
+                    <h3>Project-Based</h3>
+                    <p>Build real electronics projects with step-by-step guidance and expert feedback.</p>
+                    <a href="#" class="feature-link">View Projects <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="feature-content">
+                    <h3>Community Support</h3>
+                    <p>Join a vibrant community of electronics enthusiasts, learners, and experts.</p>
+                    <a href="#" class="feature-link">Join Community <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>-->
+        </div> 
+    </section>
     
-<section class="mission" id="mission">
+    <section class="mission" id="mission">
         <div class="mission-container">
             <div class="mission-image">
                 <img src="hand-coding-animate.svg" alt="Mission Image">
             </div>
             <div class="mission-content">
                 <span class="mission-number">01</span>
-                <h2> Practice Problems</h2>
+                <h2>Practice Problems</h2>
                 <p>Sharpen your skills by solving a curated set of practice problems tailored for electronics learners and enthusiasts.</p>
                 <div class="mission-stats">
                     <div class="stat-item">
                         <div class="stat-number" id="active-learners">10K+</div>
                         <div class="stat-label">Active Learners</div>
                     </div>
-                    <div class="stat-item">
+                    <div class="stat-item-projects">
                         <div class="stat-number" id="projects-completed">500+</div>
                         <div class="stat-label">Projects Completed</div>
                     </div>
@@ -937,21 +1050,21 @@
         </div>
     </section>
     
-   <section class="mission" id="mission">
+    <section class="mission" id="mission">
         <div class="mission-container">
             <div class="mission-image">
-                <img src="group-discussion-animate.svg"alt="Mission Image">
+                <img src="group-discussion-animate.svg" alt="Mission Image">
             </div>
             <div class="mission-content">
                 <span class="mission-number">02</span>
                 <h2>Community Forum</h2>
                 <p>Join interactive discussions with peers and experts in the electronics field — ask questions, share insights, and grow together.</p>
                 <div class="mission-stats">
-                    <div class="stat-item">
+                    <div class="stat-item-community">
                         <div class="stat-number" id="active-learners">10K+</div>
                         <div class="stat-label">Active Learners</div>
                     </div>
-                    <div class="stat-item">
+                    <div class="stat-item-projects-community">
                         <div class="stat-number" id="projects-completed">500+</div>
                         <div class="stat-label">Projects Completed</div>
                     </div>
@@ -959,22 +1072,22 @@
             </div>
         </div>
     </section>
+    
     <section class="mission" id="mission">
         <div class="mission-container">
             <div class="mission-image">
-                  <img src="profile-interface-animate.svg"alt="Mission Image">
-                
+                <img src="profile-interface-animate.svg" alt="Mission Image">
             </div>
             <div class="mission-content">
                 <span class="mission-number">03</span>
                 <h2>Profile Builder</h2>
                 <p>Create a professional electronics profile to showcase your skills, completed projects, and achievements.</p>
                 <div class="mission-stats">
-                    <div class="stat-item">
+                    <div class="stat-item-profile">
                         <div class="stat-number" id="active-learners">10K+</div>
                         <div class="stat-label">Active Learners</div>
                     </div>
-                    <div class="stat-item">
+                    <div class="stat-item-profile-projects">
                         <div class="stat-number" id="projects-completed">500+</div>
                         <div class="stat-label">Projects Completed</div>
                     </div>
@@ -986,18 +1099,18 @@
     <section class="mission">
         <div class="mission-container">
             <div class="mission-image">
-                <img src="printed-circuit-board-animate.svg"alt="Mission Image">
+                <img src="printed-circuit-board-animate.svg" alt="Mission Image">
             </div>
             <div class="mission-content">
                 <span class="mission-number">04</span>
                 <h2>Project Explorer</h2>
                 <p>Browse and explore a wide range of exciting electronics projects to learn, replicate, or get inspired for your own creations.</p>
                 <div class="mission-stats">
-                    <div class="stat-item">
+                    <div class="stat-item-explore">
                         <div class="stat-number">100+</div>
                         <div class="stat-label">Expert Instructors</div>
                     </div>
-                    <div class="stat-item">
+                    <div class="stat-item-explore-projects">
                         <div class="stat-number">95%</div>
                         <div class="stat-label">Satisfaction Rate</div>
                     </div>
@@ -1009,18 +1122,18 @@
     <section class="mission">
         <div class="mission-container">
             <div class="mission-image">
-                <img src="job-offers-animate.svg"alt="Mission Image">
+                <img src="job-offers-animate.svg" alt="Mission Image">
             </div>
             <div class="mission-content">
                 <span class="mission-number">05</span>
                 <h2>ElectroJobs</h2>
-                <p>Discover and apply for job opportunities specifically in the electronics industry, tailored to your skills and interests.<p>
+                <p>Discover and apply for job opportunities specifically in the electronics industry, tailored to your skills and interests.</p>
                 <div class="mission-stats">
-                    <div class="stat-item">
+                    <div class="stat-item-roles">
                         <div class="stat-number">100+</div>
                         <div class="stat-label">Expert Instructors</div>
                     </div>
-                    <div class="stat-item">
+                    <div class="stat-item-roles-projects">
                         <div class="stat-number">95%</div>
                         <div class="stat-label">Satisfaction Rate</div>
                     </div>
@@ -1028,9 +1141,6 @@
             </div>
         </div>
     </section>
-
-    
-    
     
     <section class="cta">
         <div class="cta-content">
@@ -1094,7 +1204,6 @@
             </div>
         </div>
     </footer>
-    
     <script>
         // Header scroll effect
         window.addEventListener('scroll', () => {

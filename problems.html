@@ -5,24 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LearnVerse</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
   <style>
     :root {
-      --primary: #6C63FF;
-      --primary-dark: #018786;
-      --primary-light: #cefff9;
-      --secondary:  #4D44DB;
-      --accent: #FF5252;
-      --text-primary: #2D3748;
-      --text-secondary: #718096;
-      --bg-primary: #FFFFFF;
-      --bg-secondary: #F7FAFC;
-      --border-color: #f3f6f6;
-      --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.04);
-      --success: #48BB78;
-      --warning: #ECC94B;
+      --primary: #000000;
+      --primary-dark: #423d7b;
+      --primary-light: #d7161600;
+      --secondary: #10B981;
+      --accent: #F59E0B;
+      --text-primary: #1F2937;
+      --text-secondary: #4B5563;
+      --bg-primary: #ebeaea5a;  
+      --bg-secondary: #fdfafa; 
+      --bg-tertiary: #ffffff;
+      --border-color: #0a0a0b;
+      --card-shadow: 0 4px 6px rgba(247, 244, 244, 0.952), 0 1px 3px rgba(230, 221, 221, 0.947);
+      --success: #10B981;
+      --warning: #F59E0B;
+      --gradient: linear-gradient(135deg, #0d0d0d 0%, #141219 100%);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     [data-theme="dark"] {
@@ -49,112 +49,170 @@
     }
 
     body { 
-      background: var(--bg-secondary); 
+      background: var(--bg-primary); 
       color: var(--text-primary); 
       line-height: 1.6;
       font-size: 14px;
-      transition: background-color 0.3s ease, color 0.3s ease;
+      transition: var(--transition);
     }
 
     /* Header */
     header {
-      background: var(--bg-primary);
-      border-bottom: 1px solid var(--border-color);
-      padding: 12px 24px;
+      background: var(--bg-secondary);
+      /* border-bottom: 1px solid var(--border-color); */
+      padding: 10px 32px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       position: sticky;
       top: 0;
       z-index: 100;
-      box-shadow: var(--card-shadow);
+      box-shadow: 0 4px 6px -1px rgba(236, 201, 75, 0.1)
     }
 
     .logo {
-      font-size: 20px;
+      font-size: 24px;
       font-weight: 700;
-      color: var(--primary);
+      color: var(--text-primary);
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 12px;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .logo span {
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .logo i {
+      font-size: 28px;
+      color: var(--primary);
     }
 
     nav {
       display: flex;
-      gap: 24px;
+      gap: 32px;
       align-items: center;
     }
 
     nav a {
-      color: var(--text-primary);
+      color: var(--text-secondary);
       text-decoration: none;
       font-weight: 500;
-      font-size: 14px;
-      transition: color 0.2s;
+      font-size: 15px;
+      transition: var(--transition);
+      position: relative;
+      padding: 8px 0;
     }
 
     nav a:hover {
-      color: var(--primary);
+      color: var(--text-primary);
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--gradient);
+      transition: var(--transition);
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    nav a.active {
+      color: var(--text-primary);
+    }
+
+    nav a.active::after {
+      width: 100%;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
     }
 
     .user-info {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 12px;
       cursor: pointer;
-      padding: 6px 12px;
-      border-radius: 6px;
-      transition: background 0.2s;
+      padding: 8px 16px;
+      border-radius: 12px;
+      transition: var(--transition);
+      background: var(--bg-tertiary);
     }
 
     .user-info:hover {
-      background: var(--bg-secondary);
-    }
-
-    .user-avatar {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background-color: var(--primary);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
+      background: rgb(11, 10, 10);
       color: white;
     }
 
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      color: white;
+      font-size: 16px;
+    }
+
     .theme-toggle {
-      background: none;
+      background: var(--bg-tertiary);
       border: none;
       color: var(--text-primary);
       cursor: pointer;
-      font-size: 16px;
-      padding: 6px;
-      border-radius: 4px;
-      transition: background 0.2s;
+      font-size: 18px;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .theme-toggle:hover {
-      background: var(--bg-secondary);
+      background: var(--border-color);
+      transform: rotate(15deg);
     }
 
     /* Container */
     .container {
       display: flex;
-      min-height: calc(100vh - 70px);
+  min-height: calc(100vh - 80px);
+  padding: 32px 32px 32px 312px; /* Add left padding to account for sidebar */
+  gap: 32px;
     }
 
     /* Sidebar */
     .sidebar {
-      width: 280px;
-      background: var(--bg-primary);
-      border-right: 1px solid var(--border-color);
-      padding: 1.5rem;
-      overflow-y: auto;
-      transition: var(--transition);
-      position: sticky;
-      top: 70px;
-      height: calc(100vh - 70px);
+     width: 280px;
+  background: var(--bg-secondary);
+  /* border-right: 1px solid var(--border-color); */
+  border-radius: 0; /* Remove border radius */
+  padding: 1.5rem;
+  overflow-y: auto;
+  transition: var(--transition);
+  position: fixed; /* Change from sticky to fixed */
+  top: 80px; /* Match header height */
+  left: 0;
+  height: calc(100vh - 80px); /* Full height minus header */
+  box-shadow: var(--card-shadow);
+  z-index: 90; /* Ensure it's above other content */
     }
 
     .sidebar-section {
@@ -162,12 +220,17 @@
     }
 
     .sidebar-title {
-      font-size: 14px;
+      font-size: 16px;
       font-weight: 600;
-      color: var(--text-secondary);
+      color: var(--text-primary);
       margin-bottom: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sidebar-title i {
+      color: var(--primary);
     }
 
     .domain-list {
@@ -175,53 +238,58 @@
     }
 
     .domain-item {
-      margin-bottom: 4px;
+      margin-bottom: 8px;
     }
 
     .domain-link {
       display: flex;
       align-items: center;
-      gap: 8px;
-      padding: 8px 12px;
+      gap: 12px;
+      padding: 12px 16px;
       color: var(--text-primary);
       text-decoration: none;
-      border-radius: 6px;
+      border-radius: 12px;
       font-size: 14px;
       font-weight: 500;
-      transition: all 0.2s;
+      transition: var(--transition);
+      background: var(--bg-tertiary);
+      /* border: 1px solid var(--border-color); */
     }
 
     .domain-link:hover {
-      background: var(--bg-secondary);
+      background: var(--primary-light);
+      transform: translateY(-2px);
     }
 
     .domain-link.active {
       background: var(--primary-light);
       color: var(--primary);
+      /* border-color: var(--primary); */
     }
 
     .filter-options {
       display: flex;
       flex-wrap: wrap;
-      gap: 6px;
+      gap: 8px;
       margin-bottom: 16px;
     }
 
     .filter-btn {
-      padding: 6px 12px;
-      border: 1px solid var(--border-color);
-      background: var(--bg-primary);
+      padding: 8px 16px;
+      border: 0px solid var(--border-color);
+      background: var(--bg-tertiary);
       color: var(--text-secondary);
-      border-radius: 20px;
-      font-size: 12px;
+      border-radius: 8px;
+      font-size: 13px;
       font-weight: 500;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: var(--transition);
     }
 
     .filter-btn:hover {
-      border-color: var(--primary);
+      /* border-color: var(--primary); */
       color: var(--primary);
+      transform: translateY(-2px);
     }
 
     .filter-btn.active {
@@ -233,43 +301,53 @@
     /* Main content */
     .main-content {
       flex: 1;
-      padding: 24px;
+      padding: 0;
       overflow-y: auto;
-      width: calc(100% - 280px);
+      width: calc(100% - 312px);
       transition: margin-right 0.3s ease;
     }
 
+    
+
     .domain-header {
       margin-bottom: 2rem;
+      background: var(--bg-secondary);
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: var(--card-shadow);
+      /* border: 1px solid var(--border-color); */
     }
 
     .domain-header h1 {
-      font-size: 24px;
-      font-weight: 600;
+      font-size: 28px;
+      font-weight: 700;
       margin-bottom: 8px;
       color: var(--text-primary);
+      font-family: 'Poppins', sans-serif;
     }
 
     .domain-description {
       color: var(--text-secondary);
-      font-size: 14px;
+      font-size: 16px;
+      line-height: 1.6;
     }
 
     /* Progress container */
     .progress-container {
-      background: var(--bg-primary);
-      border-radius: 8px;
-      padding: 16px;
+      background: var(--bg-secondary);
+      border-radius: 16px;
+      padding: 24px;
       box-shadow: var(--card-shadow);
       margin-bottom: 24px;
+      /* border: 1px solid var(--border-color); */
     }
 
     .progress-info {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 8px;
-      font-size: 14px;
+      margin-bottom: 12px;
+      font-size: 16px;
       color: var(--text-secondary);
     }
 
@@ -279,16 +357,16 @@
     }
 
     .progress-bar {
-      height: 8px;
-      background: var(--bg-secondary);
-      border-radius: 4px;
+      height: 10px;
+      background: var(--bg-primary);
+      border-radius: 8px;
       overflow: hidden;
     }
 
     .progress-fill {
       height: 100%;
-      background: var(--primary);
-      border-radius: 4px;
+      background: var(--gradient);
+      border-radius: 8px;
       transition: width 0.5s ease;
     }
 
@@ -300,66 +378,80 @@
 
     .search-container i {
       position: absolute;
-      left: 12px;
+      left: 16px;
       top: 50%;
       transform: translateY(-50%);
       color: var(--text-secondary);
+      z-index: 2;
     }
 
     .search-input {
       width: 100%;
-      padding: 10px 16px 10px 40px;
+      padding: 14px 16px 14px 48px;
       border: 1px solid var(--border-color);
-      border-radius: 6px;
-      font-size: 14px;
-      background: var(--bg-primary);
+      border-radius: 12px;
+      font-size: 15px;
+      background: var(--bg-secondary);
       color: var(--text-primary);
+      transition: var(--transition);
+      box-shadow: var(--card-shadow);
     }
 
     .search-input:focus {
       outline: none;
       border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
     }
 
     /* Problem list */
     .problems-table {
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 12px;
     }
 
     .table-header {
       display: grid;
-      grid-template-columns: 40px 1fr 100px 100px 100px 100px;
+      grid-template-columns: 50px 1fr 120px 120px 120px 120px;
       gap: 1rem;
-      padding: 12px 16px;
+      padding: 16px 24px;
       background: var(--bg-secondary);
       font-weight: 600;
-      font-size: 14px;
-      color: var(--text-secondary);
+      font-size: 15px;
+      color: var(--text-primary);
       border-bottom: 1px solid var(--border-color);
-      border-radius: 8px 8px 0 0;
+      border-radius: 16px 16px 0 0;
+      box-shadow: var(--card-shadow);
     }
 
     .problem-row {
       display: grid;
-      grid-template-columns: 40px 1fr 100px 100px 100px 100px;
+      grid-template-columns: 50px 1fr 120px 120px 120px 120px;
       gap: 1rem;
-      padding: 12px 16px;
-      background: var(--bg-primary);
-      border-radius: 6px;
+      padding: 16px 24px;
+      background: var(--bg-secondary);
+      border-radius: 12px;
       box-shadow: var(--card-shadow);
+      /* border: 1px solid var(--border-color); */
       align-items: center;
-      transition: all 0.2s;
+      transition: var(--transition);
     }
 
     .problem-row:hover {
-      background: var(--bg-secondary);
+      background: var(--bg-tertiary);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
     }
 
     .status-icon {
       cursor: pointer;
       text-align: center;
+      font-size: 18px;
+      transition: var(--transition);
+    }
+
+    .status-icon:hover {
+      transform: scale(1.2);
     }
 
     .saved-icon {
@@ -373,8 +465,9 @@
     .problem-title {
       color: var(--text-primary);
       text-decoration: none;
-      font-weight: 500;
-      transition: color 0.2s;
+      font-weight: 600;
+      transition: var(--transition);
+      font-size: 16px;
     }
 
     .problem-title:hover {
@@ -382,50 +475,59 @@
     }
 
     .popularity-tag, .level-tag {
-      padding: 4px 8px;
-      border-radius: 4px;
-      font-size: 12px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 13px;
       font-weight: 500;
       text-align: center;
     }
 
     .popularity-tag {
-      background-color: var(--bg-secondary);
-      color: var(--text-primary);
+      background-color: rgba(99, 101, 241, 0.11);
+      color: var(--primary-dark);
+      border: 1px solid rgba(99, 102, 241, 0.2);
     }
 
     .level-tag {
-      background-color: var(--secondary);
-      color: white;
+      background-color: rgba(16, 185, 129, 0.11);
+      color: var(--success);
+      border: 1px solid rgba(16, 185, 129, 0.2);
     }
 
     .difficulty {
-      padding: 4px 8px;
-      border-radius: 4px;
-      font-size: 12px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 13px;
       font-weight: 500;
       text-align: center;
     }
 
     .difficulty.easy {
       color: var(--success);
-      background-color: rgba(72, 187, 120, 0.1);
+      background-color: rgba(16, 185, 129, 0.11);
+      border: 1px solid rgba(16, 185, 129, 0.2);
     }
 
     .difficulty.medium {
       color: var(--warning);
-      background-color: rgba(236, 201, 75, 0.1);
+      background-color: rgba(245, 158, 11, 0.11);
+      border: 1px solid rgba(245, 158, 11, 0.2);
     }
 
     .difficulty.hard {
       color: var(--accent);
-      background-color: rgba(255, 82, 82, 0.1);
+      background-color: rgba(239, 68, 68, 0.11);
+      border: 1px solid rgba(239, 68, 68, 0.2);
     }
 
     .empty-state {
       text-align: center;
       padding: 3rem;
       color: var(--text-secondary);
+      background: var(--bg-secondary);
+      border-radius: 16px;
+      margin: 1rem 0;
+      border: 1px solid var(--border-color);
     }
 
     .empty-state i {
@@ -440,122 +542,144 @@
       flex-wrap: wrap;
       gap: 1rem;
       margin-top: 2rem;
-      padding: 1rem;
+      padding: 1.5rem;
       background-color: var(--bg-secondary);
-      border-radius: 6px;
+      border-radius: 16px;
+      box-shadow: var(--card-shadow);
+      border: 1px solid var(--border-color);
     }
 
     .admin-btn {
-      padding: 0.7rem 1.2rem;
+      padding: 12px 20px;
       border: none;
-      border-radius: 6px;
-      background-color: var(--primary);
+      border-radius: 12px;
+      background: var(--gradient);
       color: white;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      transition: all 0.2s;
+      gap: 8px;
+      transition: var(--transition);
       font-size: 14px;
       font-weight: 500;
     }
 
     .admin-btn:hover {
-      background-color: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(99, 102, 241, 0.4);
     }
 
     .btn-danger {
-      background-color: var(--accent);
+      background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
     }
 
     .btn-danger:hover {
-      background-color: #e53935;
+      box-shadow: 0 6px 12px rgba(239, 68, 68, 0.4);
     }
 
     /* Modal styles */
     .modal {
+      display: none;
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
-      display: flex;
+      background-color: rgba(0, 0, 0, 0.7);
+      z-index: 1000;
       align-items: center;
       justify-content: center;
-      z-index: 1000;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.3s ease;
+      backdrop-filter: blur(5px);
+      padding: 20px;
     }
 
     .modal.show {
-      opacity: 1;
-      visibility: visible;
+      display: flex;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
 
     .modal-content {
-      background-color: var(--bg-primary);
-      border-radius: 8px;
-      width: 90%;
-      max-width: 600px;
+      background: var(--bg-secondary);
+      border-radius: 16px;
+      width: 600px;
+      max-width: 100%;
       max-height: 90vh;
       overflow-y: auto;
-      box-shadow: var(--card-shadow);
+      padding: 32px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--border-color);
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
     }
 
     .modal-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1.5rem;
+      margin-bottom: 28px;
+      padding-bottom: 20px;
       border-bottom: 1px solid var(--border-color);
     }
 
     .modal-header h2 {
-      color: var(--primary);
-      font-size: 18px;
+      font-size: 24px;
+      color: var(--text-primary);
       font-weight: 600;
+      font-family: 'Poppins', sans-serif;
     }
 
     .close-modal {
       background: none;
       border: none;
-      font-size: 1.5rem;
-      cursor: pointer;
+      font-size: 28px;
       color: var(--text-secondary);
-      transition: color 0.2s;
+      cursor: pointer;
+      transition: var(--transition);
     }
 
     .close-modal:hover {
-      color: var(--text-primary);
+      color: var(--accent);
+      transform: rotate(90deg);
     }
 
     .form-group {
-      padding: 1rem 1.5rem;
+      margin-bottom: 20px;
     }
 
     .form-group label {
       display: block;
-      margin-bottom: 0.5rem;
+      margin-bottom: 10px;
       font-weight: 500;
       color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .form-control {
       width: 100%;
-      padding: 0.8rem;
+      padding: 14px 16px;
       border: 1px solid var(--border-color);
-      border-radius: 6px;
-      font-size: 14px;
-      background-color: var(--bg-primary);
+      border-radius: 12px;
+      background: var(--bg-tertiary);
       color: var(--text-primary);
-      transition: border-color 0.2s;
+      transition: var(--transition);
+      font-size: 15px;
     }
 
     .form-control:focus {
       outline: none;
       border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
     }
 
     .option-row {
@@ -585,27 +709,35 @@
     }
 
     .add-option-btn, .submit-question-btn {
-      padding: 0.7rem 1.2rem;
+      padding: 12px 20px;
       border: none;
-      border-radius: 6px;
-      background-color: var(--primary);
+      border-radius: 12px;
+      background: var(--gradient);
       color: white;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 8px;
       margin-top: 0.5rem;
-      transition: all 0.2s;
+      transition: var(--transition);
       font-size: 14px;
       font-weight: 500;
     }
 
     .add-option-btn {
-      background-color: var(--text-secondary);
+      background: var(--bg-tertiary);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+    }
+
+    .add-option-btn:hover {
+      background: var(--primary);
+      color: white;
     }
 
     .add-option-btn:hover, .submit-question-btn:hover {
-      opacity: 0.9;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(99, 102, 241, 0.4);
     }
 
     /* Question Detail View */
@@ -618,6 +750,7 @@
       height: 100%;
       background-color: rgba(0, 0, 0, 0.7);
       z-index: 999;
+      backdrop-filter: blur(5px);
     }
 
     .question-detail-backdrop.show {
@@ -633,12 +766,13 @@
       width: 90%;
       max-width: 800px;
       max-height: 90vh;
-      background-color: var(--bg-primary);
-      border-radius: 8px;
+      background-color: var(--bg-secondary);
+      border-radius: 16px;
       box-shadow: var(--card-shadow);
       z-index: 1000;
       overflow-y: auto;
       padding: 2rem;
+      border: 1px solid var(--border-color);
     }
 
     .question-detail-view.show {
@@ -646,23 +780,24 @@
     }
 
     .back-to-problems {
-      padding: 0.7rem 1.2rem;
+      padding: 12px 20px;
       border: none;
-      border-radius: 6px;
-      background-color: var(--bg-secondary);
+      border-radius: 12px;
+      background: var(--bg-tertiary);
       color: var(--text-primary);
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 8px;
       margin-bottom: 1.5rem;
-      transition: all 0.2s;
+      transition: var(--transition);
       font-size: 14px;
       font-weight: 500;
     }
 
     .back-to-problems:hover {
-      background-color: var(--border-color);
+      background: var(--primary);
+      color: white;
     }
 
     .question-header {
@@ -676,6 +811,7 @@
       margin-bottom: 2rem;
       line-height: 1.6;
       color: var(--text-primary);
+      font-size: 16px;
     }
 
     .options-container {
@@ -685,14 +821,16 @@
     .option-item {
       padding: 1rem;
       border: 1px solid var(--border-color);
-      border-radius: 6px;
+      border-radius: 12px;
       margin-bottom: 0.8rem;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: var(--transition);
+      background: var(--bg-tertiary);
     }
 
     .option-item:hover {
-      background-color: var(--bg-secondary);
+      background: var(--primary-light);
+      transform: translateY(-2px);
     }
 
     .option-item.selected {
@@ -711,53 +849,56 @@
     }
 
     .submit-answer-btn {
-      padding: 1rem 2rem;
+      padding: 16px 32px;
       border: none;
-      border-radius: 6px;
-      background-color: var(--primary);
+      border-radius: 12px;
+      background: var(--gradient);
       color: white;
       cursor: pointer;
-      font-size: 1rem;
-      font-weight: 500;
-      transition: all 0.2s;
+      font-size: 16px;
+      font-weight: 600;
+      transition: var(--transition);
+      width: 100%;
     }
 
     .submit-answer-btn:hover {
-      background-color: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(99, 102, 241, 0.4);
     }
 
     .submit-answer-btn:disabled {
-      background-color: var(--text-secondary);
+      background: var(--text-secondary);
       cursor: not-allowed;
     }
 
     .feedback-message {
       margin-top: 1.5rem;
       padding: 1rem;
-      border-radius: 6px;
+      border-radius: 12px;
       font-weight: 500;
+      border: 1px solid;
     }
 
     .feedback-correct {
       background-color: rgba(72, 187, 120, 0.1);
       color: var(--success);
-      border: 1px solid var(--success);
+      border-color: var(--success);
     }
 
     .feedback-incorrect {
       background-color: rgba(255, 82, 82, 0.1);
       color: var(--accent);
-      border: 1px solid var(--accent);
+      border-color: var(--accent);
     }
 
     /* Enhanced Roadmap Section */
     .roadmap-container {
       position: fixed;
-      top: 70px;
+      top: 96px;
       right: 0;
       width: 320px;
-      height: calc(100vh - 70px);
-      background-color: var(--bg-primary);
+      height: calc(100vh - 96px);
+      background-color: var(--bg-secondary);
       border-left: 1px solid var(--border-color);
       padding: 1.5rem;
       overflow-y: auto;
@@ -765,6 +906,7 @@
       z-index: 90;
       transform: translateX(100%);
       transition: transform 0.3s ease;
+      border-radius: 16px 0 0 16px;
     }
 
     .roadmap-container.show {
@@ -781,7 +923,7 @@
     }
 
     .roadmap-header h2 {
-      font-size: 18px;
+      font-size: 20px;
       font-weight: 600;
       color: var(--text-primary);
       display: flex;
@@ -790,10 +932,10 @@
     }
 
     .roadmap-toggle {
-      background: var(--primary);
+      background: var(--gradient);
       color: white;
       border: none;
-      border-radius: 6px;
+      border-radius: 8px;
       padding: 8px 12px;
       cursor: pointer;
       display: flex;
@@ -801,11 +943,12 @@
       gap: 6px;
       font-size: 14px;
       font-weight: 500;
-      transition: all 0.2s;
+      transition: var(--transition);
     }
 
     .roadmap-toggle:hover {
-      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(99, 102, 241, 0.3);
     }
 
     .roadmap-content {
@@ -865,7 +1008,7 @@
     }
 
     .roadmap-details li {
-      padding: 6px 0;
+      padding: 8px 0;
       color: var(--text-secondary);
       position: relative;
       padding-left: 20px;
@@ -883,17 +1026,17 @@
     }
 
     .roadmap-progress {
-      height: 6px;
-      background: var(--bg-secondary);
-      border-radius: 3px;
+      height: 8px;
+      background: var(--bg-primary);
+      border-radius: 4px;
       margin: 8px 0;
       overflow: hidden;
     }
 
     .roadmap-progress-fill {
       height: 100%;
-      background: var(--success);
-      border-radius: 3px;
+      background: var(--gradient);
+      border-radius: 4px;
       transition: width 0.5s ease;
     }
 
@@ -901,6 +1044,9 @@
       text-align: center;
       padding: 2rem;
       color: var(--text-secondary);
+      background: var(--bg-tertiary);
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
     }
 
     .roadmap-empty i {
@@ -913,6 +1059,84 @@
     .roadmap-visible .main-content {
       margin-right: 320px;
       transition: margin-right 0.3s ease;
+    }
+
+    .roadmap-toggle-btn {
+      background: var(--bg-tertiary);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 10px 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .roadmap-toggle-btn:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .pagination-controls {
+      display: flex;
+      justify-content: center;
+      margin-top: 2rem;
+      padding: 1rem;
+    }
+
+    .pagination-buttons {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .pagination-btn {
+      padding: 8px 16px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-tertiary);
+      color: var(--text-primary);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .pagination-btn:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .pagination-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    #deleteCsvResults {
+      background-color: var(--bg-tertiary);
+      padding: 1rem;
+      border-radius: 12px;
+      margin-top: 1rem;
+      border: 1px solid var(--border-color);
+    }
+
+    #deleteCsvResults h3 {
+      margin-bottom: 0.5rem;
+      color: var(--text-primary);
+    }
+
+    #deleteCsvResults ul {
+      margin-top: 0.5rem;
+      padding-left: 1.5rem;
+    }
+
+    #deleteCsvResults li {
+      color: var(--text-secondary);
+      margin-bottom: 0.25rem;
     }
 
     /* Responsive adjustments */
@@ -936,15 +1160,19 @@
 
     @media (max-width: 768px) {
       .container {
+        padding: flex; /* Reset padding on mobile */
         flex-direction: column;
       }
       
       .sidebar {
-        width: 100%;
-        height: auto;
-        position: static;
-        border-right: none;
-        border-bottom: 1px solid var(--border-color);
+        position: static; /* Back to normal flow on mobile */
+    width: 100%;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+    border-radius: 0;
+    top: auto;
+    left: auto;
       }
       
       .roadmap-container {
@@ -954,6 +1182,7 @@
         transform: none;
         border-left: none;
         border-top: 1px solid var(--border-color);
+        margin-top: 24px;
       }
       
       .roadmap-container.show {
@@ -962,7 +1191,7 @@
       
       .main-content {
         width: 100%;
-        padding: 16px;
+        padding: 0;
       }
       
       .roadmap-visible .main-content {
@@ -1008,78 +1237,127 @@
         padding: 1rem;
       }
     }
-    .roadmap-toggle-btn {
-  background: var(--bg-secondary);
-  color: var(--text-primary);
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
-  padding: 8px 12px;
+
+    /* Sidebar Toggle Button */
+.sidebar-toggle {
+  position: absolute;
+  top: 16px;
+  right: 5px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: white;
+  color: rgb(18, 18, 18);
+  border: 0px solid var(--border-color);
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 14px;
-  font-weight: 500;
-  transition: all 0.2s;
-}
-
-.roadmap-toggle-btn:hover {
-  background: var(--primary-light);
-  border-color: var(--primary);
-  color: var(--primary);
-}
-.pagination-controls {
-  display: flex;
   justify-content: center;
-  margin-top: 2rem;
-  padding: 1rem;
+  z-index: 9999;
+  transition: var(--transition);
 }
 
-.pagination-buttons {
-  display: flex;
-  gap: 0.5rem;
+.sidebar-toggle:hover {
+  transform: scale(1.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
-.pagination-btn {
-  padding: 0.5rem 1rem;
-  border: 1px solid var(--border-color);
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.2s;
+.sidebar.collapsed .sidebar-toggle i {
+  transform: rotate(180deg);
 }
 
-.pagination-btn:hover {
-  background: var(--bg-secondary);
-  border-color: var(--primary);
+/* Collapsed sidebar */
+.sidebar.collapsed {
+  width: 70px !important;
+  overflow: visible;
 }
 
-.pagination-btn.active {
-  background: var(--primary);
-  color: white;
-  border-color: var(--primary);
-}
-#deleteCsvResults {
-  background-color: var(--bg-secondary);
-  padding: 1rem;
-  border-radius: 6px;
-  margin-top: 1rem;
+.sidebar.collapsed .sidebar-section {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
 }
 
-#deleteCsvResults h3 {
-  margin-bottom: 0.5rem;
-  color: var(--text-primary);
+.sidebar.collapsed .sidebar-title,
+.sidebar.collapsed .domain-link span,
+.sidebar.collapsed .filter-options {
+  display: none;
 }
 
-#deleteCsvResults ul {
-  margin-top: 0.5rem;
-  padding-left: 1.5rem;
+.sidebar.collapsed .domain-link {
+  justify-content: center;
+  padding: 12px;
 }
 
-#deleteCsvResults li {
-  color: var(--text-secondary);
-  margin-bottom: 0.25rem;
+.sidebar.collapsed .domain-link i {
+  margin-right: 0;
+  font-size: 1.2rem;
+}
+
+/* Adjust main content when sidebar is collapsed */
+.sidebar.collapsed ~ .main-content {
+  margin-left: -210px;
+  width: calc(100% - 102px);
+  transition: margin-left 0.3s ease, width 0.3s ease;
+}
+
+/* For mobile view */
+@media (max-width: 768px) {
+  .sidebar-toggle {
+    display: none;
+  }
+  
+  .sidebar.collapsed {
+    width: 100% !important;
+  }
+  
+  .sidebar.collapsed .sidebar-section {
+    opacity: 1;
+    pointer-events: all;
+  }
+  
+  .sidebar.collapsed .sidebar-title,
+  .sidebar.collapsed .domain-link span,
+  .sidebar.collapsed .filter-options {
+    display: block;
+  }
+  
+  .sidebar.collapsed .domain-link {
+    justify-content: flex-start;
+    padding: 12px 16px;
+  }
+  
+  .sidebar.collapsed .domain-link i {
+    margin-right: 12px;
+    font-size: inherit;
+  }
+  
+  .sidebar.collapsed ~ .main-content {
+    margin-left: 0;
+    width: 100%;
+  }
+}
+
+/* Remove sidebar scrollbar but keep scrolling functionality */
+.sidebar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.sidebar::-webkit-scrollbar {
+  display: none;
+}
+
+.progress-fill.low {
+  background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+}
+
+.progress-fill.medium {
+  background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+}
+
+.progress-fill.high {
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
 }
   </style>
 </head>
@@ -1101,24 +1379,32 @@
         <i class="fas fa-moon"></i>
       </button>
       <button class="roadmap-toggle-btn" id="headerRoadmapToggle">
-  <i class="fas fa-road"></i>
-  <span>Show Roadmap</span>
-</button>
+        <i class="fas fa-road"></i>
+        <span>Show Roadmap</span>
+      </button>
     </nav>
   </header>
 
   <div class="container" id="container">
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
+      <button class="sidebar-toggle" id="sidebarToggle">
+    <i class="fas fa-chevron-left"></i>
+  </button>
+
       <div class="sidebar-section">
-        <div class="sidebar-title">Learning Domains</div>
+        <div class="sidebar-title">
+          <i class="fas fa-book-open"></i> Learning Domains
+        </div>
         <ul class="domain-list" id="domainList">
           <!-- Domains will be loaded here -->
         </ul>
       </div>
-
+      
       <div class="sidebar-section">
-        <div class="sidebar-title">Difficulty</div>
+        <div class="sidebar-title">
+           Difficulty
+        </div>
         <div class="filter-options">
           <button class="filter-btn active" data-filter="difficulty" data-value="all">All</button>
           <button class="filter-btn" data-filter="difficulty" data-value="easy">Easy</button>
@@ -1128,7 +1414,9 @@
       </div>
 
       <div class="sidebar-section">
-        <div class="sidebar-title">Status</div>
+        <div class="sidebar-title">
+        Status
+        </div>
         <div class="filter-options">
           <button class="filter-btn active" data-filter="status" data-value="all">All</button>
           <button class="filter-btn" data-filter="status" data-value="solved">Attempted</button>
@@ -1137,16 +1425,20 @@
       </div>
 
       <div class="sidebar-section">
-  <div class="sidebar-title">Solution Status</div>
-  <div class="filter-options">
-    <button class="filter-btn active" data-filter="solution" data-value="all">All</button>
-    <button class="filter-btn" data-filter="solution" data-value="correct">Correctly Solved</button>
-    <button class="filter-btn" data-filter="solution" data-value="incorrect">Incorrectly Solved</button>
-  </div>
-</div>
+        <div class="sidebar-title">
+         Solution Status
+        </div>
+        <div class="filter-options">
+          <button class="filter-btn active" data-filter="solution" data-value="all">All</button>
+          <button class="filter-btn" data-filter="solution" data-value="correct">Correctly Solved</button>
+          <button class="filter-btn" data-filter="solution" data-value="incorrect">Incorrectly Solved</button>
+        </div>
+      </div>
 
       <div class="sidebar-section">
-        <div class="sidebar-title">Saved Questions</div>
+        <div class="sidebar-title">
+           Saved Questions
+        </div>
         <div class="filter-options">
           <button class="filter-btn active" data-filter="saved" data-value="all">All</button>
           <button class="filter-btn" data-filter="saved" data-value="saved">Saved</button>
@@ -1172,6 +1464,7 @@
       </div>
 
       <div class="search-container">
+        <i class="fas fa-search"></i>
         <input type="text" class="search-input" id="searchInput" placeholder="Search questions...">
       </div>
 
@@ -1190,37 +1483,35 @@
         </div>
       </div>
 
-      
-
-     <div id="adminControls" style="display: none;">
-      <div class="admin-controls">
-    <button class="admin-btn" onclick="showAddCSVModal()">
-      <i class="fas fa-file-csv"></i> Add File
-    </button>
-    <button class="admin-btn" onclick="showDeleteCSVModal()">
-      <i class="fas fa-trash"></i> Delete from File
-    </button>
-    <button class="admin-btn" onclick="showAddDomainModal()">
-      <i class="fas fa-plus"></i> Add Domain
-    </button>
-    <button class="admin-btn" onclick="showAddRoadmapModal()">
-      <i class="fas fa-plus"></i> Add Roadmap
-    </button>
-    <button class="admin-btn btn-danger" onclick="showDeleteQuestionModal()">
-      <i class="fas fa-trash"></i> Delete Question
-    </button>
-    <button class="admin-btn btn-danger" onclick="showDeleteDomainModal()">
-      <i class="fas fa-trash"></i> Delete Domain
-    </button>
-    <button class="admin-btn btn-danger" onclick="showDeleteRoadmapModal()">
-      <i class="fas fa-trash"></i> Delete Roadmap
-    </button>
-   </div>
-   <div class="empty-state" id="adminEmptyMessage" style="display: none;">
-    <p>Admin controls enabled. You can manage content.</p>
-   </div>
-   </div>
-</div>
+      <div id="adminControls" style="display: none;">
+        <div class="admin-controls">
+          <button class="admin-btn" onclick="showAddCSVModal()">
+            <i class="fas fa-file-csv"></i> Add File
+          </button>
+          <button class="admin-btn" onclick="showDeleteCSVModal()">
+            <i class="fas fa-trash"></i> Delete from File
+          </button>
+          <button class="admin-btn" onclick="showAddDomainModal()">
+            <i class="fas fa-plus"></i> Add Domain
+          </button>
+          <button class="admin-btn" onclick="showAddRoadmapModal()">
+            <i class="fas fa-plus"></i> Add Roadmap
+          </button>
+          <button class="admin-btn btn-danger" onclick="showDeleteQuestionModal()">
+            <i class="fas fa-trash"></i> Delete Question
+          </button>
+          <button class="admin-btn btn-danger" onclick="showDeleteDomainModal()">
+            <i class="fas fa-trash"></i> Delete Domain
+          </button>
+          <button class="admin-btn btn-danger" onclick="showDeleteRoadmapModal()">
+            <i class="fas fa-trash"></i> Delete Roadmap
+          </button>
+        </div>
+        <div class="empty-state" id="adminEmptyMessage" style="display: none;">
+          <p>Admin controls enabled. You can manage content.</p>
+        </div>
+      </div>
+    </div>
 
     <!-- Roadmap Section -->
     <div class="roadmap-container" id="roadmapContainer">
@@ -1239,141 +1530,141 @@
       </div>
     </div>
   </div>
-<!-- Add Question Modal -->
-<div class="modal" id="addQuestionModal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h2>Add New Question</h2>
-      <button class="close-modal" onclick="closeModal('addQuestionModal')">&times;</button>
-    </div>
-    <div class="form-group">
-      <label for="questionDomain">Domain</label>
-      <select id="questionDomain" class="form-control">
-        <!-- Domains will be populated here -->
-      </select>
-    </div>
-    <div class="form-group">
-      <label for="questionTitle">Question Title</label>
-      <input type="text" id="questionTitle" class="form-control" placeholder="Enter question title">
-    </div>
-    <div class="form-group">
-      <label for="questionDescription">Description</label>
-      <textarea id="questionDescription" class="form-control" rows="3" placeholder="Enter question description"></textarea>
-    </div>
-    <div class="form-group">
-      <label>Options</label>
-      <div id="optionsContainer">
-        <div class="option-row">
-          <input type="text" class="form-control option-input" placeholder="Option 1">
-          <button class="remove-option" onclick="removeOption(this)"><i class="fas fa-times"></i></button>
-        </div>
-        <div class="option-row">
-          <input type="text" class="form-control option-input" placeholder="Option 2">
-          <button class="remove-option" onclick="removeOption(this)"><i class="fas fa-times"></i></button>
-        </div>
-      </div>
-      <button class="add-option-btn" onclick="addOption()">
-        <i class="fas fa-plus"></i> Add Option
-      </button>
-    </div>
-    <div class="form-group">
-      <label for="correctAnswer">Correct Answer</label>
-      <input type="text" id="correctAnswer" class="form-control" placeholder="Enter correct answer">
-    </div>
-    <div class="form-group">
-      <label for="difficultySelect">Difficulty</label>
-      <select id="difficultySelect" class="form-control">
-        <option value="easy">Easy</option>
-        <option value="medium">Medium</option>
-        <option value="hard">Hard</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <button class="submit-question-btn" onclick="addQuestion()">
-        <i class="fas fa-plus"></i> Add Question
-      </button>
-    </div>
-  </div>
-</div>
 
-<!-- Add CSV Modal -->
-<div class="modal" id="addCSVModal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h2>Upload Questions CSV</h2>
-      <button class="close-modal" onclick="closeModal('addCSVModal')">&times;</button>
-    </div>
-    <div class="form-group">
-      <label for="csvDomain">Domain</label>
-      <select id="csvDomain" class="form-control">
-        <!-- Domains will be populated here -->
-      </select>
-    </div>
-    <div class="form-group">
-      <label for="csvFile">CSV File</label>
-      <input type="file" id="csvFile" class="form-control" accept=".csv">
-      <small>CSV format: Title, Description, Option1, Option2, Option3, Option4, CorrectAnswer, Difficulty</small>
-    </div>
-    <div class="form-group">
-      <button class="submit-question-btn" onclick="processCSV()">
-        <i class="fas fa-upload"></i> Upload Questions
-      </button>
-    </div>
-  </div>
-</div>
-
-<!-- Delete Questions from CSV Modal -->
-<div class="modal" id="deleteCSVModal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h2>Delete Questions from CSV</h2>
-      <button class="close-modal" onclick="closeModal('deleteCSVModal')">&times;</button>
-    </div>
-    <div class="form-group">
-      <label for="deleteCsvDomain">Domain</label>
-      <select id="deleteCsvDomain" class="form-control">
-        <!-- Domains will be populated here -->
-      </select>
-    </div>
-    <div class="form-group">
-      <label for="deleteCsvFile">CSV File</label>
-      <input type="file" id="deleteCsvFile" class="form-control" accept=".csv">
-      <small>CSV format: Title, Description, Option1, Option2, Option3, Option4, CorrectAnswer, Difficulty</small>
-    </div>
-    <div class="form-group">
-      <button class="submit-question-btn" onclick="processDeleteCSV()">
-        <i class="fas fa-trash"></i> Delete Questions
-      </button>
-    </div>
-    <div class="form-group" id="deleteCsvResults" style="display: none;">
-      <h3>Deletion Results:</h3>
-      <div id="deletedCount" style="color: var(--success);"></div>
-      <div id="notFoundCount" style="color: var(--accent);"></div>
-      <div id="notFoundList"></div>
-    </div>
-  </div>
-</div>
-
-  <!-- Delete Question Modal
-  <div class="modal" id="deleteQuestionModal">
+  <!-- Add Question Modal -->
+  <div class="modal" id="addQuestionModal">
     <div class="modal-content">
       <div class="modal-header">
-        <h2>Delete Question</h2>
-        <button class="close-modal" onclick="closeModal('deleteQuestionModal')">&times;</button>
+        <h2>Add New Question</h2>
+        <button class="close-modal" onclick="closeModal('addQuestionModal')">&times;</button>
       </div>
       <div class="form-group">
-        <label for="deleteQuestionSelect">Select Question to Delete</label>
-        <select id="deleteQuestionSelect" class="form-control">
-          Questions will be populated here
+        <label for="questionDomain">
+          <i class="fas fa-book"></i> Domain
+        </label>
+        <select id="questionDomain" class="form-control">
+          <!-- Domains will be populated here -->
         </select>
       </div>
       <div class="form-group">
-        <button class="submit-question-btn" style="background: var(--accent)" onclick="deleteQuestion()">
-          <i class="fas fa-trash"></i> Delete Question
+        <label for="questionTitle">
+          <i class="fas fa-heading"></i> Question Title
+        </label>
+        <input type="text" id="questionTitle" class="form-control" placeholder="Enter question title">
+      </div>
+      <div class="form-group">
+        <label for="questionDescription">
+          <i class="fas fa-file-alt"></i> Description
+        </label>
+        <textarea id="questionDescription" class="form-control" rows="3" placeholder="Enter question description"></textarea>
+      </div>
+      <div class="form-group">
+        <label>
+          <i class="fas fa-list"></i> Options
+        </label>
+        <div id="optionsContainer">
+          <div class="option-row">
+            <input type="text" class="form-control option-input" placeholder="Option 1">
+            <button class="remove-option" onclick="removeOption(this)"><i class="fas fa-times"></i></button>
+          </div>
+          <div class="option-row">
+            <input type="text" class="form-control option-input" placeholder="Option 2">
+            <button class="remove-option" onclick="removeOption(this)"><i class="fas fa-times"></i></button>
+          </div>
+        </div>
+        <button class="add-option-btn" onclick="addOption()">
+          <i class="fas fa-plus"></i> Add Option
+        </button>
+      </div>
+      <div class="form-group">
+        <label for="correctAnswer">
+          <i class="fas fa-check-circle"></i> Correct Answer
+        </label>
+        <input type="text" id="correctAnswer" class="form-control" placeholder="Enter correct answer">
+      </div>
+      <div class="form-group">
+        <label for="difficultySelect">
+          <i class="fas fa-signal"></i> Difficulty
+        </label>
+        <select id="difficultySelect" class="form-control">
+          <option value="easy">Easy</option>
+          <option value="medium">Medium</option>
+          <option value="hard">Hard</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <button class="submit-question-btn" onclick="addQuestion()">
+          <i class="fas fa-plus"></i> Add Question
         </button>
       </div>
     </div>
-  </div> -->
+  </div>
+
+  <!-- Add CSV Modal -->
+  <div class="modal" id="addCSVModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Upload Questions CSV</h2>
+        <button class="close-modal" onclick="closeModal('addCSVModal')">&times;</button>
+      </div>
+      <div class="form-group">
+        <label for="csvDomain">
+          <i class="fas fa-book"></i> Domain
+        </label>
+        <select id="csvDomain" class="form-control">
+          <!-- Domains will be populated here -->
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="csvFile">
+          <i class="fas fa-file-csv"></i> CSV File
+        </label>
+        <input type="file" id="csvFile" class="form-control" accept=".csv">
+        <small>CSV format: Title, Description, Option1, Option2, Option3, Option4, CorrectAnswer, Difficulty</small>
+      </div>
+      <div class="form-group">
+        <button class="submit-question-btn" onclick="processCSV()">
+          <i class="fas fa-upload"></i> Upload Questions
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Questions from CSV Modal -->
+  <div class="modal" id="deleteCSVModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Delete Questions from CSV</h2>
+        <button class="close-modal" onclick="closeModal('deleteCSVModal')">&times;</button>
+      </div>
+      <div class="form-group">
+        <label for="deleteCsvDomain">
+          <i class="fas fa-book"></i> Domain
+        </label>
+        <select id="deleteCsvDomain" class="form-control">
+          <!-- Domains will be populated here -->
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="deleteCsvFile">
+          <i class="fas fa-file-csv"></i> CSV File
+        </label>
+        <input type="file" id="deleteCsvFile" class="form-control" accept=".csv">
+        <small>CSV format: Title, Description, Option1, Option2, Option3, Option4, CorrectAnswer, Difficulty</small>
+      </div>
+      <div class="form-group">
+        <button class="submit-question-btn" onclick="processDeleteCSV()">
+          <i class="fas fa-trash"></i> Delete Questions
+        </button>
+      </div>
+      <div class="form-group" id="deleteCsvResults" style="display: none;">
+        <h3>Deletion Results:</h3>
+        <div id="deletedCount" style="color: var(--success);"></div>
+        <div id="notFoundCount" style="color: var(--accent);"></div>
+        <div id="notFoundList"></div>
+      </div>
+    </div>
+  </div>
 
   <!-- Delete Domain Modal -->
   <div class="modal" id="deleteDomainModal">
@@ -1383,7 +1674,9 @@
         <button class="close-modal" onclick="closeModal('deleteDomainModal')">&times;</button>
       </div>
       <div class="form-group">
-        <label for="deleteDomainSelect">Select Domain to Delete</label>
+        <label for="deleteDomainSelect">
+          <i class="fas fa-book"></i> Select Domain to Delete
+        </label>
         <select id="deleteDomainSelect" class="form-control">
           <!-- Domains will be populated here -->
         </select>
@@ -1404,7 +1697,9 @@
         <button class="close-modal" onclick="closeModal('deleteRoadmapModal')">&times;</button>
       </div>
       <div class="form-group">
-        <label for="deleteRoadmapSelect">Select Roadmap to Delete</label>
+        <label for="deleteRoadmapSelect">
+          <i class="fas fa-road"></i> Select Roadmap to Delete
+        </label>
         <select id="deleteRoadmapSelect" class="form-control">
           <!-- Roadmaps will be populated here -->
         </select>
@@ -1425,15 +1720,21 @@
         <button class="close-modal" onclick="closeModal('addDomainModal')">&times;</button>
       </div>
       <div class="form-group">
-        <label for="domainName">Domain Name</label>
+        <label for="domainName">
+          <i class="fas fa-heading"></i> Domain Name
+        </label>
         <input type="text" id="domainName" class="form-control" placeholder="Enter domain name">
       </div>
       <div class="form-group">
-        <label for="domainIcon">Icon Class (Font Awesome)</label>
+        <label for="domainIcon">
+          <i class="fas fa-icons"></i> Icon Class (Font Awesome)
+        </label>
         <input type="text" id="domainIcon" class="form-control" placeholder="e.g., fas fa-microchip">
       </div>
       <div class="form-group">
-        <label for="domainDescription">Description</label>
+        <label for="domainDescription">
+          <i class="fas fa-file-alt"></i> Description
+        </label>
         <textarea id="domainDescription" class="form-control" placeholder="Enter domain description"></textarea>
       </div>
       <div class="form-group">
@@ -1452,17 +1753,23 @@
         <button class="close-modal" onclick="closeModal('addRoadmapModal')">&times;</button>
       </div>
       <div class="form-group">
-        <label for="roadmapDomain">Domain</label>
+        <label for="roadmapDomain">
+          <i class="fas fa-book"></i> Domain
+        </label>
         <select id="roadmapDomain" class="form-control">
           <!-- Domains will be populated here -->
         </select>
       </div>
       <div class="form-group">
-        <label for="roadmapTitle">Roadmap Title</label>
+        <label for="roadmapTitle">
+          <i class="fas fa-heading"></i> Roadmap Title
+        </label>
         <input type="text" id="roadmapTitleInput" class="form-control" placeholder="Enter roadmap title">
       </div>
       <div class="form-group">
-        <label>Roadmap Content</label>
+        <label>
+          <i class="fas fa-list"></i> Roadmap Content
+        </label>
         <div id="mainHeadingsContainer">
           <div class="main-heading-item">
             <div class="form-group">
@@ -1528,18 +1835,23 @@
     <div class="feedback-message" id="feedbackMessage" style="display: none;"></div>
   </div>
 
-  <script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+
+<script>
     // Firebase configuration
-  const firebaseConfig = {
-    apiKey: "AIzaSyD4T6rAV2npex-ZOJuu5IKQ1bDUkD7o9Oc",
-    authDomain: "eceverse-adeac.firebaseapp.com",
-    databaseURL: "https://eceverse-adeac-default-rtdb.firebaseio.com",
-    projectId: "eceverse-adeac",
-    storageBucket: "eceverse-adeac.firebasestorage.app",
-    messagingSenderId: "55835462054",
-    appId: "1:55835462054:web:9ca23a5817ed40f2842767",
-    measurementId: "G-KTV3P359DX"
-  };
+    const firebaseConfig = {
+        apiKey: "AIzaSyD4T6rAV2npex-ZOJuu5IKQ1bDUkD7o9Oc",
+        authDomain: "eceverse-adeac.firebaseapp.com",
+        databaseURL: "https://eceverse-adeac-default-rtdb.firebaseio.com",
+        projectId: "eceverse-adeac",
+        storageBucket: "eceverse-adeac.firebasestorage.app",
+        messagingSenderId: "55835462054",
+        appId: "1:55835462054:web:9ca23a5817ed40f2842767",
+        measurementId: "G-KTV3P359DX"
+    };
+
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
@@ -1558,1562 +1870,1608 @@
 
     // Check authentication state
     auth.onAuthStateChanged((user) => {
-      if (user) {
-        currentUser = user;
-        document.getElementById('userName').textContent = user.displayName || user.email;
-        document.getElementById('userAvatar').textContent = (user.displayName || user.email).charAt(0).toUpperCase();
-        
-        // Show admin controls only for srujansrujan@gmail.com
-        if (user.email === 'srujansrujan@gmail.com') {
-          document.getElementById('adminControls').style.display = 'block';
-          document.getElementById('adminEmptyMessage').style.display = 'block';
+        if (user) {
+            currentUser = user;
+            document.getElementById('userName').textContent = user.displayName || user.email;
+            document.getElementById('userAvatar').textContent = (user.displayName || user.email).charAt(0).toUpperCase();
+            
+            // Show admin controls only for srujansrujan@gmail.com
+            if (user.email === 'srujansrujan@gmail.com') {
+                document.getElementById('adminControls').style.display = 'block';
+                document.getElementById('adminEmptyMessage').style.display = 'block';
+            }
+            
+            // Load data
+            loadDomains();
+            loadUserProgress();
+            setupFilterListeners();
+            setupSearchListener();
+            initSidebarToggle();
+            
+            // Initialize roadmap toggle
+            initRoadmapToggle();
+        } else {
+            // Redirect to login page if not authenticated
+            window.location.href = 'login.html';
         }
-        
-        // Load data
-        loadDomains();
-        loadUserProgress();
-        setupFilterListeners();
-        setupSearchListener();
-        
-        // Initialize roadmap toggle
-        initRoadmapToggle();
-      } else {
-        // Redirect to login page if not authenticated
-        window.location.href = 'login.html';
-      }
     });
 
     // Theme toggle functionality
     const themeToggle = document.getElementById('themeToggle');
     
     themeToggle.addEventListener('click', () => {
-      document.body.classList.toggle('dark-theme');
-      
-      if (document.body.classList.contains('dark-theme')) {
-        document.body.setAttribute('data-theme', 'dark');
-        themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-        localStorage.setItem('theme', 'dark');
-      } else {
-        document.body.removeAttribute('data-theme');
-        themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
-        localStorage.setItem('theme', 'light');
-      }
+        document.body.classList.toggle('dark-theme');
+        
+        if (document.body.classList.contains('dark-theme')) {
+            document.body.setAttribute('data-theme', 'dark');
+            themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            localStorage.setItem('theme', 'dark');
+        } else {
+            document.body.removeAttribute('data-theme');
+            themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+            localStorage.setItem('theme', 'light');
+        }
     });
     
     // Check for saved theme preference
     if (localStorage.getItem('theme') === 'dark') {
-      document.body.classList.add('dark-theme');
-      document.body.setAttribute('data-theme', 'dark');
-      themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        document.body.classList.add('dark-theme');
+        document.body.setAttribute('data-theme', 'dark');
+        themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
     }
     
     // Initialize roadmap toggle
     function initRoadmapToggle() {
-      const toggleRoadmapBtn = document.getElementById('toggleRoadmap');
-      const roadmapContainer = document.getElementById('roadmapContainer');
-      const mainContent = document.querySelector('.main-content');
-      
-      if (toggleRoadmapBtn && roadmapContainer) {
+        const toggleRoadmapBtn = document.getElementById('toggleRoadmap');
+        const headerToggleBtn = document.getElementById('headerRoadmapToggle');
+        const roadmapContainer = document.getElementById('roadmapContainer');
+        const mainContent = document.querySelector('.main-content');
+        
         // Set initial state
         roadmapContainer.classList.add('show');
         document.body.classList.add('roadmap-visible');
         
-        toggleRoadmapBtn.addEventListener('click', () => {
-          roadmapContainer.classList.toggle('show');
-          document.body.classList.toggle('roadmap-visible');
-          
-          const icon = toggleRoadmapBtn.querySelector('.roadmap-toggle-icon');
-          const span = toggleRoadmapBtn.querySelector('span');
-          
-          if (roadmapContainer.classList.contains('show')) {
-            icon.className = 'fas fa-chevron-left roadmap-toggle-icon';
-            span.textContent = 'Hide Roadmap';
-          } else {
-            icon.className = 'fas fa-chevron-right roadmap-toggle-icon';
-            span.textContent = 'Show Roadmap';
-          }
-        });
-      }
+        // Toggle roadmap from header button
+        if (headerToggleBtn) {
+            headerToggleBtn.addEventListener('click', () => {
+                roadmapContainer.classList.toggle('show');
+                document.body.classList.toggle('roadmap-visible');
+                
+                const icon = headerToggleBtn.querySelector('i');
+                const span = headerToggleBtn.querySelector('span');
+                
+                if (roadmapContainer.classList.contains('show')) {
+                    icon.className = 'fas fa-times';
+                    span.textContent = 'Hide Roadmap';
+                } else {
+                    icon.className = 'fas fa-road';
+                    span.textContent = 'Show Roadmap';
+                }
+            });
+        }
+        
+        // Toggle roadmap from inside button
+        if (toggleRoadmapBtn) {
+            toggleRoadmapBtn.addEventListener('click', () => {
+                roadmapContainer.classList.toggle('show');
+                document.body.classList.toggle('roadmap-visible');
+                
+                const icon = toggleRoadmapBtn.querySelector('.roadmap-toggle-icon');
+                const span = toggleRoadmapBtn.querySelector('span');
+                
+                if (roadmapContainer.classList.contains('show')) {
+                    icon.className = 'fas fa-chevron-left roadmap-toggle-icon';
+                    span.textContent = 'Hide Roadmap';
+                } else {
+                    icon.className = 'fas fa-chevron-right roadmap-toggle-icon';
+                    span.textContent = 'Show Roadmap';
+                }
+            });
+        }
     }
     
     // Setup search listener
-   function setupSearchListener() {
-      const searchInput = document.getElementById('searchInput');
-      searchInput.addEventListener('input', () => {
-        filterQuestions();
-      });
+    function setupSearchListener() {
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', () => {
+            filterQuestions();
+        });
     }
     
     // Load domains from Firestore
     function loadDomains() {
-      db.collection('domains').get().then((querySnapshot) => {
-        domains = [];
-        const domainList = document.getElementById('domainList');
-        domainList.innerHTML = '';
-        
-        querySnapshot.forEach((doc) => {
-          const domain = { id: doc.id, ...doc.data() };
-          domains.push(domain);
-          
-          const li = document.createElement('li');
-          li.className = 'domain-item';
-          li.innerHTML = `
-            <a href="#" class="domain-link" data-domain="${domain.id}">
-              <i class="${domain.icon}"></i>
-              <span>${domain.name}</span>
-            </a>
-          `;
-          domainList.appendChild(li);
-          
-          // Add event listener to domain link
-          li.querySelector('.domain-link').addEventListener('click', (e) => {
-            e.preventDefault();
-            selectDomain(domain.id);
-          });
+        db.collection('domains').get().then((querySnapshot) => {
+            domains = [];
+            const domainList = document.getElementById('domainList');
+            domainList.innerHTML = '';
+            
+            querySnapshot.forEach((doc) => {
+                const domain = { id: doc.id, ...doc.data() };
+                domains.push(domain);
+                
+                const li = document.createElement('li');
+                li.className = 'domain-item';
+                li.innerHTML = `
+                    <a href="#" class="domain-link" data-domain="${domain.id}">
+                        <i class="${domain.icon}"></i>
+                        <span>${domain.name}</span>
+                    </a>
+                `;
+                domainList.appendChild(li);
+                
+                // Add event listener to domain link
+                li.querySelector('.domain-link').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    selectDomain(domain.id);
+                });
+            });
+            
+            // Populate domain dropdowns in modals
+            populateDomainDropdowns();
+        }).catch((error) => {
+            console.error('Error loading domains:', error);
         });
-        
-        // Populate domain dropdowns in modals
-        populateDomainDropdowns();
-      }).catch((error) => {
-        console.error('Error loading domains:', error);
-      });
     }
     
     // Select a domain
     function selectDomain(domainId) {
-      currentDomain = domains.find(d => d.id === domainId);
-      document.getElementById('domainTitle').textContent = currentDomain.name;
-      document.getElementById('domainDescription').textContent = currentDomain.description || 'No description available';
-      
-      // Load questions for this domain
-      loadQuestions(domainId);
-      
-      // Load roadmap for this domain
-      loadRoadmap(domainId);
+        currentDomain = domains.find(d => d.id === domainId);
+        document.getElementById('domainTitle').textContent = currentDomain.name;
+        document.getElementById('domainDescription').textContent = currentDomain.description || 'No description available';
+        
+        // Load questions for this domain
+        loadQuestions(domainId);
+        
+        // Load roadmap for this domain
+        loadRoadmap(domainId);
+        
+        // Show roadmap container if it's hidden
+        document.getElementById('roadmapContainer').style.display = 'block';
     }
     
-    // Load questions from Firestore
-// Load questions from Firestore with pagination
-  function loadQuestions(domainId) {
-      db.collection('questions')
-        .where('domain', '==', domainId)
-        .get()
-        .then((querySnapshot) => {
-          questions = [];
-          const problemsTable = document.getElementById('problemsTable');
-          problemsTable.innerHTML = `
-            <div class="table-header">
-              <div></div>
-              <div>Title</div>
-              <div>Popularity</div>
-              <div>Level</div>
-              <div>Difficulty</div>
-              <div>Actions</div>
-            </div>
-            <div id="questionsContainer"></div>
-            <div id="paginationControls" class="pagination-controls"></div>
-          `;
-          
-          if (querySnapshot.empty) {
-            problemsTable.innerHTML += `
-              <div class="empty-state">
-                <i class="fas fa-inbox"></i>
-                <p>No problems available for this domain yet.</p>
-                ${currentUser && currentUser.email === 'srujansrujan@gmail.com' ? 
-                  '<p>Use the "Add Question" button to create the first problem.</p>' : ''}
-              </div>
-            `;
-            return;
-          }
-          
-          querySnapshot.forEach((doc) => {
-            const question = { id: doc.id, ...doc.data() };
-            questions.push(question);
-          });
-          
-          // Initialize pagination
-          currentPage = 1;
-          renderQuestionsPage(1);
-          renderPaginationControls();
-          
-          // Update progress UI
-          updateProgressUI();
-        })
-        .catch((error) => {
-          console.error('Error loading questions:', error);
-        });
+    // Load questions from Firestore with pagination
+    function loadQuestions(domainId) {
+        db.collection('questions')
+            .where('domain', '==', domainId)
+            .get()
+            .then((querySnapshot) => {
+                questions = [];
+                const problemsTable = document.getElementById('problemsTable');
+                problemsTable.innerHTML = `
+                    <div class="table-header">
+                        <div></div>
+                        <div>Title</div>
+                        <div>Popularity</div>
+                        <div>Level</div>
+                        <div>Difficulty</div>
+                        <div>Actions</div>
+                    </div>
+                    <div id="questionsContainer"></div>
+                    <div id="paginationControls" class="pagination-controls"></div>
+                `;
+                
+                if (querySnapshot.empty) {
+                    problemsTable.innerHTML += `
+                        <div class="empty-state">
+                            <i class="fas fa-inbox"></i>
+                            <p>No problems available for this domain yet.</p>
+                            ${currentUser && currentUser.email === 'srujansrujan@gmail.com' ? 
+                                '<p>Use the "Add Question" button to create the first problem.</p>' : ''}
+                        </div>
+                    `;
+                    return;
+                }
+                
+                querySnapshot.forEach((doc) => {
+                    const question = { id: doc.id, ...doc.data() };
+                    questions.push(question);
+                });
+                
+                // Initialize pagination
+                currentPage = 1;
+                renderQuestionsPage(1);
+                renderPaginationControls();
+                
+                // Update progress UI
+                updateProgressUI();
+            })
+            .catch((error) => {
+                console.error('Error loading questions:', error);
+            });
     }
 
     // Render questions for a specific page
     function renderQuestionsPage(page) {
-      const questionsPerPage = 8;
-      const startIndex = (page - 1) * questionsPerPage;
-      const endIndex = Math.min(startIndex + questionsPerPage, questions.length);
-      const questionsContainer = document.getElementById('questionsContainer');
-      
-      questionsContainer.innerHTML = '';
-      
-      if (questions.length === 0) {
-        questionsContainer.innerHTML = `
-          <div class="empty-state">
-            <i class="fas fa-inbox"></i>
-            <p>No problems available for this domain yet.</p>
-          </div>
-        `;
-        return;
-      }
-      
-      for (let i = startIndex; i < endIndex; i++) {
-        const question = questions[i];
-        const isSaved = userProgress.savedQuestions && userProgress.savedQuestions.includes(question.id);
-        const isSolved = userProgress.solvedQuestions && userProgress.solvedQuestions.includes(question.id);
-        const isCorrect = userProgress.correctAnswers && userProgress.correctAnswers.includes(question.id);
+        const questionsPerPage = 8;
+        const startIndex = (page - 1) * questionsPerPage;
+        const endIndex = Math.min(startIndex + questionsPerPage, questions.length);
+        const questionsContainer = document.getElementById('questionsContainer');
         
-        const problemRow = document.createElement('div');
-        problemRow.className = 'problem-row';
-        problemRow.setAttribute('data-id', question.id);
-        problemRow.setAttribute('data-solved', isSolved);
-        problemRow.setAttribute('data-correct', isCorrect);
-        problemRow.setAttribute('data-saved', isSaved);
-        problemRow.setAttribute('data-difficulty', question.difficulty);
-        problemRow.setAttribute('data-title', question.title.toLowerCase());
+        questionsContainer.innerHTML = '';
         
-        problemRow.innerHTML = `
-          <div class="status-icon" onclick="toggleSaveQuestion('${question.id}')">
-            <i class="fas fa-bookmark ${isSaved ? 'saved-icon' : 'unsolved-icon'}"></i>
-          </div>
-          <a href="#" class="problem-title" onclick="showQuestionDetail('${question.id}'); return false;">${question.title}</a>
-          <div class="popularity-tag">${question.popularity || 'New'}</div>
-          <div class="level-tag">${question.level || 'Practice'}</div>
-          <div class="difficulty ${question.difficulty}">${question.difficulty}</div>
-          <div>
-            ${isSolved ? 
-              `<span class="difficulty ${isCorrect ? 'easy' : 'hard'}">${isCorrect ? 'Correct' : 'Wrong'}</span>` : 
-              `<button class="filter-btn" onclick="attemptQuestion('${question.id}')">Attempt</button>`
-            }
-          </div>
-        `;
+        if (questions.length === 0) {
+            questionsContainer.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-inbox"></i>
+                    <p>No problems available for this domain yet.</p>
+                </div>
+            `;
+            return;
+        }
         
-        questionsContainer.appendChild(problemRow);
-      }
-      
-      // Apply filters after rendering
-      filterQuestions();
+        for (let i = startIndex; i < endIndex; i++) {
+            const question = questions[i];
+            const isSaved = userProgress.savedQuestions && userProgress.savedQuestions.includes(question.id);
+            const isSolved = userProgress.solvedQuestions && userProgress.solvedQuestions.includes(question.id);
+            const isCorrect = userProgress.correctAnswers && userProgress.correctAnswers.includes(question.id);
+            
+            const problemRow = document.createElement('div');
+            problemRow.className = 'problem-row';
+            problemRow.setAttribute('data-id', question.id);
+            problemRow.setAttribute('data-solved', isSolved);
+            problemRow.setAttribute('data-correct', isCorrect);
+            problemRow.setAttribute('data-saved', isSaved);
+            problemRow.setAttribute('data-difficulty', question.difficulty);
+            problemRow.setAttribute('data-title', question.title.toLowerCase());
+            
+            problemRow.innerHTML = `
+                <div class="status-icon" onclick="toggleSaveQuestion('${question.id}')">
+                    <i class="fas fa-bookmark ${isSaved ? 'saved-icon' : 'unsolved-icon'}"></i>
+                </div>
+                <a href="#" class="problem-title" onclick="showQuestionDetail('${question.id}'); return false;">${question.title}</a>
+                <div class="popularity-tag">${question.popularity || 'New'}</div>
+                <div class="level-tag">${question.level || 'Practice'}</div>
+                <div class="difficulty ${question.difficulty}">${question.difficulty}</div>
+                <div>
+                    ${isSolved ? 
+                        `<span class="difficulty ${isCorrect ? 'easy' : 'hard'}">${isCorrect ? 'Correct' : 'Wrong'}</span>` : 
+                        `<button class="filter-btn" onclick="attemptQuestion('${question.id}')">Attempt</button>`
+                    }
+                </div>
+            `;
+            
+            questionsContainer.appendChild(problemRow);
+        }
+        
+        // Apply filters after rendering
+        filterQuestions();
     }
 
     // Render pagination controls
     function renderPaginationControls() {
-      const questionsPerPage = 8;
-      const totalPages = Math.ceil(questions.length / questionsPerPage);
-      const paginationControls = document.getElementById('paginationControls');
-      
-      paginationControls.innerHTML = '';
-      
-      if (totalPages <= 1) return;
-      
-      const paginationContainer = document.createElement('div');
-      paginationContainer.className = 'pagination-buttons';
-      
-      // Previous button
-      if (currentPage > 1) {
-        const prevButton = document.createElement('button');
-        prevButton.className = 'pagination-btn';
-        prevButton.innerHTML = '<i class="fas fa-chevron-left"></i>';
-        prevButton.addEventListener('click', () => {
-          renderQuestionsPage(currentPage - 1);
-          currentPage--;
-          updatePaginationButtons();
-        });
-        paginationContainer.appendChild(prevButton);
-      }
-      
-      // Page number buttons
-      for (let i = 1; i <= totalPages; i++) {
-        const pageButton = document.createElement('button');
-        pageButton.className = `pagination-btn ${i === currentPage ? 'active' : ''}`;
-        pageButton.textContent = i;
-        pageButton.addEventListener('click', () => {
-          renderQuestionsPage(i);
-          currentPage = i;
-          updatePaginationButtons();
-        });
-        paginationContainer.appendChild(pageButton);
-      }
-      
-      // Next button
-      if (currentPage < totalPages) {
-        const nextButton = document.createElement('button');
-        nextButton.className = 'pagination-btn';
-        nextButton.innerHTML = '<i class="fas fa-chevron-right"></i>';
-        nextButton.addEventListener('click', () => {
-          renderQuestionsPage(currentPage + 1);
-          currentPage++;
-          updatePaginationButtons();
-        });
-        paginationContainer.appendChild(nextButton);
-      }
-      
-      paginationControls.appendChild(paginationContainer);
+        const questionsPerPage = 8;
+        const totalPages = Math.ceil(questions.length / questionsPerPage);
+        const paginationControls = document.getElementById('paginationControls');
+        
+        paginationControls.innerHTML = '';
+        
+        if (totalPages <= 1) return;
+        
+        const paginationContainer = document.createElement('div');
+        paginationContainer.className = 'pagination-buttons';
+        
+        // Previous button
+        if (currentPage > 1) {
+            const prevButton = document.createElement('button');
+            prevButton.className = 'pagination-btn';
+            prevButton.innerHTML = '<i class="fas fa-chevron-left"></i>';
+            prevButton.addEventListener('click', () => {
+                renderQuestionsPage(currentPage - 1);
+                currentPage--;
+                updatePaginationButtons();
+            });
+            paginationContainer.appendChild(prevButton);
+        }
+        
+        // Page number buttons
+        for (let i = 1; i <= totalPages; i++) {
+            const pageButton = document.createElement('button');
+            pageButton.className = `pagination-btn ${i === currentPage ? 'active' : ''}`;
+            pageButton.textContent = i;
+            pageButton.addEventListener('click', () => {
+                renderQuestionsPage(i);
+                currentPage = i;
+                updatePaginationButtons();
+            });
+            paginationContainer.appendChild(pageButton);
+        }
+        
+        // Next button
+        if (currentPage < totalPages) {
+            const nextButton = document.createElement('button');
+            nextButton.className = 'pagination-btn';
+            nextButton.innerHTML = '<i class="fas fa-chevron-right"></i>';
+            nextButton.addEventListener('click', () => {
+                renderQuestionsPage(currentPage + 1);
+                currentPage++;
+                updatePaginationButtons();
+            });
+            paginationContainer.appendChild(nextButton);
+        }
+        
+        paginationControls.appendChild(paginationContainer);
     }
 
     // Update pagination buttons active state
     function updatePaginationButtons() {
-      const buttons = document.querySelectorAll('.pagination-btn');
-      buttons.forEach((button, index) => {
-        if (button.textContent === String(currentPage)) {
-          button.classList.add('active');
-        } else {
-          button.classList.remove('active');
-        }
-      });
+        const buttons = document.querySelectorAll('.pagination-btn');
+        buttons.forEach((button, index) => {
+            if (button.textContent === String(currentPage)) {
+                button.classList.add('active');
+            } else {
+                button.classList.remove('active');
+            }
+        });
     }
 
     // Filter questions based on selected filters and search
     function filterQuestions() {
-      const difficultyFilter = document.querySelector('[data-filter="difficulty"].active')?.dataset.value || 'all';
-      const statusFilter = document.querySelector('[data-filter="status"].active')?.dataset.value || 'all';
-      const solutionFilter = document.querySelector('[data-filter="solution"].active')?.dataset.value || 'all';
-      const savedFilter = document.querySelector('[data-filter="saved"].active')?.dataset.value || 'all';
-      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-      
-      // Get all questions for the current domain
-      const domainQuestions = questions.filter(q => q.domain === currentDomain.id);
-      
-      // Filter questions based on criteria
-      const filteredQuestions = domainQuestions.filter(question => {
-        let show = true;
-        const isSolved = userProgress.solvedQuestions && userProgress.solvedQuestions.includes(question.id);
-        const isCorrect = userProgress.correctAnswers && userProgress.correctAnswers.includes(question.id);
-        const isSaved = userProgress.savedQuestions && userProgress.savedQuestions.includes(question.id);
-        const title = question.title.toLowerCase();
+        const difficultyFilter = document.querySelector('[data-filter="difficulty"].active')?.dataset.value || 'all';
+        const statusFilter = document.querySelector('[data-filter="status"].active')?.dataset.value || 'all';
+        const solutionFilter = document.querySelector('[data-filter="solution"].active')?.dataset.value || 'all';
+        const savedFilter = document.querySelector('[data-filter="saved"].active')?.dataset.value || 'all';
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
         
-        // Apply difficulty filter
-        if (difficultyFilter !== 'all' && question.difficulty !== difficultyFilter) {
-          show = false;
-        }
+        // Get all questions for the current domain
+        const domainQuestions = questions.filter(q => q.domain === currentDomain.id);
         
-        // Apply status filter
-        if (statusFilter !== 'all') {
-          if (statusFilter === 'solved' && !isSolved) show = false;
-          if (statusFilter === 'unsolved' && isSolved) show = false;
-        }
+        // Filter questions based on criteria
+        const filteredQuestions = domainQuestions.filter(question => {
+            let show = true;
+            const isSolved = userProgress.solvedQuestions && userProgress.solvedQuestions.includes(question.id);
+            const isCorrect = userProgress.correctAnswers && userProgress.correctAnswers.includes(question.id);
+            const isSaved = userProgress.savedQuestions && userProgress.savedQuestions.includes(question.id);
+            const title = question.title.toLowerCase();
+            
+            // Apply difficulty filter
+            if (difficultyFilter !== 'all' && question.difficulty !== difficultyFilter) {
+                show = false;
+            }
+            
+            // Apply status filter
+            if (statusFilter !== 'all') {
+                if (statusFilter === 'solved' && !isSolved) show = false;
+                if (statusFilter === 'unsolved' && isSolved) show = false;
+            }
+            
+            // Apply solution filter
+            if (solutionFilter !== 'all') {
+                if (solutionFilter === 'correct' && (!isSolved || !isCorrect)) show = false;
+                if (solutionFilter === 'incorrect' && (!isSolved || isCorrect)) show = false;
+            }
+            
+            // Apply saved filter
+            if (savedFilter !== 'all') {
+                if (savedFilter === 'saved' && !isSaved) show = false;
+            }
+            
+            // Apply search filter
+            if (searchTerm && !title.includes(searchTerm)) {
+                show = false;
+            }
+            
+            return show;
+        });
         
-        // Apply solution filter
-        if (solutionFilter !== 'all') {
-          if (solutionFilter === 'correct' && (!isSolved || !isCorrect)) show = false;
-          if (solutionFilter === 'incorrect' && (!isSolved || isCorrect)) show = false;
-        }
+        // Update the questions array for pagination
+        const filteredQuestionIds = filteredQuestions.map(q => q.id);
+        const displayQuestions = questions.filter(q => filteredQuestionIds.includes(q.id));
         
-        // Apply saved filter
-        if (savedFilter !== 'all') {
-          if (savedFilter === 'saved' && !isSaved) show = false;
-        }
-        
-        // Apply search filter
-        if (searchTerm && !title.includes(searchTerm)) {
-          show = false;
-        }
-        
-        return show;
-      });
-      
-      // Update the questions array for pagination
-      const filteredQuestionIds = filteredQuestions.map(q => q.id);
-      const displayQuestions = questions.filter(q => filteredQuestionIds.includes(q.id));
-      
-      // Render the filtered questions with pagination
-      currentPage = 1;
-      renderFilteredQuestions(displayQuestions);
+        // Render the filtered questions with pagination
+        currentPage = 1;
+        renderFilteredQuestions(displayQuestions);
     }
 
     // Render filtered questions with pagination
     function renderFilteredQuestions(filteredQuestions) {
-      const questionsPerPage = 8;
-      const startIndex = (currentPage - 1) * questionsPerPage;
-      const endIndex = Math.min(startIndex + questionsPerPage, filteredQuestions.length);
-      const questionsContainer = document.getElementById('questionsContainer');
-      
-      questionsContainer.innerHTML = '';
-      
-      if (filteredQuestions.length === 0) {
-        questionsContainer.innerHTML = `
-          <div class="empty-state">
-            <i class="fas fa-search"></i>
-            <p>No questions match your filters.</p>
-          </div>
-        `;
+        const questionsPerPage = 8;
+        const startIndex = (currentPage - 1) * questionsPerPage;
+        const endIndex = Math.min(startIndex + questionsPerPage, filteredQuestions.length);
+        const questionsContainer = document.getElementById('questionsContainer');
         
-        // Hide pagination controls
-        document.getElementById('paginationControls').innerHTML = '';
-        return;
-      }
-      
-      for (let i = startIndex; i < endIndex; i++) {
-        const question = filteredQuestions[i];
-        const isSaved = userProgress.savedQuestions && userProgress.savedQuestions.includes(question.id);
-        const isSolved = userProgress.solvedQuestions && userProgress.solvedQuestions.includes(question.id);
-        const isCorrect = userProgress.correctAnswers && userProgress.correctAnswers.includes(question.id);
+        questionsContainer.innerHTML = '';
         
-        const problemRow = document.createElement('div');
-        problemRow.className = 'problem-row';
-        problemRow.setAttribute('data-id', question.id);
-        problemRow.setAttribute('data-solved', isSolved);
-        problemRow.setAttribute('data-correct', isCorrect);
-        problemRow.setAttribute('data-saved', isSaved);
-        problemRow.setAttribute('data-difficulty', question.difficulty);
-        problemRow.setAttribute('data-title', question.title.toLowerCase());
-        
-        problemRow.innerHTML = `
-          <div class="status-icon" onclick="toggleSaveQuestion('${question.id}')">
-            <i class="fas fa-bookmark ${isSaved ? 'saved-icon' : 'unsolved-icon'}"></i>
-          </div>
-          <a href="#" class="problem-title" onclick="showQuestionDetail('${question.id}'); return false;">${question.title}</a>
-          <div class="popularity-tag">${question.popularity || 'New'}</div>
-          <div class="level-tag">${question.level || 'Practice'}</div>
-          <div class="difficulty ${question.difficulty}">${question.difficulty}</div>
-          <div>
-            ${isSolved ? 
-              `<span class="difficulty ${isCorrect ? 'easy' : 'hard'}">${isCorrect ? 'Correct' : 'Wrong'}</span>` : 
-              `<button class="filter-btn" onclick="attemptQuestion('${question.id}')">Attempt</button>`
-            }
-          </div>
-        `;
-        
-        questionsContainer.appendChild(problemRow);
-      }
-      
-      // Render pagination controls for filtered results
-      renderPaginationControlsForFiltered(filteredQuestions);
-    }
-    function renderPaginationControlsForFiltered(filteredQuestions) {
-      const questionsPerPage = 8;
-      const totalPages = Math.ceil(filteredQuestions.length / questionsPerPage);
-      const paginationControls = document.getElementById('paginationControls');
-      
-      paginationControls.innerHTML = '';
-      
-      if (totalPages <= 1) return;
-      
-      const paginationContainer = document.createElement('div');
-      paginationContainer.className = 'pagination-buttons';
-      
-      // Previous button
-      if (currentPage > 1) {
-        const prevButton = document.createElement('button');
-        prevButton.className = 'pagination-btn';
-        prevButton.innerHTML = '<i class="fas fa-chevron-left"></i>';
-        prevButton.addEventListener('click', () => {
-          currentPage--;
-          renderFilteredQuestions(filteredQuestions);
-        });
-        paginationContainer.appendChild(prevButton);
-      }
-      
-      // Page number buttons
-      for (let i = 1; i <= totalPages; i++) {
-        const pageButton = document.createElement('button');
-        pageButton.className = `pagination-btn ${i === currentPage ? 'active' : ''}`;
-        pageButton.textContent = i;
-        pageButton.addEventListener('click', () => {
-          currentPage = i;
-          renderFilteredQuestions(filteredQuestions);
-        });
-        paginationContainer.appendChild(pageButton);
-      }
-      
-      // Next button
-      if (currentPage < totalPages) {
-        const nextButton = document.createElement('button');
-        nextButton.className = 'pagination-btn';
-        nextButton.innerHTML = '<i class="fas fa-chevron-right"></i>';
-        nextButton.addEventListener('click', () => {
-          currentPage++;
-          renderFilteredQuestions(filteredQuestions);
-        });
-        paginationContainer.appendChild(nextButton);
-      }
-      
-      paginationControls.appendChild(paginationContainer);
-    }
-    // Add event listeners to filter buttons
-   // Add event listeners to filter buttons
-   // Show CSV upload modal
-function showAddCSVModal() {
-      document.getElementById('addCSVModal').classList.add('show');
-    }
-
-// Process CSV file
-function processCSV() {
-  const domain = document.getElementById('csvDomain').value;
-  const fileInput = document.getElementById('csvFile');
-  const file = fileInput.files[0];
-  
-  if (!domain || !file) {
-    alert('Please select a domain and CSV file');
-    return;
-  }
-  
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    const csvData = e.target.result;
-    const questions = parseCSV(csvData);
-    
-    if (questions.length === 0) {
-      alert('No valid questions found in CSV');
-      return;
-    }
-    
-    // Add questions to Firebase
-    addQuestionsFromCSV(questions, domain);
-  };
-  reader.readAsText(file);
-}
-
-// Parse CSV data
-// Parse CSV data
-function parseCSV(csvData) {
-  const questions = [];
-  const lines = csvData.split('\n');
-  
-  // Skip header row if exists
-  const startRow = lines[0].toLowerCase().includes('title') ? 1 : 0;
-  
-  for (let i = startRow; i < lines.length; i++) {
-    const line = lines[i].trim();
-    if (!line) continue;
-    
-    // Handle quoted fields that might contain commas
-    const fields = parseCSVLine(line);
-    
-    if (fields.length >= 8) {
-      const question = {
-        title: fields[0].trim(),
-        description: fields[1].trim(),
-        options: [
-          fields[2].trim(),
-          fields[3].trim(),
-          fields[4].trim(),
-          fields[5].trim()
-        ].filter(opt => opt), // Remove empty options
-        correctAnswer: fields[6].trim(),
-        difficulty: fields[7].trim().toLowerCase()
-      };
-      
-      // Validate difficulty
-      if (!['easy', 'medium', 'hard'].includes(question.difficulty)) {
-        question.difficulty = 'medium'; // Default to medium
-      }
-      
-      questions.push(question);
-    }
-  }
-  
-  return questions;
-}
-
-// Parse a CSV line, handling quoted fields
-function parseCSVLine(line) {
-  const fields = [];
-  let currentField = '';
-  let inQuotes = false;
-  
-  for (let i = 0; i < line.length; i++) {
-    const char = line[i];
-    
-    if (char === '"') {
-      inQuotes = !inQuotes;
-    } else if (char === ',' && !inQuotes) {
-      fields.push(currentField);
-      currentField = '';
-    } else {
-      currentField += char;
-    }
-  }
-  
-  fields.push(currentField); // Add the last field
-  return fields;
-}
-
-// Add questions from CSV to Firebase
-function addQuestionsFromCSV(questions, domain) {
-  let addedCount = 0;
-  let errorCount = 0;
-  
-  questions.forEach((question, index) => {
-    db.collection('questions').add({
-      domain,
-      title: question.title,
-      description: question.description,
-      options: question.options,
-      correctAnswer: question.correctAnswer,
-      difficulty: question.difficulty,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      createdBy: currentUser.uid
-    })
-    .then(() => {
-      addedCount++;
-      
-      // If this is the last question, show success message
-      if (addedCount + errorCount === questions.length) {
-        alert(`Successfully added ${addedCount} questions. ${errorCount} failed.`);
-        closeModal('addCSVModal');
-        
-        // Clear file input
-        document.getElementById('csvFile').value = '';
-        
-        // Reload questions if we're viewing this domain
-        if (currentDomain && currentDomain.id === domain) {
-          loadQuestions(domain);
+        if (filteredQuestions.length === 0) {
+            questionsContainer.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-search"></i>
+                    <p>No questions match your filters.</p>
+                </div>
+            `;
+            
+            // Hide pagination controls
+            document.getElementById('paginationControls').innerHTML = '';
+            return;
         }
-      }
-    })
-    .catch((error) => {
-      console.error('Error adding question from CSV:', error);
-      errorCount++;
-      
-      // If this is the last question, show result message
-      if (addedCount + errorCount === questions.length) {
-        alert(`Added ${addedCount} questions. ${errorCount} failed.`);
-        closeModal('addCSVModal');
-      }
-    });
-  });
-}
-    function setupFilterListeners() {
-      const filterButtons = document.querySelectorAll('.filter-btn');
-      
-      filterButtons.forEach(button => {
-        button.addEventListener('click', () => {
-          const filterType = button.dataset.filter;
-          
-          // Remove active class from all buttons in the same filter group
-          const siblings = document.querySelectorAll(`.filter-btn[data-filter="${filterType}"]`);
-          siblings.forEach(btn => btn.classList.remove('active'));
-          
-          // Add active class to clicked button
-          button.classList.add('active');
-          
-          // Apply filters
-          filterQuestions();
-        });
-      });
+        
+        for (let i = startIndex; i < endIndex; i++) {
+            const question = filteredQuestions[i];
+            const isSaved = userProgress.savedQuestions && userProgress.savedQuestions.includes(question.id);
+            const isSolved = userProgress.solvedQuestions && userProgress.solvedQuestions.includes(question.id);
+            const isCorrect = userProgress.correctAnswers && userProgress.correctAnswers.includes(question.id);
+            
+            const problemRow = document.createElement('div');
+            problemRow.className = 'problem-row';
+            problemRow.setAttribute('data-id', question.id);
+            problemRow.setAttribute('data-solved', isSolved);
+            problemRow.setAttribute('data-correct', isCorrect);
+            problemRow.setAttribute('data-saved', isSaved);
+            problemRow.setAttribute('data-difficulty', question.difficulty);
+            problemRow.setAttribute('data-title', question.title.toLowerCase());
+            
+            problemRow.innerHTML = `
+                <div class="status-icon" onclick="toggleSaveQuestion('${question.id}')">
+                    <i class="fas fa-bookmark ${isSaved ? 'saved-icon' : 'unsolved-icon'}"></i>
+                </div>
+                <a href="#" class="problem-title" onclick="showQuestionDetail('${question.id}'); return false;">${question.title}</a>
+                <div class="popularity-tag">${question.popularity || 'New'}</div>
+                <div class="level-tag">${question.level || 'Practice'}</div>
+                <div class="difficulty ${question.difficulty}">${question.difficulty}</div>
+                <div>
+                    ${isSolved ? 
+                        `<span class="difficulty ${isCorrect ? 'easy' : 'hard'}">${isCorrect ? 'Correct' : 'Wrong'}</span>` : 
+                        `<button class="filter-btn" onclick="attemptQuestion('${question.id}')">Attempt</button>`
+                    }
+                </div>
+            `;
+            
+            questionsContainer.appendChild(problemRow);
+        }
+        
+        // Render pagination controls for filtered results
+        renderPaginationControlsForFiltered(filteredQuestions);
     }
+
+    function renderPaginationControlsForFiltered(filteredQuestions) {
+        const questionsPerPage = 8;
+        const totalPages = Math.ceil(filteredQuestions.length / questionsPerPage);
+        const paginationControls = document.getElementById('paginationControls');
+        
+        paginationControls.innerHTML = '';
+        
+        if (totalPages <= 1) return;
+        
+        const paginationContainer = document.createElement('div');
+        paginationContainer.className = 'pagination-buttons';
+        
+        // Previous button
+        if (currentPage > 1) {
+            const prevButton = document.createElement('button');
+            prevButton.className = 'pagination-btn';
+            prevButton.innerHTML = '<i class="fas fa-chevron-left"></i>';
+            prevButton.addEventListener('click', () => {
+                currentPage--;
+                renderFilteredQuestions(filteredQuestions);
+            });
+            paginationContainer.appendChild(prevButton);
+        }
+        
+        // Page number buttons
+        for (let i = 1; i <= totalPages; i++) {
+            const pageButton = document.createElement('button');
+            pageButton.className = `pagination-btn ${i === currentPage ? 'active' : ''}`;
+            pageButton.textContent = i;
+            pageButton.addEventListener('click', () => {
+                currentPage = i;
+                renderFilteredQuestions(filteredQuestions);
+            });
+            paginationContainer.appendChild(pageButton);
+        }
+        
+        // Next button
+        if (currentPage < totalPages) {
+            const nextButton = document.createElement('button');
+            nextButton.className = 'pagination-btn';
+            nextButton.innerHTML = '<i class="fas fa-chevron-right"></i>';
+            nextButton.addEventListener('click', () => {
+                currentPage++;
+                renderFilteredQuestions(filteredQuestions);
+            });
+            paginationContainer.appendChild(nextButton);
+        }
+        
+        paginationControls.appendChild(paginationContainer);
+    }
+
+    // Add event listeners to filter buttons
+    function setupFilterListeners() {
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const filterType = button.dataset.filter;
+                
+                // Remove active class from all buttons in the same filter group
+                const siblings = document.querySelectorAll(`.filter-btn[data-filter="${filterType}"]`);
+                siblings.forEach(btn => btn.classList.remove('active'));
+                
+                // Add active class to clicked button
+                button.classList.add('active');
+                
+                // Apply filters
+                filterQuestions();
+            });
+        });
+    }
+
+    // Show CSV upload modal
+    function showAddCSVModal() {
+        document.getElementById('addCSVModal').classList.add('show');
+    }
+
+    // Process CSV file
+    function processCSV() {
+        const domain = document.getElementById('csvDomain').value;
+        const fileInput = document.getElementById('csvFile');
+        const file = fileInput.files[0];
+        
+        if (!domain || !file) {
+            alert('Please select a domain and CSV file');
+            return;
+        }
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const csvData = e.target.result;
+            const questions = parseCSV(csvData);
+            
+            if (questions.length === 0) {
+                alert('No valid questions found in CSV');
+                return;
+            }
+            
+            // Add questions to Firebase
+            addQuestionsFromCSV(questions, domain);
+        };
+        reader.readAsText(file);
+    }
+
+    // Parse CSV data
+    function parseCSV(csvData) {
+        const questions = [];
+        const lines = csvData.split('\n');
+        
+        // Skip header row if exists
+        const startRow = lines[0].toLowerCase().includes('title') ? 1 : 0;
+        
+        for (let i = startRow; i < lines.length; i++) {
+            const line = lines[i].trim();
+            if (!line) continue;
+            
+            // Handle quoted fields that might contain commas
+            const fields = parseCSVLine(line);
+            
+            if (fields.length >= 8) {
+                const question = {
+                    title: fields[0].trim(),
+                    description: fields[1].trim(),
+                    options: [
+                        fields[2].trim(),
+                        fields[3].trim(),
+                        fields[4].trim(),
+                        fields[5].trim()
+                    ].filter(opt => opt), // Remove empty options
+                    correctAnswer: fields[6].trim(),
+                    difficulty: fields[7].trim().toLowerCase()
+                };
+                
+                // Validate difficulty
+                if (!['easy', 'medium', 'hard'].includes(question.difficulty)) {
+                    question.difficulty = 'medium'; // Default to medium
+                }
+                
+                questions.push(question);
+            }
+        }
+        
+        return questions;
+    }
+
+    // Parse a CSV line, handling quoted fields
+    function parseCSVLine(line) {
+        const fields = [];
+        let currentField = '';
+        let inQuotes = false;
+        
+        for (let i = 0; i < line.length; i++) {
+            const char = line[i];
+            
+            if (char === '"') {
+                inQuotes = !inQuotes;
+            } else if (char === ',' && !inQuotes) {
+                fields.push(currentField);
+                currentField = '';
+            } else {
+                currentField += char;
+            }
+        }
+        
+        fields.push(currentField); // Add the last field
+        return fields;
+    }
+
+    // Add questions from CSV to Firebase
+    function addQuestionsFromCSV(questions, domain) {
+        let addedCount = 0;
+        let errorCount = 0;
+        
+        questions.forEach((question, index) => {
+            db.collection('questions').add({
+                domain,
+                title: question.title,
+                description: question.description,
+                options: question.options,
+                correctAnswer: question.correctAnswer,
+                difficulty: question.difficulty,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                createdBy: currentUser.uid
+            })
+            .then(() => {
+                addedCount++;
+                
+                // If this is the last question, show success message
+                if (addedCount + errorCount === questions.length) {
+                    alert(`Successfully added ${addedCount} questions. ${errorCount} failed.`);
+                    closeModal('addCSVModal');
+                    
+                    // Clear file input
+                    document.getElementById('csvFile').value = '';
+                    
+                    // Reload questions if we're viewing this domain
+                    if (currentDomain && currentDomain.id === domain) {
+                        loadQuestions(domain);
+                    }
+                }
+            })
+            .catch((error) => {
+                console.error('Error adding question from CSV:', error);
+                errorCount++;
+                
+                // If this is the last question, show result message
+                if (addedCount + errorCount === questions.length) {
+                    alert(`Added ${addedCount} questions. ${errorCount} failed.`);
+                    closeModal('addCSVModal');
+                }
+            });
+        });
+    }
+
     // Load roadmap from Firestore
     function loadRoadmap(domainId) {
-      db.collection('roadmaps')
-        .where('domain', '==', domainId)
-        .get()
-        .then((querySnapshot) => {
-          const roadmapContent = document.getElementById('roadmapContent');
-          roadmapContent.innerHTML = '';
-          
-          if (querySnapshot.empty) {
-            roadmapContent.innerHTML = `
-              <div class="roadmap-empty">
-                <i class="fas fa-map-marked-alt"></i>
-                <p>No roadmap available for this domain yet.</p>
-                ${currentUser && currentUser.email === 'srujansrujan@gmail.com' ? 
-                  '<p>Use the "Add Roadmap" button to create one.</p>' : ''}
-              </div>
-            `;
-            return;
-          }
-          
-          querySnapshot.forEach((doc) => {
-            const roadmap = { id: doc.id, ...doc.data() };
-            const roadmapItem = document.createElement('div');
-            roadmapItem.className = 'roadmap-item';
-            
-            // Calculate progress (this is a simple example)
-            const totalItems = roadmap.roadmapData ? roadmap.roadmapData.reduce((total, item) => 
-              total + (item.subheadings ? item.subheadings.length : 0), 0) : 0;
-            const completedItems = Math.min(totalItems, Math.floor(totalItems * 0.3)); // Example: 30% completed
-            
-            let roadmapHtml = `
-              <div class="roadmap-item-header">
-                <i class="fas fa-chevron-right roadmap-toggle-icon"></i>
-                <h3>${roadmap.title}</h3>
-              </div>
-              <div class="roadmap-progress">
-                <div class="roadmap-progress-fill" style="width: ${totalItems > 0 ? (completedItems/totalItems)*100 : 0}%"></div>
-              </div>
-              <div class="roadmap-details">
-            `;
-            
-            if (roadmap.roadmapData && roadmap.roadmapData.length > 0) {
-              roadmap.roadmapData.forEach(item => {
-                roadmapHtml += `<h4>${item.mainHeading}</h4>`;
-                if (item.subheadings && item.subheadings.length > 0) {
-                  roadmapHtml += '<ul>';
-                  item.subheadings.forEach(subheading => {
-                    roadmapHtml += `<li>${subheading}</li>`;
-                  });
-                  roadmapHtml += '</ul>';
+        db.collection('roadmaps')
+            .where('domain', '==', domainId)
+            .get()
+            .then((querySnapshot) => {
+                const roadmapContent = document.getElementById('roadmapContent');
+                roadmapContent.innerHTML = '';
+                
+                if (querySnapshot.empty) {
+                    roadmapContent.innerHTML = `
+                        <div class="roadmap-empty">
+                            <i class="fas fa-map-marked-alt"></i>
+                            <p>No roadmap available for this domain yet.</p>
+                            ${currentUser && currentUser.email === 'srujansrujan@gmail.com' ? 
+                                '<p>Use the "Add Roadmap" button to create one.</p>' : ''}
+                        </div>
+                    `;
+                    return;
                 }
-              });
-            }
-            
-            roadmapHtml += '</div>';
-            roadmapItem.innerHTML = roadmapHtml;
-            roadmapContent.appendChild(roadmapItem);
-          });
-          
-          // Add event listeners to roadmap items
-          const roadmapItems = document.querySelectorAll('.roadmap-item-header');
-          roadmapItems.forEach(item => {
-            item.addEventListener('click', () => {
-              const toggleIcon = item.querySelector('.roadmap-toggle-icon');
-              const details = item.nextElementSibling.nextElementSibling;
-              
-              toggleIcon.classList.toggle('rotated');
-              details.classList.toggle('show');
+                
+                querySnapshot.forEach((doc) => {
+                    const roadmap = { id: doc.id, ...doc.data() };
+                    const roadmapItem = document.createElement('div');
+                    roadmapItem.className = 'roadmap-item';
+                    
+                    // Calculate progress (this is a simple example)
+                    const totalItems = roadmap.roadmapData ? roadmap.roadmapData.reduce((total, item) => 
+                        total + (item.subheadings ? item.subheadings.length : 0), 0) : 0;
+                    const completedItems = Math.min(totalItems, Math.floor(totalItems * 0.3)); // Example: 30% completed
+                    
+                    let roadmapHtml = `
+                        <div class="roadmap-item-header">
+                            <i class="fas fa-chevron-right roadmap-toggle-icon"></i>
+                            <h3>${roadmap.title}</h3>
+                        </div>
+                        <div class="roadmap-progress">
+                            <div class="roadmap-progress-fill" style="width: ${totalItems > 0 ? (completedItems/totalItems)*100 : 0}%"></div>
+                        </div>
+                        <div class="roadmap-details">
+                    `;
+                    
+                    if (roadmap.roadmapData && roadmap.roadmapData.length > 0) {
+                        roadmap.roadmapData.forEach(item => {
+                            roadmapHtml += `<h4>${item.mainHeading}</h4>`;
+                            if (item.subheadings && item.subheadings.length > 0) {
+                                roadmapHtml += '<ul>';
+                                item.subheadings.forEach(subheading => {
+                                    roadmapHtml += `<li>${subheading}</li>`;
+                                });
+                                roadmapHtml += '</ul>';
+                            }
+                        });
+                    }
+                    
+                    roadmapHtml += '</div>';
+                    roadmapItem.innerHTML = roadmapHtml;
+                    roadmapContent.appendChild(roadmapItem);
+                });
+                
+                // Add event listeners to roadmap items
+                const roadmapItems = document.querySelectorAll('.roadmap-item-header');
+                roadmapItems.forEach(item => {
+                    item.addEventListener('click', () => {
+                        const toggleIcon = item.querySelector('.roadmap-toggle-icon');
+                        const details = item.nextElementSibling.nextElementSibling;
+                        
+                        toggleIcon.classList.toggle('rotated');
+                        details.classList.toggle('show');
+                    });
+                });
+            })
+            .catch((error) => {
+                console.error('Error loading roadmap:', error);
             });
-          });
-        })
-        .catch((error) => {
-          console.error('Error loading roadmap:', error);
-        });
     }
     
     // Load user progress
-    // Load user progress
-function loadUserProgress() {
-  if (!currentUser) return;
-  
-  db.collection('userProgress')
-    .doc(currentUser.uid)
-    .get()
-    .then((doc) => {
-      if (doc.exists) {
-        userProgress = doc.data();
-        // Ensure all progress arrays exist
-        if (!userProgress.solvedQuestions) userProgress.solvedQuestions = [];
-        if (!userProgress.savedQuestions) userProgress.savedQuestions = [];
-        if (!userProgress.correctAnswers) userProgress.correctAnswers = [];
-        if (!userProgress.wrongAnswers) userProgress.wrongAnswers = [];
+    function loadUserProgress() {
+        if (!currentUser) return;
         
-        // Update progress UI after loading
-        updateProgressUI();
-      } else {
-        // Initialize empty progress
-        userProgress = {
-          solvedQuestions: [],
-          savedQuestions: [],
-          correctAnswers: [],
-          wrongAnswers: []
-        };
-        updateProgressUI();
-      }
-    })
-    .catch((error) => {
-      console.error('Error loading user progress:', error);
-    });
-}
+        db.collection('userProgress')
+            .doc(currentUser.uid)
+            .get()
+            .then((doc) => {
+                if (doc.exists) {
+                    userProgress = doc.data();
+                    // Ensure all progress arrays exist
+                    if (!userProgress.solvedQuestions) userProgress.solvedQuestions = [];
+                    if (!userProgress.savedQuestions) userProgress.savedQuestions = [];
+                    if (!userProgress.correctAnswers) userProgress.correctAnswers = [];
+                    if (!userProgress.wrongAnswers) userProgress.wrongAnswers = [];
+                    
+                    // Update progress UI after loading
+                    updateProgressUI();
+                } else {
+                    // Initialize empty progress
+                    userProgress = {
+                        solvedQuestions: [],
+                        savedQuestions: [],
+                        correctAnswers: [],
+                        wrongAnswers: []
+                    };
+                    updateProgressUI();
+                }
+            })
+            .catch((error) => {
+                console.error('Error loading user progress:', error);
+            });
+    }
     
-    // Update progress UI
     // Update progress UI for current domain
+   // Update progress UI for current domain
 function updateProgressUI() {
-  if (!currentDomain || !questions.length) {
-    // Reset progress if no domain selected or no questions
-    document.getElementById('solvedCount').textContent = '0';
-    document.getElementById('totalCount').textContent = '0';
-    document.getElementById('progressPercent').textContent = '0%';
-    document.getElementById('progressFill').style.width = '0%';
-    return;
-  }
-  
-  // Filter solved questions for the current domain only
-  const domainQuestions = questions.filter(q => q.domain === currentDomain.id);
-  const total = domainQuestions.length;
-  
-  // Count correct answers for this domain only
-  const domainCorrectAnswers = userProgress.correctAnswers 
-    ? userProgress.correctAnswers.filter(id => {
-        const question = questions.find(q => q.id === id);
-        return question && question.domain === currentDomain.id;
-      }) 
-    : [];
-  
-  const correct = domainCorrectAnswers.length;
-  const percent = total > 0 ? Math.round((correct / total) * 100) : 0;
-  
-  document.getElementById('solvedCount').textContent = correct;
-  document.getElementById('totalCount').textContent = total;
-  document.getElementById('progressPercent').textContent = `${percent}% (${correct} correct)`;
-  document.getElementById('progressFill').style.width = `${percent}%`;
+    if (!currentDomain || !questions.length) {
+        // Reset progress if no domain selected or no questions
+        document.getElementById('solvedCount').textContent = '0';
+        document.getElementById('totalCount').textContent = '0';
+        document.getElementById('progressPercent').textContent = '0%';
+        document.getElementById('progressFill').style.width = '0%';
+        
+        // Reset progress bar color
+        const progressFill = document.getElementById('progressFill');
+        progressFill.className = 'progress-fill';
+        return;
+    }
+    
+    // Filter solved questions for the current domain only
+    const domainQuestions = questions.filter(q => q.domain === currentDomain.id);
+    const total = domainQuestions.length;
+    
+    // Count correct answers for this domain only
+    const domainCorrectAnswers = userProgress.correctAnswers 
+        ? userProgress.correctAnswers.filter(id => {
+            const question = questions.find(q => q.id === id);
+            return question && question.domain === currentDomain.id;
+        }) 
+        : [];
+    
+    const correct = domainCorrectAnswers.length;
+    const percent = total > 0 ? Math.round((correct / total) * 100) : 0;
+    
+    document.getElementById('solvedCount').textContent = correct;
+    document.getElementById('totalCount').textContent = total;
+    document.getElementById('progressPercent').textContent = `${percent}% (${correct} correct)`;
+    document.getElementById('progressFill').style.width = `${percent}%`;
+    
+    // Update progress bar color based on percentage
+    const progressFill = document.getElementById('progressFill');
+    
+    // Remove existing color classes
+    progressFill.classList.remove('low', 'medium', 'high');
+    
+    // Add appropriate class based on percentage
+    if (percent < 40) {
+        progressFill.classList.add('low');
+    } else if (percent >= 40 && percent < 75) {
+        progressFill.classList.add('medium');
+    } else {
+        progressFill.classList.add('high');
+    }
 }
+
     // Show add question modal
     function showAddQuestionModal() {
-      document.getElementById('addQuestionModal').classList.add('show');
+        document.getElementById('addQuestionModal').classList.add('show');
     }
     
     // Show add domain modal
     function showAddDomainModal() {
-      document.getElementById('addDomainModal').classList.add('show');
+        document.getElementById('addDomainModal').classList.add('show');
     }
     
     // Show add roadmap modal
     function showAddRoadmapModal() {
-      document.getElementById('addRoadmapModal').classList.add('show');
+        document.getElementById('addRoadmapModal').classList.add('show');
     }
     
     // Close modal
     function closeModal(modalId) {
-      document.getElementById(modalId).classList.remove('show');
+        document.getElementById(modalId).classList.remove('show');
     }
     
     // Populate domain dropdowns in modals
-    // Populate domain dropdowns in modals
-function populateDomainDropdowns() {
-  const questionDomain = document.getElementById('questionDomain');
-  const roadmapDomain = document.getElementById('roadmapDomain');
-  const deleteDomainSelect = document.getElementById('deleteDomainSelect');
-  const csvDomain = document.getElementById('csvDomain');
-  
-  questionDomain.innerHTML = '';
-  roadmapDomain.innerHTML = '';
-  deleteDomainSelect.innerHTML = '';
-  csvDomain.innerHTML = '';
-  
-  domains.forEach(domain => {
-    questionDomain.innerHTML += `<option value="${domain.id}">${domain.name}</option>`;
-    roadmapDomain.innerHTML += `<option value="${domain.id}">${domain.name}</option>`;
-    deleteDomainSelect.innerHTML += `<option value="${domain.id}">${domain.name}</option>`;
-    csvDomain.innerHTML += `<option value="${domain.id}">${domain.name}</option>`;
-  });
-}
+    function populateDomainDropdowns() {
+        const questionDomain = document.getElementById('questionDomain');
+        const roadmapDomain = document.getElementById('roadmapDomain');
+        const deleteDomainSelect = document.getElementById('deleteDomainSelect');
+        const csvDomain = document.getElementById('csvDomain');
+        const deleteCsvDomain = document.getElementById('deleteCsvDomain');
+        
+        questionDomain.innerHTML = '';
+        roadmapDomain.innerHTML = '';
+        deleteDomainSelect.innerHTML = '';
+        csvDomain.innerHTML = '';
+        deleteCsvDomain.innerHTML = '';
+        
+        domains.forEach(domain => {
+            questionDomain.innerHTML += `<option value="${domain.id}">${domain.name}</option>`;
+            roadmapDomain.innerHTML += `<option value="${domain.id}">${domain.name}</option>`;
+            deleteDomainSelect.innerHTML += `<option value="${domain.id}">${domain.name}</option>`;
+            csvDomain.innerHTML += `<option value="${domain.id}">${domain.name}</option>`;
+            deleteCsvDomain.innerHTML += `<option value="${domain.id}">${domain.name}</option>`;
+        });
+    }
     
     // Add option to question form
     function addOption() {
-      const optionsContainer = document.getElementById('optionsContainer');
-      const optionCount = optionsContainer.children.length + 1;
-      
-      const optionRow = document.createElement('div');
-      optionRow.className = 'option-row';
-      optionRow.innerHTML = `
-        <input type="text" class="form-control option-input" placeholder="Option ${optionCount}">
-        <button class="remove-option" onclick="removeOption(this)"><i class="fas fa-times"></i></button>
-      `;
-      
-      optionsContainer.appendChild(optionRow);
+        const optionsContainer = document.getElementById('optionsContainer');
+        const optionCount = optionsContainer.children.length + 1;
+        
+        const optionRow = document.createElement('div');
+        optionRow.className = 'option-row';
+        optionRow.innerHTML = `
+            <input type="text" class="form-control option-input" placeholder="Option ${optionCount}">
+            <button class="remove-option" onclick="removeOption(this)"><i class="fas fa-times"></i></button>
+        `;
+        
+        optionsContainer.appendChild(optionRow);
     }
     
     // Remove option from question form
     function removeOption(button) {
-      const optionRow = button.parentElement;
-      if (document.getElementById('optionsContainer').children.length > 1) {
-        optionRow.remove();
-      }
+        const optionRow = button.parentElement;
+        if (document.getElementById('optionsContainer').children.length > 1) {
+            optionRow.remove();
+        }
     }
     
     // Add question to Firestore
     function addQuestion() {
-      const domain = document.getElementById('questionDomain').value;
-      const title = document.getElementById('questionTitle').value;
-      const description = document.getElementById('questionDescription').value;
-      const difficulty = document.getElementById('difficultySelect').value;
-      const correctAnswer = document.getElementById('correctAnswer').value;
-      
-      if (!domain || !title || !description || !correctAnswer) {
-        alert('Please fill in all required fields');
-        return;
-      }
-      
-      // Get options
-      const optionInputs = document.querySelectorAll('.option-input');
-      const options = Array.from(optionInputs).map(input => input.value).filter(val => val);
-      
-      if (options.length < 2) {
-        alert('Please add at least two options');
-        return;
-      }
-      
-      // Add question to Firestore
-      db.collection('questions').add({
-        domain,
-        title,
-        description,
-        options,
-        correctAnswer,
-        difficulty,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        createdBy: currentUser.uid
-      })
-      .then(() => {
-        alert('Question added successfully!');
-        closeModal('addQuestionModal');
+        const domain = document.getElementById('questionDomain').value;
+        const title = document.getElementById('questionTitle').value;
+        const description = document.getElementById('questionDescription').value;
+        const difficulty = document.getElementById('difficultySelect').value;
+        const correctAnswer = document.getElementById('correctAnswer').value;
         
-        // Clear form
-        document.getElementById('questionTitle').value = '';
-        document.getElementById('questionDescription').value = '';
-        document.getElementById('correctAnswer').value = '';
-        
-        // Reload questions if we're viewing this domain
-        if (currentDomain && currentDomain.id === domain) {
-          loadQuestions(domain);
+        if (!domain || !title || !description || !correctAnswer) {
+            alert('Please fill in all required fields');
+            return;
         }
-      })
-      .catch((error) => {
-        console.error('Error adding question:', error);
-        alert('Error adding question: ' + error.message);
-      });
+        
+        // Get options
+        const optionInputs = document.querySelectorAll('.option-input');
+        const options = Array.from(optionInputs).map(input => input.value).filter(val => val);
+        
+        if (options.length < 2) {
+            alert('Please add at least two options');
+            return;
+        }
+        
+        // Add question to Firestore
+        db.collection('questions').add({
+            domain,
+            title,
+            description,
+            options,
+            correctAnswer,
+            difficulty,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            createdBy: currentUser.uid
+        })
+        .then(() => {
+            alert('Question added successfully!');
+            closeModal('addQuestionModal');
+            
+            // Clear form
+            document.getElementById('questionTitle').value = '';
+            document.getElementById('questionDescription').value = '';
+            document.getElementById('correctAnswer').value = '';
+            
+            // Reload questions if we're viewing this domain
+            if (currentDomain && currentDomain.id === domain) {
+                loadQuestions(domain);
+            }
+        })
+        .catch((error) => {
+            console.error('Error adding question:', error);
+            alert('Error adding question: ' + error.message);
+        });
     }
     
     // Add domain to Firestore
     function addDomain() {
-      const name = document.getElementById('domainName').value;
-      const icon = document.getElementById('domainIcon').value;
-      const description = document.getElementById('domainDescription').value;
-      
-      if (!name || !icon) {
-        alert('Please fill in all fields');
-        return;
-      }
-      
-      db.collection('domains').add({
-        name,
-        icon,
-        description: description || "No description available",
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        createdBy: currentUser.uid
-      })
-      .then(() => {
-        alert('Domain added successfully!');
-        closeModal('addDomainModal');
+        const name = document.getElementById('domainName').value;
+        const icon = document.getElementById('domainIcon').value;
+        const description = document.getElementById('domainDescription').value;
         
-        // Clear form
-        document.getElementById('domainName').value = '';
-        document.getElementById('domainIcon').value = '';
-        document.getElementById('domainDescription').value = '';
+        if (!name || !icon) {
+            alert('Please fill in all fields');
+            return;
+        }
         
-        loadDomains();
-      })
-      .catch((error) => {
-        console.error('Error adding domain:', error);
-        alert('Error adding domain: ' + error.message);
-      });
+        db.collection('domains').add({
+            name,
+            icon,
+            description: description || "No description available",
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            createdBy: currentUser.uid
+        })
+        .then(() => {
+            alert('Domain added successfully!');
+            closeModal('addDomainModal');
+            
+            // Clear form
+            document.getElementById('domainName').value = '';
+            document.getElementById('domainIcon').value = '';
+            document.getElementById('domainDescription').value = '';
+            
+            loadDomains();
+        })
+        .catch((error) => {
+            console.error('Error adding domain:', error);
+            alert('Error adding domain: ' + error.message);
+        });
     }
     
     // Add roadmap to Firestore
     function addRoadmap() {
-      const domain = document.getElementById('roadmapDomain').value;
-      const title = document.getElementById('roadmapTitleInput').value;
-      
-      if (!domain || !title) {
-        alert('Please select a domain and enter a title');
-        return;
-      }
-      
-      // Get main headings and subheadings
-      const mainHeadingItems = document.querySelectorAll('.main-heading-item');
-      const roadmapData = [];
-      
-      let hasValidContent = false;
-      mainHeadingItems.forEach((item) => {
-        const mainHeading = item.querySelector('.main-heading-input').value;
-        const subheadings = Array.from(item.querySelectorAll('.subheading-input'))
-          .map(input => input.value)
-          .filter(val => val.trim() !== '');
+        const domain = document.getElementById('roadmapDomain').value;
+        const title = document.getElementById('roadmapTitleInput').value;
         
-        if (mainHeading.trim() !== '' || subheadings.length > 0) {
-          hasValidContent = true;
-          roadmapData.push({
-            mainHeading: mainHeading.trim(),
-            subheadings
-          });
+        if (!domain || !title) {
+            alert('Please select a domain and enter a title');
+            return;
         }
-      });
-      
-      if (!hasValidContent) {
-        alert('Please add at least one main heading or subheading');
-        return;
-      }
-      
-      db.collection('roadmaps').add({
-        domain,
-        title,
-        roadmapData,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        createdBy: currentUser.uid
-      })
-      .then(() => {
-        alert('Roadmap added successfully!');
-        closeModal('addRoadmapModal');
         
-        // Clear form
-        document.getElementById('roadmapTitleInput').value = '';
-        clearRoadmapForm();
+        // Get main headings and subheadings
+        const mainHeadingItems = document.querySelectorAll('.main-heading-item');
+        const roadmapData = [];
         
-        // Reload roadmap if we're viewing this domain
-        if (currentDomain && currentDomain.id === domain) {
-          loadRoadmap(domain);
+        let hasValidContent = false;
+        mainHeadingItems.forEach((item) => {
+            const mainHeading = item.querySelector('.main-heading-input').value;
+            const subheadings = Array.from(item.querySelectorAll('.subheading-input'))
+                .map(input => input.value)
+                .filter(val => val.trim() !== '');
+            
+            if (mainHeading.trim() !== '' || subheadings.length > 0) {
+                hasValidContent = true;
+                roadmapData.push({
+                    mainHeading: mainHeading.trim(),
+                    subheadings
+                });
+            }
+        });
+        
+        if (!hasValidContent) {
+            alert('Please add at least one main heading or subheading');
+            return;
         }
-      })
-      .catch((error) => {
-        console.error('Error adding roadmap:', error);
-        alert('Error adding roadmap: ' + error.message);
-      });
+        
+        db.collection('roadmaps').add({
+            domain,
+            title,
+            roadmapData,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            createdBy: currentUser.uid
+        })
+        .then(() => {
+            alert('Roadmap added successfully!');
+            closeModal('addRoadmapModal');
+            
+            // Clear form
+            document.getElementById('roadmapTitleInput').value = '';
+            clearRoadmapForm();
+            
+            // Reload roadmap if we're viewing this domain
+            if (currentDomain && currentDomain.id === domain) {
+                loadRoadmap(domain);
+            }
+        })
+        .catch((error) => {
+            console.error('Error adding roadmap:', error);
+            alert('Error adding roadmap: ' + error.message);
+        });
     }
-    function toggleRoadmap() {
-  const roadmapContainer = document.getElementById('roadmapContainer');
-  const headerToggleBtn = document.getElementById('headerRoadmapToggle');
-  const icon = headerToggleBtn.querySelector('i');
-  const span = headerToggleBtn.querySelector('span');
-  
-  roadmapContainer.classList.toggle('show');
-  document.body.classList.toggle('roadmap-visible');
-  
-  if (roadmapContainer.classList.contains('show')) {
-    icon.className = 'fas fa-times';
-    span.textContent = 'Hide Roadmap';
-  } else {
-    icon.className = 'fas fa-road';
-    span.textContent = 'Show Roadmap';
-  }
-}
-
-// Initialize the roadmap toggle button
-function initRoadmapToggle() {
-  const headerToggleBtn = document.getElementById('headerRoadmapToggle');
-  if (headerToggleBtn) {
-    headerToggleBtn.addEventListener('click', toggleRoadmap);
-  }
-}
 
     // Toggle save question
     function toggleSaveQuestion(questionId) {
-      if (!userProgress.savedQuestions) {
-        userProgress.savedQuestions = [];
-      }
-      
-      const index = userProgress.savedQuestions.indexOf(questionId);
-      if (index > -1) {
-        userProgress.savedQuestions.splice(index, 1);
-      } else {
-        userProgress.savedQuestions.push(questionId);
-      }
-      
-      // Update in Firestore
-      db.collection('userProgress')
-        .doc(currentUser.uid)
-        .set(userProgress, { merge: true })
-        .then(() => {
-          // Update the UI directly
-          const problemRow = document.querySelector(`.problem-row[data-id="${questionId}"]`);
-          if (problemRow) {
-            const isSaved = userProgress.savedQuestions.includes(questionId);
-            problemRow.setAttribute('data-saved', isSaved);
-            
-            // Update the icon
-            const icon = problemRow.querySelector('.status-icon i');
-            icon.className = isSaved ? 'fas fa-bookmark saved-icon' : 'fas fa-bookmark unsolved-icon';
-            
-            // Reapply filters
-            filterQuestions();
-          }
-        })
-        .catch((error) => {
-          console.error('Error updating saved questions:', error);
-        });
+        if (!userProgress.savedQuestions) {
+            userProgress.savedQuestions = [];
+        }
+        
+        const index = userProgress.savedQuestions.indexOf(questionId);
+        if (index > -1) {
+            userProgress.savedQuestions.splice(index, 1);
+        } else {
+            userProgress.savedQuestions.push(questionId);
+        }
+        
+        // Update in Firestore
+        db.collection('userProgress')
+            .doc(currentUser.uid)
+            .set(userProgress, { merge: true })
+            .then(() => {
+                // Update the UI directly
+                const problemRow = document.querySelector(`.problem-row[data-id="${questionId}"]`);
+                if (problemRow) {
+                    const isSaved = userProgress.savedQuestions.includes(questionId);
+                    problemRow.setAttribute('data-saved', isSaved);
+                    
+                    // Update the icon
+                    const icon = problemRow.querySelector('.status-icon i');
+                    icon.className = isSaved ? 'fas fa-bookmark saved-icon' : 'fas fa-bookmark unsolved-icon';
+                    
+                    // Reapply filters
+                    filterQuestions();
+                }
+            })
+            .catch((error) => {
+                console.error('Error updating saved questions:', error);
+            });
     }
     
     // Show question detail
     function showQuestionDetail(questionId) {
-      const question = questions.find(q => q.id === questionId);
-      if (!question) return;
-      
-      // Hide main content and roadmap
-      document.querySelector('.main-content').style.display = 'none';
-      document.getElementById('roadmapContainer').style.display = 'none';
-      
-      // Show backdrop
-      document.getElementById('questionDetailBackdrop').classList.add('show');
-      
-      // Set question details
-      document.getElementById('detailQuestionTitle').textContent = question.title;
-      document.getElementById('detailQuestionDescription').textContent = question.description;
-      
-      // Set difficulty
-      const difficultyEl = document.getElementById('detailQuestionDifficulty');
-      difficultyEl.textContent = question.difficulty;
-      difficultyEl.className = `difficulty ${question.difficulty}`;
-      
-      // Populate options
-      const optionsContainer = document.getElementById('detailQuestionOptions');
-      optionsContainer.innerHTML = '';
-      
-      if (question.options && question.options.length > 0) {
-        question.options.forEach((option, index) => {
-          const optionElement = document.createElement('div');
-          optionElement.className = 'option-item';
-          optionElement.innerHTML = `
-            <div class="option-text">${option}</div>
-          `;
-          optionElement.addEventListener('click', () => selectOption(optionElement, option));
-          optionsContainer.appendChild(optionElement);
-        });
-      }
-      
-      // Reset feedback and selected option
-      document.getElementById('feedbackMessage').style.display = 'none';
-      document.getElementById('submitAnswerBtn').disabled = false;
-      currentSelectedOption = null;
-      currentQuestionId = questionId;
-      
-      // Show question detail
-      document.getElementById('questionDetailView').classList.add('show');
+        const question = questions.find(q => q.id === questionId);
+        if (!question) return;
+        
+        // Hide main content and roadmap
+        document.querySelector('.main-content').style.display = 'none';
+        document.getElementById('roadmapContainer').style.display = 'none';
+        
+        // Show backdrop
+        document.getElementById('questionDetailBackdrop').classList.add('show');
+        
+        // Set question details
+        document.getElementById('detailQuestionTitle').textContent = question.title;
+        document.getElementById('detailQuestionDescription').textContent = question.description;
+        
+        // Set difficulty
+        const difficultyEl = document.getElementById('detailQuestionDifficulty');
+        difficultyEl.textContent = question.difficulty;
+        difficultyEl.className = `difficulty ${question.difficulty}`;
+        
+        // Populate options
+        const optionsContainer = document.getElementById('detailQuestionOptions');
+        optionsContainer.innerHTML = '';
+        
+        if (question.options && question.options.length > 0) {
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option-item';
+                optionElement.innerHTML = `
+                    <div class="option-text">${option}</div>
+                `;
+                optionElement.addEventListener('click', () => selectOption(optionElement, option));
+                optionsContainer.appendChild(optionElement);
+            });
+        }
+        
+        // Reset feedback and selected option
+        document.getElementById('feedbackMessage').style.display = 'none';
+        document.getElementById('submitAnswerBtn').disabled = false;
+        currentSelectedOption = null;
+        currentQuestionId = questionId;
+        
+        // Show question detail
+        document.getElementById('questionDetailView').classList.add('show');
     }
     
     function hideQuestionDetail() {
-      // Hide question detail view and backdrop
-      document.getElementById('questionDetailView').classList.remove('show');
-      document.getElementById('questionDetailBackdrop').classList.remove('show');
-      
-      // Show the main content and roadmap section
-      document.querySelector('.main-content').style.display = 'block';
-      
-      if (currentDomain) {
-        document.getElementById('roadmapContainer').style.display = 'block';
-      }
+        // Hide question detail view and backdrop
+        document.getElementById('questionDetailView').classList.remove('show');
+        document.getElementById('questionDetailBackdrop').classList.remove('show');
+        
+        // Show the main content and roadmap section
+        document.querySelector('.main-content').style.display = 'block';
+        
+        if (currentDomain) {
+            document.getElementById('roadmapContainer').style.display = 'block';
+        }
     }
     
     function selectOption(optionElement, optionValue) {
-      // Remove selected class from all options
-      const allOptions = document.querySelectorAll('.option-item');
-      allOptions.forEach(opt => {
-        opt.classList.remove('selected');
-        opt.classList.remove('correct');
-        opt.classList.remove('incorrect');
-      });
-      
-      // Add selected class to clicked option
-      optionElement.classList.add('selected');
-      currentSelectedOption = optionValue;
+        // Remove selected class from all options
+        const allOptions = document.querySelectorAll('.option-item');
+        allOptions.forEach(opt => {
+            opt.classList.remove('selected');
+            opt.classList.remove('correct');
+            opt.classList.remove('incorrect');
+        });
+        
+        // Add selected class to clicked option
+        optionElement.classList.add('selected');
+        currentSelectedOption = optionValue;
     }
 
     function checkAnswer() {
-      if (!currentSelectedOption) {
-        alert('Please select an answer');
-        return;
-      }
-      
-      const question = questions.find(q => q.id === currentQuestionId);
-      const isCorrect = currentSelectedOption.trim().toLowerCase() === question.correctAnswer.toLowerCase();
-      const feedbackEl = document.getElementById('feedbackMessage');
-      
-      // Disable submit button and options
-      document.getElementById('submitAnswerBtn').disabled = true;
-      const allOptions = document.querySelectorAll('.option-item');
-      allOptions.forEach(opt => {
-        opt.style.cursor = 'default';
-        opt.removeEventListener('click', () => {});
-      });
-      
-      // Mark correct/incorrect options
-      allOptions.forEach(opt => {
-        const optionText = opt.querySelector('.option-text').textContent;
-        if (optionText.trim().toLowerCase() === question.correctAnswer.toLowerCase()) {
-          opt.classList.add('correct');
-        } else if (opt.classList.contains('selected')) {
-          opt.classList.add('incorrect');
+        if (!currentSelectedOption) {
+            alert('Please select an answer');
+            return;
         }
-      });
-      
-      // Show feedback
-      feedbackEl.style.display = 'block';
-      if (isCorrect) {
-        feedbackEl.textContent = 'Correct! Well done!';
-        feedbackEl.className = 'feedback-message feedback-correct';
         
-        // Update user progress
-        updateUserProgress(true);
-      } else {
-        feedbackEl.textContent = 'Incorrect. Try again or review the concepts.';
-        feedbackEl.className = 'feedback-message feedback-incorrect';
+        const question = questions.find(q => q.id === currentQuestionId);
+        const isCorrect = currentSelectedOption.trim().toLowerCase() === question.correctAnswer.toLowerCase();
+        const feedbackEl = document.getElementById('feedbackMessage');
         
-        // Update user progress
-        updateUserProgress(false);
-      }
+        // Disable submit button and options
+        document.getElementById('submitAnswerBtn').disabled = true;
+        const allOptions = document.querySelectorAll('.option-item');
+        allOptions.forEach(opt => {
+            opt.style.cursor = 'default';
+            opt.removeEventListener('click', () => {});
+        });
+        
+        // Mark correct/incorrect options
+        allOptions.forEach(opt => {
+            const optionText = opt.querySelector('.option-text').textContent;
+            if (optionText.trim().toLowerCase() === question.correctAnswer.toLowerCase()) {
+                opt.classList.add('correct');
+            } else if (opt.classList.contains('selected')) {
+                opt.classList.add('incorrect');
+            }
+        });
+        
+        // Show feedback
+        feedbackEl.style.display = 'block';
+        if (isCorrect) {
+            feedbackEl.textContent = 'Correct! Well done!';
+            feedbackEl.className = 'feedback-message feedback-correct';
+            
+            // Update user progress
+            updateUserProgress(true);
+        } else {
+            feedbackEl.textContent = 'Incorrect. Try again or review the concepts.';
+            feedbackEl.className = 'feedback-message feedback-incorrect';
+            
+            // Update user progress
+            updateUserProgress(false);
+        }
     }
 
     function updateUserProgress(isCorrect) {
-      if (!userProgress.solvedQuestions) userProgress.solvedQuestions = [];
-      if (!userProgress.correctAnswers) userProgress.correctAnswers = [];
-      if (!userProgress.wrongAnswers) userProgress.wrongAnswers = [];
-      
-      if (!userProgress.solvedQuestions.includes(currentQuestionId)) {
-        userProgress.solvedQuestions.push(currentQuestionId);
-      }
-      
-      if (isCorrect) {
-        if (!userProgress.correctAnswers.includes(currentQuestionId)) {
-          userProgress.correctAnswers.push(currentQuestionId);
+        if (!userProgress.solvedQuestions) userProgress.solvedQuestions = [];
+        if (!userProgress.correctAnswers) userProgress.correctAnswers = [];
+        if (!userProgress.wrongAnswers) userProgress.wrongAnswers = [];
+        
+        if (!userProgress.solvedQuestions.includes(currentQuestionId)) {
+            userProgress.solvedQuestions.push(currentQuestionId);
         }
         
-        // Remove from wrong answers if it was there
-        if (userProgress.wrongAnswers.includes(currentQuestionId)) {
-          const index = userProgress.wrongAnswers.indexOf(currentQuestionId);
-          userProgress.wrongAnswers.splice(index, 1);
-        }
-      } else {
-        if (!userProgress.wrongAnswers.includes(currentQuestionId)) {
-          userProgress.wrongAnswers.push(currentQuestionId);
+        if (isCorrect) {
+            if (!userProgress.correctAnswers.includes(currentQuestionId)) {
+                userProgress.correctAnswers.push(currentQuestionId);
+            }
+            
+            // Remove from wrong answers if it was there
+            if (userProgress.wrongAnswers.includes(currentQuestionId)) {
+                const index = userProgress.wrongAnswers.indexOf(currentQuestionId);
+                userProgress.wrongAnswers.splice(index, 1);
+            }
+        } else {
+            if (!userProgress.wrongAnswers.includes(currentQuestionId)) {
+                userProgress.wrongAnswers.push(currentQuestionId);
+            }
+            
+            // Remove from correct answers if it was there
+            if (userProgress.correctAnswers.includes(currentQuestionId)) {
+                const index = userProgress.correctAnswers.indexOf(currentQuestionId);
+                userProgress.correctAnswers.splice(index, 1);
+            }
         }
         
-        // Remove from correct answers if it was there
-        if (userProgress.correctAnswers.includes(currentQuestionId)) {
-          const index = userProgress.correctAnswers.indexOf(currentQuestionId);
-          userProgress.correctAnswers.splice(index, 1);
-        }
-      }
-      
-      // Update in Firestore
-      db.collection('userProgress')
-        .doc(currentUser.uid)
-        .set(userProgress, { merge: true })
-        .then(() => {
-          // Update progress UI
-          updateProgressUI();
-          
-          // Update the problem row status
-          const problemRow = document.querySelector(`.problem-row[data-id="${currentQuestionId}"]`);
-          if (problemRow) {
-            problemRow.setAttribute('data-solved', 'true');
-            problemRow.setAttribute('data-correct', isCorrect);
-            
-            // Update the action column
-            const actionCol = problemRow.querySelector('div:last-child');
-            actionCol.innerHTML = `<span class="difficulty ${isCorrect ? 'easy' : 'hard'}">${isCorrect ? 'Correct' : 'Wrong'}</span>`;
-            
-            // Reapply filters
-            filterQuestions();
-          }
-        })
-        .catch((error) => {
-          console.error('Error updating user progress:', error);
-        });
+        // Update in Firestore
+        db.collection('userProgress')
+            .doc(currentUser.uid)
+            .set(userProgress, { merge: true })
+            .then(() => {
+                // Update progress UI
+                updateProgressUI();
+                
+                // Update the problem row status
+                const problemRow = document.querySelector(`.problem-row[data-id="${currentQuestionId}"]`);
+                if (problemRow) {
+                    problemRow.setAttribute('data-solved', 'true');
+                    problemRow.setAttribute('data-correct', isCorrect);
+                    
+                    // Update the action column
+                    const actionCol = problemRow.querySelector('div:last-child');
+                    actionCol.innerHTML = `<span class="difficulty ${isCorrect ? 'easy' : 'hard'}">${isCorrect ? 'Correct' : 'Wrong'}</span>`;
+                    
+                    // Reapply filters
+                    filterQuestions();
+                }
+            })
+            .catch((error) => {
+                console.error('Error updating user progress:', error);
+            });
     }
     
     // Attempt question (shortcut to show detail)
     function attemptQuestion(questionId) {
-      showQuestionDetail(questionId);
+        showQuestionDetail(questionId);
     }
 
     // Show delete modals
     function showDeleteQuestionModal() {
-      const select = document.getElementById('deleteQuestionSelect');
-      select.innerHTML = '';
-      
-      questions.forEach(question => {
-        const option = document.createElement('option');
-        option.value = question.id;
-        option.textContent = question.title;
-        select.appendChild(option);
-      });
-      
-      document.getElementById('deleteQuestionModal').classList.add('show');
+        const select = document.getElementById('deleteQuestionSelect');
+        select.innerHTML = '';
+        
+        questions.forEach(question => {
+            const option = document.createElement('option');
+            option.value = question.id;
+            option.textContent = question.title;
+            select.appendChild(option);
+        });
+        
+        document.getElementById('deleteQuestionModal').classList.add('show');
     }
 
     function showDeleteDomainModal() {
-      const select = document.getElementById('deleteDomainSelect');
-      select.innerHTML = '';
-      
-      domains.forEach(domain => {
-        const option = document.createElement('option');
-        option.value = domain.id;
-        option.textContent = domain.name;
-        select.appendChild(option);
-      });
-      
-      document.getElementById('deleteDomainModal').classList.add('show');
+        const select = document.getElementById('deleteDomainSelect');
+        select.innerHTML = '';
+        
+        domains.forEach(domain => {
+            const option = document.createElement('option');
+            option.value = domain.id;
+            option.textContent = domain.name;
+            select.appendChild(option);
+        });
+        
+        document.getElementById('deleteDomainModal').classList.add('show');
     }
 
     function showDeleteRoadmapModal() {
-      const select = document.getElementById('deleteRoadmapSelect');
-      select.innerHTML = '';
-      
-      // Load roadmaps for current domain
-      if (currentDomain) {
-        db.collection('roadmaps')
-          .where('domain', '==', currentDomain.id)
-          .get()
-          .then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-              const roadmap = { id: doc.id, ...doc.data() };
-              const option = document.createElement('option');
-              option.value = roadmap.id;
-              option.textContent = roadmap.title;
-              select.appendChild(option);
-            });
-          });
-      }
-      
-      document.getElementById('deleteRoadmapModal').classList.add('show');
+        const select = document.getElementById('deleteRoadmapSelect');
+        select.innerHTML = '';
+        
+        // Load roadmaps for current domain
+        if (currentDomain) {
+            db.collection('roadmaps')
+                .where('domain', '==', currentDomain.id)
+                .get()
+                .then((querySnapshot) => {
+                    querySnapshot.forEach((doc) => {
+                        const roadmap = { id: doc.id, ...doc.data() };
+                        const option = document.createElement('option');
+                        option.value = roadmap.id;
+                        option.textContent = roadmap.title;
+                        select.appendChild(option);
+                    });
+                });
+        }
+        
+        document.getElementById('deleteRoadmapModal').classList.add('show');
     }
 
     // Delete functions
     function deleteQuestion() {
-      const questionId = document.getElementById('deleteQuestionSelect').value;
-      
-      db.collection('questions').doc(questionId).delete()
-        .then(() => {
-          alert('Question deleted successfully!');
-          closeModal('deleteQuestionModal');
-          if (currentDomain) loadQuestions(currentDomain.id);
-        })
-        .catch((error) => {
-          alert('Error deleting question: ' + error.message);
-        });
+        const questionId = document.getElementById('deleteQuestionSelect').value;
+        
+        db.collection('questions').doc(questionId).delete()
+            .then(() => {
+                alert('Question deleted successfully!');
+                closeModal('deleteQuestionModal');
+                if (currentDomain) loadQuestions(currentDomain.id);
+            })
+            .catch((error) => {
+                alert('Error deleting question: ' + error.message);
+            });
     }
 
     function deleteDomain() {
-      const domainId = document.getElementById('deleteDomainSelect').value;
-      
-      db.collection('domains').doc(domainId).delete()
-        .then(() => {
-          alert('Domain deleted successfully!');
-          closeModal('deleteDomainModal');
-          loadDomains();
-        })
-        .catch((error) => {
-          alert('Error deleting domain: ' + error.message);
-        });
+        const domainId = document.getElementById('deleteDomainSelect').value;
+        
+        db.collection('domains').doc(domainId).delete()
+            .then(() => {
+                alert('Domain deleted successfully!');
+                closeModal('deleteDomainModal');
+                loadDomains();
+            })
+            .catch((error) => {
+                alert('Error deleting domain: ' + error.message);
+            });
     }
 
     function deleteRoadmap() {
-      const roadmapId = document.getElementById('deleteRoadmapSelect').value;
-      
-      db.collection('roadmaps').doc(roadmapId).delete()
-        .then(() => {
-          alert('Roadmap deleted successfully!');
-          closeModal('deleteRoadmapModal');
-          if (currentDomain) loadRoadmap(currentDomain.id);
-        })
-        .catch((error) => {
-          alert('Error deleting roadmap: ' + error.message);
-        });
+        const roadmapId = document.getElementById('deleteRoadmapSelect').value;
+        
+        db.collection('roadmaps').doc(roadmapId).delete()
+            .then(() => {
+                alert('Roadmap deleted successfully!');
+                closeModal('deleteRoadmapModal');
+                if (currentDomain) loadRoadmap(currentDomain.id);
+            })
+            .catch((error) => {
+                alert('Error deleting roadmap: ' + error.message);
+            });
     }
     
     // Add main heading to roadmap form
     function addMainHeading() {
-      const container = document.getElementById('mainHeadingsContainer');
-      const headingCount = container.children.length + 1;
-      
-      const mainHeadingItem = document.createElement('div');
-      mainHeadingItem.className = 'main-heading-item';
-      mainHeadingItem.innerHTML = `
-        <div class="form-group">
-          <label>Main Heading ${headingCount}</label>
-          <input type="text" class="form-control main-heading-input" placeholder="Enter main heading">
-        </div>
-        <div class="subheadings-container">
-          <div class="form-group">
-            <label>Subheading 1</label>
-            <input type="text" class="form-control subheading-input" placeholder="Enter subheading">
-          </div>
-          <div class="form-group">
-            <label>Subheading 2</label>
-            <input type="text" class="form-control subheading-input" placeholder="Enter subheading">
-          </div>
-        </div>
-        <button class="add-subheading-btn" onclick="addSubheading(this)">
-          <i class="fas fa-plus"></i> Add Subheading
-        </button>
-        <button class="remove-heading-btn" onclick="removeHeading(this)">
-          <i class="fas fa-times"></i> Remove Heading
-        </button>
-      `;
-      
-      container.appendChild(mainHeadingItem);
+        const container = document.getElementById('mainHeadingsContainer');
+        const headingCount = container.children.length + 1;
+        
+        const mainHeadingItem = document.createElement('div');
+        mainHeadingItem.className = 'main-heading-item';
+        mainHeadingItem.innerHTML = `
+            <div class="form-group">
+                <label>Main Heading ${headingCount}</label>
+                <input type="text" class="form-control main-heading-input" placeholder="Enter main heading">
+            </div>
+            <div class="subheadings-container">
+                <div class="form-group">
+                    <label>Subheading 1</label>
+                    <input type="text" class="form-control subheading-input" placeholder="Enter subheading">
+                </div>
+                <div class="form-group">
+                    <label>Subheading 2</label>
+                    <input type="text" class="form-control subheading-input" placeholder="Enter subheading">
+                </div>
+            </div>
+            <button class="add-subheading-btn" onclick="addSubheading(this)">
+                <i class="fas fa-plus"></i> Add Subheading
+            </button>
+            <button class="remove-heading-btn" onclick="removeHeading(this)">
+                <i class="fas fa-times"></i> Remove Heading
+            </button>
+        `;
+        
+        container.appendChild(mainHeadingItem);
     }
 
     // Add subheading to a main heading
     function addSubheading(button) {
-      const subheadingsContainer = button.previousElementSibling;
-      const subheadingCount = subheadingsContainer.children.length + 1;
-      
-      const subheadingDiv = document.createElement('div');
-      subheadingDiv.className = 'form-group';
-      subheadingDiv.innerHTML = `
-        <label>Subheading ${subheadingCount}</label>
-        <input type="text" class="form-control subheading-input" placeholder="Enter subheading">
-      `;
-      
-      subheadingsContainer.appendChild(subheadingDiv);
+        const subheadingsContainer = button.previousElementSibling;
+        const subheadingCount = subheadingsContainer.children.length + 1;
+        
+        const subheadingDiv = document.createElement('div');
+        subheadingDiv.className = 'form-group';
+        subheadingDiv.innerHTML = `
+            <label>Subheading ${subheadingCount}</label>
+            <input type="text" class="form-control subheading-input" placeholder="Enter subheading">
+        `;
+        
+        subheadingsContainer.appendChild(subheadingDiv);
     }
 
     // Remove a heading
     function removeHeading(button) {
-      const mainHeadingItem = button.closest('.main-heading-item');
-      if (document.getElementById('mainHeadingsContainer').children.length > 1) {
-        mainHeadingItem.remove();
-      }
+        const mainHeadingItem = button.closest('.main-heading-item');
+        if (document.getElementById('mainHeadingsContainer').children.length > 1) {
+            mainHeadingItem.remove();
+        }
     }
 
     // Clear roadmap form
     function clearRoadmapForm() {
-      document.getElementById('mainHeadingsContainer').innerHTML = `
-        <div class="main-heading-item">
-          <div class="form-group">
-            <label>Main Heading 1</label>
-            <input type="text" class="form-control main-heading-input" placeholder="Enter main heading">
-          </div>
-          <div class="subheadings-container">
-            <div class="form-group">
-              <label>Subheading 1</label>
-              <input type="text" class="form-control subheading-input" placeholder="Enter subheading">
+        document.getElementById('mainHeadingsContainer').innerHTML = `
+            <div class="main-heading-item">
+                <div class="form-group">
+                    <label>Main Heading 1</label>
+                    <input type="text" class="form-control main-heading-input" placeholder="Enter main heading">
+                </div>
+                <div class="subheadings-container">
+                    <div class="form-group">
+                        <label>Subheading 1</label>
+                        <input type="text" class="form-control subheading-input" placeholder="Enter subheading">
+                    </div>
+                    <div class="form-group">
+                        <label>Subheading 2</label>
+                        <input type="text" class="form-control subheading-input" placeholder="Enter subheading">
+                    </div>
+                </div>
+                <button class="add-subheading-btn" onclick="addSubheading(this)">
+                    <i class="fas fa-plus"></i> Add Subheading
+                </button>
+                <button class="remove-heading-btn" onclick="removeHeading(this)">
+                    <i class="fas fa-times"></i> Remove Heading
+                </button>
             </div>
-            <div class="form-group">
-              <label>Subheading 2</label>
-              <input type="text" class="form-control subheading-input" placeholder="Enter subheading">
-            </div>
-          </div>
-          <button class="add-subheading-btn" onclick="addSubheading(this)">
-            <i class="fas fa-plus"></i> Add Subheading
-            </button>
-          <button class="remove-heading-btn" onclick="removeHeading(this)">
-            <i class="fas fa-times"></i> Remove Heading
-          </button>
-        </div>
-      `;
+        `;
     }
 
     // Show delete CSV modal
-function showDeleteCSVModal() {
-  // Populate domain dropdown
-  const deleteCsvDomain = document.getElementById('deleteCsvDomain');
-  deleteCsvDomain.innerHTML = '';
-  domains.forEach(domain => {
-    deleteCsvDomain.innerHTML += `<option value="${domain.id}">${domain.name}</option>`;
-  });
-  
-  // Reset results
-  document.getElementById('deleteCsvResults').style.display = 'none';
-  document.getElementById('deleteCsvFile').value = '';
-  
-  document.getElementById('deleteCSVModal').classList.add('show');
-}
-
-// Process CSV file for deletion
-function processDeleteCSV() {
-  const domain = document.getElementById('deleteCsvDomain').value;
-  const fileInput = document.getElementById('deleteCsvFile');
-  const file = fileInput.files[0];
-  
-  if (!domain || !file) {
-    alert('Please select a domain and CSV file');
-    return;
-  }
-  
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    const csvData = e.target.result;
-    const questionsToDelete = parseCSV(csvData);
-    
-    if (questionsToDelete.length === 0) {
-      alert('No valid questions found in CSV');
-      return;
-    }
-    
-    // Delete questions from Firebase
-    deleteQuestionsFromCSV(questionsToDelete, domain);
-  };
-  reader.readAsText(file);
-}
-
-// Delete questions from CSV
-function deleteQuestionsFromCSV(questionsToDelete, domain) {
-  let deletedCount = 0;
-  let notFoundCount = 0;
-  let notFoundList = [];
-  let processedCount = 0;
-  
-  // First, get all questions from the domain
-  db.collection('questions')
-    .where('domain', '==', domain)
-    .get()
-    .then((querySnapshot) => {
-      const allQuestions = [];
-      querySnapshot.forEach((doc) => {
-        allQuestions.push({ id: doc.id, ...doc.data() });
-      });
-      
-      // Process each question from CSV
-      questionsToDelete.forEach((csvQuestion) => {
-        // Find matching question in database
-        const matchingQuestion = allQuestions.find(dbQuestion => 
-          dbQuestion.title.toLowerCase().trim() === csvQuestion.title.toLowerCase().trim() &&
-          dbQuestion.correctAnswer.toLowerCase().trim() === csvQuestion.correctAnswer.toLowerCase().trim()
-        );
+    function showDeleteCSVModal() {
+        // Populate domain dropdown
+        const deleteCsvDomain = document.getElementById('deleteCsvDomain');
+        deleteCsvDomain.innerHTML = '';
+        domains.forEach(domain => {
+            deleteCsvDomain.innerHTML += `<option value="${domain.id}">${domain.name}</option>`;
+        });
         
-        if (matchingQuestion) {
-          // Delete the question
-          db.collection('questions').doc(matchingQuestion.id).delete()
-            .then(() => {
-              deletedCount++;
-              processedCount++;
-              
-              // If this is the last question, show results
-              if (processedCount === questionsToDelete.length) {
-                showDeleteResults(deletedCount, notFoundCount, notFoundList);
+        // Reset results
+        document.getElementById('deleteCsvResults').style.display = 'none';
+        document.getElementById('deleteCsvFile').value = '';
+        
+        document.getElementById('deleteCSVModal').classList.add('show');
+    }
+
+    // Process CSV file for deletion
+    function processDeleteCSV() {
+        const domain = document.getElementById('deleteCsvDomain').value;
+        const fileInput = document.getElementById('deleteCsvFile');
+        const file = fileInput.files[0];
+        
+        if (!domain || !file) {
+            alert('Please select a domain and CSV file');
+            return;
+        }
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const csvData = e.target.result;
+            const questionsToDelete = parseCSV(csvData);
+            
+            if (questionsToDelete.length === 0) {
+                alert('No valid questions found in CSV');
+                return;
+            }
+            
+            // Delete questions from Firebase
+            deleteQuestionsFromCSV(questionsToDelete, domain);
+        };
+        reader.readAsText(file);
+    }
+
+    // Delete questions from CSV
+    function deleteQuestionsFromCSV(questionsToDelete, domain) {
+        let deletedCount = 0;
+        let notFoundCount = 0;
+        let notFoundList = [];
+        let processedCount = 0;
+        
+        // First, get all questions from the domain
+        db.collection('questions')
+            .where('domain', '==', domain)
+            .get()
+            .then((querySnapshot) => {
+                const allQuestions = [];
+                querySnapshot.forEach((doc) => {
+                    allQuestions.push({ id: doc.id, ...doc.data() });
+                });
                 
-                // Reload questions if we're viewing this domain
-                if (currentDomain && currentDomain.id === domain) {
-                  loadQuestions(domain);
-                }
-              }
+                // Process each question from CSV
+                questionsToDelete.forEach((csvQuestion) => {
+                    // Find matching question in database
+                    const matchingQuestion = allQuestions.find(dbQuestion => 
+                        dbQuestion.title.toLowerCase().trim() === csvQuestion.title.toLowerCase().trim() &&
+                        dbQuestion.correctAnswer.toLowerCase().trim() === csvQuestion.correctAnswer.toLowerCase().trim()
+                    );
+                    
+                    if (matchingQuestion) {
+                        // Delete the question
+                        db.collection('questions').doc(matchingQuestion.id).delete()
+                            .then(() => {
+                                deletedCount++;
+                                processedCount++;
+                                
+                                // If this is the last question, show results
+                                if (processedCount === questionsToDelete.length) {
+                                    showDeleteResults(deletedCount, notFoundCount, notFoundList);
+                                    
+                                    // Reload questions if we're viewing this domain
+                                    if (currentDomain && currentDomain.id === domain) {
+                                        loadQuestions(domain);
+                                    }
+                                }
+                            })
+                            .catch((error) => {
+                                console.error('Error deleting question:', error);
+                                processedCount++;
+                                
+                                // If this is the last question, show results
+                                if (processedCount === questionsToDelete.length) {
+                                    showDeleteResults(deletedCount, notFoundCount, notFoundList);
+                                }
+                            });
+                    } else {
+                        notFoundCount++;
+                        notFoundList.push(csvQuestion.title);
+                        processedCount++;
+                        
+                        // If this is the last question, show results
+                        if (processedCount === questionsToDelete.length) {
+                            showDeleteResults(deletedCount, notFoundCount, notFoundList);
+                        }
+                    }
+                });
             })
             .catch((error) => {
-              console.error('Error deleting question:', error);
-              processedCount++;
-              
-              // If this is the last question, show results
-              if (processedCount === questionsToDelete.length) {
-                showDeleteResults(deletedCount, notFoundCount, notFoundList);
-              }
+                console.error('Error loading questions:', error);
+                alert('Error loading questions: ' + error.message);
             });
-        } else {
-          notFoundCount++;
-          notFoundList.push(csvQuestion.title);
-          processedCount++;
-          
-          // If this is the last question, show results
-          if (processedCount === questionsToDelete.length) {
-            showDeleteResults(deletedCount, notFoundCount, notFoundList);
-          }
-        }
-      });
-    })
-    .catch((error) => {
-      console.error('Error loading questions:', error);
-      alert('Error loading questions: ' + error.message);
-    });
-}
+    }
 
-// Show deletion results
-function showDeleteResults(deletedCount, notFoundCount, notFoundList) {
-  const resultsDiv = document.getElementById('deleteCsvResults');
-  const deletedCountDiv = document.getElementById('deletedCount');
-  const notFoundCountDiv = document.getElementById('notFoundCount');
-  const notFoundListDiv = document.getElementById('notFoundList');
+    // Show deletion results
+    function showDeleteResults(deletedCount, notFoundCount, notFoundList) {
+        const resultsDiv = document.getElementById('deleteCsvResults');
+        const deletedCountDiv = document.getElementById('deletedCount');
+        const notFoundCountDiv = document.getElementById('notFoundCount');
+        const notFoundListDiv = document.getElementById('notFoundList');
+        
+        resultsDiv.style.display = 'block';
+        deletedCountDiv.textContent = `Successfully deleted: ${deletedCount} questions`;
+        notFoundCountDiv.textContent = `Not found: ${notFoundCount} questions`;
+        
+        if (notFoundCount > 0) {
+            notFoundListDiv.innerHTML = '<strong>Questions not found:</strong><ul>';
+            notFoundList.forEach(question => {
+                notFoundListDiv.innerHTML += `<li>${question}</li>`;
+            });
+            notFoundListDiv.innerHTML += '</ul>';
+        } else {
+            notFoundListDiv.innerHTML = '';
+        }
+        
+        // Scroll to results
+        resultsDiv.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function initSidebarToggle() {
+  const sidebar = document.getElementById('sidebar');
+  const sidebarToggle = document.getElementById('sidebarToggle');
+  const mainContent = document.querySelector('.main-content');
   
-  resultsDiv.style.display = 'block';
-  deletedCountDiv.textContent = `Successfully deleted: ${deletedCount} questions`;
-  notFoundCountDiv.textContent = `Not found: ${notFoundCount} questions`;
-  
-  if (notFoundCount > 0) {
-    notFoundListDiv.innerHTML = '<strong>Questions not found:</strong><ul>';
-    notFoundList.forEach(question => {
-      notFoundListDiv.innerHTML += `<li>${question}</li>`;
+  if (sidebarToggle) {
+    sidebarToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('collapsed');
+      
+      // Save state to localStorage
+      const isCollapsed = sidebar.classList.contains('collapsed');
+      localStorage.setItem('sidebarCollapsed', isCollapsed);
     });
-    notFoundListDiv.innerHTML += '</ul>';
-  } else {
-    notFoundListDiv.innerHTML = '';
   }
   
-  // Scroll to results
-  resultsDiv.scrollIntoView({ behavior: 'smooth' });
+  // Check for saved sidebar state
+  const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+  if (isCollapsed) {
+    sidebar.classList.add('collapsed');
+  }
 }
-  </script>
+</script>
+
+  <!-- Firebase and other scripts would go here -->
 </body>
 </html>
