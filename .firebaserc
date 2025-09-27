@@ -1,6 +1,7 @@
 {
   "projects": {
-    "default": "eceverse-adeac"
+    "default": "myeceverse",
+    "n": "myeceverse"
   },
   "targets": {},
   "etags": {}

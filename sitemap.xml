@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- Home page -->
+  <url>
+    <loc>https://myeceverse.web.app/</loc>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Example other pages, add more as needed -->
+  <url>
+    <loc>https://myeceverse.web.app/about.html</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://myeceverse.web.app/contact.html</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://myeceverse.web.app/practice.html</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://myeceverse.web.app/problems.html</loc>
+    <priority>0.8</priority>
+  </url>
+
+</urlset>
