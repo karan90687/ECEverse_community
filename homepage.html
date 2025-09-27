@@ -203,7 +203,7 @@
     }
     
     .card { 
-    background: rgba(218, 218, 223, 0.126);
+    background: rgba(218, 218, 223, 0.095);
     color: #01010554;
     border: 1px solid rgba(99, 102, 241, 0.2);
       border-radius: 16px;
@@ -217,9 +217,9 @@
     
     .card:hover { 
       transform: translateY(-6px); 
-    background: rgba(99, 101, 241, 0.085);
-    color: #6366F1;
-    border: 1px solid rgba(99, 102, 241, 0.2);
+   background: rgba(16, 185, 129, 0.201);
+    color: #10B981;
+    border: 1px solid rgba(16, 185, 129, 0.2);
     }
     
     .card::before {
@@ -402,15 +402,14 @@
     import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-database.js";
 
     const firebaseConfig = {
-      apiKey: "AIzaSyD4T6rAV2npex-ZOJuu5IKQ1bDUkD7o9Oc",
-      authDomain: "eceverse-adeac.firebaseapp.com",
-      databaseURL: "https://eceverse-adeac-default-rtdb.firebaseio.com",
-      projectId: "eceverse-adeac",
-      storageBucket: "eceverse-adeac.firebasestorage.app",
-      messagingSenderId: "55835462054",
-      appId: "1:55835462054:web:9ca23a5817ed40f2842767",
-      measurementId: "G-KTV3P359DX"
-    };
+    apiKey: "AIzaSyCXb6mPRJT6MsmzZPLOBM3NW6IYEwe9g1s",
+    authDomain: "eceverse-caedc.firebaseapp.com",
+    projectId: "eceverse-caedc",
+    storageBucket: "eceverse-caedc.firebasestorage.app",
+    messagingSenderId: "1084496551701",
+    appId: "1:1084496551701:web:06c6554d000b599f51531c",
+    measurementId: "G-F84HDMZX59"
+  };
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
