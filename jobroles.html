@@ -17,8 +17,8 @@
             --accent: #F59E0B;
             --text-primary: #1F2937;
             --text-secondary: #4B5563;
-            --bg-primary: #ebeaea5a;  
-            --bg-secondary: #fdfafa; 
+            --bg-primary: #ebeaea5a;
+            --bg-secondary: #fdfafa;
             --bg-tertiary: #ffffff;
             --border-color: #0a0a0b;
             --card-shadow: 0 4px 6px rgba(247, 244, 244, 0.952), 0 1px 3px rgba(230, 221, 221, 0.947);
@@ -28,17 +28,28 @@
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* All the other CSS from the provided code */
-        * { 
-            margin: 0; 
-            padding: 0; 
-            box-sizing: border-box; 
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
+        /* Dark theme overrides (data-theme on body) */
+        [data-theme="dark"] {
+            --bg-primary: #0B0F14;
+            --bg-secondary: #0F172A;
+            --bg-tertiary: #111827;
+            --text-primary: #E5E7EB;
+            --text-secondary: #9CA3AF;
+            --border-color: #1F2937;
+            --card-shadow: 0 4px 6px rgba(0,0,0,0.4), 0 1px 3px rgba(0,0,0,0.3);
         }
 
-        body { 
-            background: var(--bg-primary); 
-            color: var(--text-primary); 
+        /* All the other CSS from the provided code */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
             line-height: 1.6;
             font-size: 14px;
             transition: var(--transition);
@@ -295,24 +306,24 @@
             gap: 16px;
             align-items: center;
         }
-    
+
 
         .company-logo {
-    min-width: 60px;
-    height: 60px;
-    border-radius: 12px;
-    background: var(--bg-tertiary);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid var(--border-color);
-    font-weight: 600;
-    color: var(--text-secondary);
-    font-size: 12px;
-    transition: var(--transition);
-    padding: 0 12px;
-    white-space: nowrap;
-}
+            min-width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            background: var(--bg-tertiary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border-color);
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 12px;
+            transition: var(--transition);
+            padding: 0 12px;
+            white-space: nowrap;
+        }
 
         .company-logo:hover {
             transform: translateY(-4px);
@@ -622,7 +633,7 @@
             .container {
                 flex-direction: column;
             }
-            
+
             .role-details-section, .role-info-section {
                 width: 100%;
             }
@@ -632,16 +643,16 @@
             .role-title {
                 font-size: 24px;
             }
-            
+
             .skills-list, .tools-list, .companies-list {
                 gap: 8px;
             }
-            
+
             .skill-tag, .tool-tag, .company-tag {
                 padding: 6px 12px;
                 font-size: 12px;
             }
-            
+
             .company-logo {
                 width: 50px;
                 height: 50px;
@@ -649,186 +660,186 @@
         }
 
         /* Action buttons grid */
-.action-buttons-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-top: 24px;
-}
+        .action-buttons-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 24px;
+        }
 
-.action-btn {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 50px 100px;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: var(--transition);
-    min-height: 80px;
-     height: 120px; /* Fixed height */
-     /* width: 120px; */
-    /* width: 140px; Fixed width */
-    text-align: center;
-    
-    
-}
+        .action-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 50px 100px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            min-height: 80px;
+            height: 120px; /* Fixed height */
+            /* width: 120px; */
+            /* width: 140px; Fixed width */
+            text-align: center;
 
-.action-btn i {
-    font-size: 20px;
-    margin-bottom: 8px;
-}
 
-.action-btn span {
-    font-size: 13px;
-}
+        }
 
-.action-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
+        .action-btn i {
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
 
-/* Different colors for each button */
-.explore-projects {
-    background: rgba(16, 185, 129, 0.11);
-    color: #10B981;
-    border: 1px solid rgba(16, 185, 129, 0.2);
-}
+        .action-btn span {
+            font-size: 13px;
+        }
 
-.save-role {
-    background: rgba(99, 102, 241, 0.11);
-    color: #6366F1;
-    border: 1px solid rgba(99, 102, 241, 0.2);
-}
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
 
-.share-role {
-    background: rgba(245, 158, 11, 0.11);
-    color: #F59E0B;
-    border: 1px solid rgba(245, 158, 11, 0.2);
-}
+        /* Different colors for each button */
+        .explore-projects {
+            background: rgba(16, 185, 129, 0.11);
+            color: #10B981;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
 
-.compare-roles {
-    background: rgba(239, 68, 68, 0.11);
-    color: #EF4444;
-    border: 1px solid rgba(239, 68, 68, 0.2);
-}
+        .save-role {
+            background: rgba(99, 102, 241, 0.11);
+            color: #6366F1;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
 
-/* Update the prepare button style */
-.prepare-btn {
-    padding: 16px 20px;
-    background: var(--gradient);
-    color: white;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    transition: var(--transition);
-    margin-top: 16px;
-    width: 202.5%;
-}
+        .share-role {
+            background: rgba(245, 158, 11, 0.11);
+            color: #F59E0B;
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
 
-.prepare-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(99, 102, 241, 0.4);
-}
+        .compare-roles {
+            background: rgba(239, 68, 68, 0.11);
+            color: #EF4444;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
 
-/* Toggle buttons for paragraph/points */
-.format-toggle {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 12px;
-}
+        /* Update the prepare button style */
+        .prepare-btn {
+            padding: 16px 20px;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: var(--transition);
+            margin-top: 16px;
+            width: 202.5%;
+        }
 
-.toggle-btn {
-    padding: 8px 16px;
-    border: 1px solid var(--border-color);
-    background: var(--bg-tertiary);
-    color: var(--text-secondary);
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 13px;
-    font-weight: 500;
-    transition: var(--transition);
-}
+        .prepare-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(99, 102, 241, 0.4);
+        }
 
-.toggle-btn.active {
-    background: var(--primary);
-    color: white;
-    border-color: var(--primary);
-}
+        /* Toggle buttons for paragraph/points */
+        .format-toggle {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
 
-.toggle-btn:hover {
-    background: var(--border-color);
-    color: var(--text-primary);
-}
+        .toggle-btn {
+            padding: 8px 16px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .toggle-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .toggle-btn:hover {
+            background: var(--border-color);
+            color: var(--text-primary);
+        }
 
 
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="logo">
-            <i class="fas fa-briefcase"></i>
-            <span>JobPortal</span>
+<!-- Header -->
+<header>
+    <div class="logo">
+        <i class="fas fa-briefcase"></i>
+        <span>JobPortal</span>
+    </div>
+    <nav>
+        <a href="jobs.html">Jobs</a>
+        <a href="companies.html">Companies</a>
+        <a href="career-path.html">Career Path</a>
+        <a href="roleinfo.html" class="active">Role Info</a>
+        <a href="resources.html">Resources</a>
+    </nav>
+    <div class="header-right">
+        <button class="theme-toggle">
+            <i class="fas fa-moon"></i>
+        </button>
+        <div class="user-info">
+            <div class="user-avatar">JD</div>
+            <span>John Doe</span>
         </div>
-        <nav>
-    <a href="jobs.html">Jobs</a>
-    <a href="companies.html">Companies</a>
-    <a href="career-path.html">Career Path</a>
-    <a href="roleinfo.html" class="active">Role Info</a>
-    <a href="resources.html">Resources</a>
-</nav>
-        <div class="header-right">
-            <button class="theme-toggle">
-                <i class="fas fa-moon"></i>
-            </button>
-            <div class="user-info">
-                <div class="user-avatar">JD</div>
-                <span>John Doe</span>
-            </div>
-        </div>
-    </header>
+    </div>
+</header>
 
-    <!-- Main Content -->
-    <div class="container">
-        <!-- Left Section: Role Details -->
-        <section class="role-details-section">
-            <div class="role-card">
-                <div class="role-header">
-                    <h1 class="role-title">Job Role Title</h1>
-                    <button class="edit-btn" id="editRoleBtn">
-                        <i class="fas fa-edit"></i> Edit Details
-                    </button>
-                </div>
-                
-                <div class="skills-section">
-                    <h3 class="section-title">
-                        <i class="fas fa-tools"></i> Essential Skills
-                    </h3>
-                    <div class="skills-list" id="essentialSkills">
-                        <div class="empty-state">No skills added yet</div>
-                    </div>
-                </div>
-                
-                <div class="companies-section">
-                    <h3 class="section-title">
-                        <i class="fas fa-building"></i> Companies Hiring
-                    </h3>
-                    <div class="companies-logos" id="companiesLogos">
-                        <div class="empty-state">No companies added yet</div>
-                    </div>
+<!-- Main Content -->
+<div class="container">
+    <!-- Left Section: Role Details -->
+    <section class="role-details-section">
+        <div class="role-card">
+            <div class="role-header">
+                <h1 class="role-title">Job Role Title</h1>
+                <button class="edit-btn" id="editRoleBtn">
+                    <i class="fas fa-edit"></i> Edit Details
+                </button>
+            </div>
+
+            <div class="skills-section">
+                <h3 class="section-title">
+                    <i class="fas fa-tools"></i> Essential Skills
+                </h3>
+                <div class="skills-list" id="essentialSkills">
+                    <div class="empty-state">No skills added yet</div>
                 </div>
             </div>
 
-               <div class="action-buttons-grid">
+            <div class="companies-section">
+                <h3 class="section-title">
+                    <i class="fas fa-building"></i> Companies Hiring
+                </h3>
+                <div class="companies-logos" id="companiesLogos">
+                    <div class="empty-state">No companies added yet</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-buttons-grid">
             <button class="action-btn explore-projects">
                 <i class="fas fa-project-diagram"></i>
                 <span>Explore Projects</span>
@@ -846,123 +857,123 @@
                 <span>Compare Roles</span>
             </button>
             <button class="prepare-btn">
-        <i class="fas fa-rocket"></i> Start Preparing
-    </button>
-        </section>
+                <i class="fas fa-rocket"></i> Start Preparing
+            </button>
+    </section>
 
-        <!-- Right Section: Role Information -->
-        <section class="role-info-section">
-            <div class="info-card">
-                <div class="role-header">
-                    <h2 class="section-title">
-                        <i class="fas fa-file-alt"></i> Job Description
-                    </h2>
-                    <button class="edit-btn" id="editDescriptionBtn">
-                        <i class="fas fa-edit"></i> Edit
-                    </button>
-                </div>
-                <div class="description-content" id="jobDescription">
-                    <div class="empty-state">No job description added yet</div>
-                </div>
+    <!-- Right Section: Role Information -->
+    <section class="role-info-section">
+        <div class="info-card">
+            <div class="role-header">
+                <h2 class="section-title">
+                    <i class="fas fa-file-alt"></i> Job Description
+                </h2>
+                <button class="edit-btn" id="editDescriptionBtn">
+                    <i class="fas fa-edit"></i> Edit
+                </button>
             </div>
-            
-            <div class="info-card">
-                <div class="role-header">
-                    <h2 class="section-title">
-                        <i class="fas fa-code"></i> Skills & Technologies
-                    </h2>
-                    <button class="edit-btn" id="editSkillsBtn">
-                        <i class="fas fa-edit"></i> Edit
-                    </button>
-                </div>
-                <div class="skills-content" id="requiredSkills">
-                    <div class="empty-state">No skills details added yet</div>
-                </div>
-                <div class="tools-list" id="toolsList">
-                    <!-- Tools will be added here dynamically -->
-                </div>
+            <div class="description-content" id="jobDescription">
+                <div class="empty-state">No job description added yet</div>
             </div>
-            
-            <div class="info-card">
-                <div class="role-header">
-                    <h2 class="section-title">
-                        <i class="fas fa-money-bill-wave"></i> Salary Information
-                    </h2>
-                    <button class="edit-btn" id="editSalaryBtn">
-                        <i class="fas fa-edit"></i> Edit
-                    </button>
-                </div>
-                <div class="salary-content">
-                    <div id="salaryInfo">
-                        <div class="empty-state">No salary information added yet</div>
-                    </div>
-                </div>
-                
-                <div class="companies-section">
-                    <h3 class="section-title">
-                        <i class="fas fa-building"></i> Hiring Companies
-                    </h3>
-                    <div class="companies-list" id="hiringCompanies">
-                        <div class="empty-state">No companies added yet</div>
-                    </div>
-                </div>
-                
- 
-        </section>
-    </div>
-
-    <!-- Edit Role Modal -->
-    <div class="modal" id="roleModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Edit Role Information</h2>
-                <button class="close-modal">&times;</button>
-            </div>
-            <form id="roleForm">
-                <div class="form-group">
-                    <label for="roleTitle">
-                        <i class="fas fa-heading"></i> Role Title
-                    </label>
-                    <input type="text" id="roleTitle" class="form-control" placeholder="Enter job role title">
-                </div>
-                
-                <div class="form-group">
-                    <label for="essentialSkills">
-                        <i class="fas fa-tools"></i> Essential Skills
-                    </label>
-                    <div class="multi-input-container">
-                        <input type="text" id="skillInput" class="form-control" placeholder="Add a skill">
-                        <button type="button" class="add-item-btn" id="addSkillBtn">
-                            <i class="fas fa-plus"></i>
-                        </button>
-                    </div>
-                    <div class="items-list" id="skillsList">
-                        <!-- Skills will be added here dynamically -->
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="companies">
-                        <i class="fas fa-building"></i> Companies
-                    </label>
-                    <div class="multi-input-container">
-                        <input type="text" id="companyInput" class="form-control" placeholder="Add a company">
-                        <button type="button" class="add-item-btn" id="addCompanyBtn">
-                            <i class="fas fa-plus"></i>
-                        </button>
-                    </div>
-                    <div class="items-list" id="companiesList">
-                        <!-- Companies will be added here dynamically -->
-                    </div>
-                </div>
-                
-                <button type="submit" class="submit-btn">Save Changes</button>
-            </form>
         </div>
-    </div>
 
-    <!-- Edit Description Modal -->
-    <!-- Edit Description Modal -->
+        <div class="info-card">
+            <div class="role-header">
+                <h2 class="section-title">
+                    <i class="fas fa-code"></i> Skills & Technologies
+                </h2>
+                <button class="edit-btn" id="editSkillsBtn">
+                    <i class="fas fa-edit"></i> Edit
+                </button>
+            </div>
+            <div class="skills-content" id="requiredSkills">
+                <div class="empty-state">No skills details added yet</div>
+            </div>
+            <div class="tools-list" id="toolsList">
+                <!-- Tools will be added here dynamically -->
+            </div>
+        </div>
+
+        <div class="info-card">
+            <div class="role-header">
+                <h2 class="section-title">
+                    <i class="fas fa-money-bill-wave"></i> Salary Information
+                </h2>
+                <button class="edit-btn" id="editSalaryBtn">
+                    <i class="fas fa-edit"></i> Edit
+                </button>
+            </div>
+            <div class="salary-content">
+                <div id="salaryInfo">
+                    <div class="empty-state">No salary information added yet</div>
+                </div>
+            </div>
+
+            <div class="companies-section">
+                <h3 class="section-title">
+                    <i class="fas fa-building"></i> Hiring Companies
+                </h3>
+                <div class="companies-list" id="hiringCompanies">
+                    <div class="empty-state">No companies added yet</div>
+                </div>
+            </div>
+
+
+    </section>
+</div>
+
+<!-- Edit Role Modal -->
+<div class="modal" id="roleModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Edit Role Information</h2>
+            <button class="close-modal">&times;</button>
+        </div>
+        <form id="roleForm">
+            <div class="form-group">
+                <label for="roleTitle">
+                    <i class="fas fa-heading"></i> Role Title
+                </label>
+                <input type="text" id="roleTitle" class="form-control" placeholder="Enter job role title">
+            </div>
+
+            <div class="form-group">
+                <label for="essentialSkills">
+                    <i class="fas fa-tools"></i> Essential Skills
+                </label>
+                <div class="multi-input-container">
+                    <input type="text" id="skillInput" class="form-control" placeholder="Add a skill">
+                    <button type="button" class="add-item-btn" id="addSkillBtn">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                <div class="items-list" id="skillsList">
+                    <!-- Skills will be added here dynamically -->
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="companies">
+                    <i class="fas fa-building"></i> Companies
+                </label>
+                <div class="multi-input-container">
+                    <input type="text" id="companyInput" class="form-control" placeholder="Add a company">
+                    <button type="button" class="add-item-btn" id="addCompanyBtn">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                <div class="items-list" id="companiesList">
+                    <!-- Companies will be added here dynamically -->
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">Save Changes</button>
+        </form>
+    </div>
+</div>
+
+<!-- Edit Description Modal -->
+<!-- Edit Description Modal -->
 <div class="modal" id="descriptionModal">
     <div class="modal-content">
         <div class="modal-header">
@@ -996,8 +1007,8 @@
     </div>
 </div>
 
-    <!-- Edit Skills Modal -->
-    <!-- Edit Skills Modal -->
+<!-- Edit Skills Modal -->
+<!-- Edit Skills Modal -->
 <div class="modal" id="skillsModal">
     <div class="modal-content">
         <div class="modal-header">
@@ -1026,7 +1037,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="form-group">
                 <label for="tools">
                     <i class="fas fa-wrench"></i> Tools & Technologies
@@ -1041,62 +1052,62 @@
                     <!-- Tools will be added here dynamically -->
                 </div>
             </div>
-            
+
             <button type="submit" class="submit-btn">Save Skills</button>
         </form>
     </div>
 </div>
 
-    <!-- Edit Salary Modal -->
-    <div class="modal" id="salaryModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Edit Salary Information</h2>
-                <button class="close-modal">&times;</button>
-            </div>
-            <form id="salaryForm">
-                <div class="form-group">
-                    <label for="salaryAmount">
-                        <i class="fas fa-money-bill-wave"></i> Average Salary
-                    </label>
-                    <input type="text" id="salaryAmount" class="form-control" placeholder="Enter average salary (e.g., $80,000 - $120,000)">
-                </div>
-                
-                <div class="form-group">
-                    <label for="hiringCompanies">
-                        <i class="fas fa-building"></i> Hiring Companies
-                    </label>
-                    <div class="multi-input-container">
-                        <input type="text" id="hiringCompanyInput" class="form-control" placeholder="Add a hiring company">
-                        <button type="button" class="add-item-btn" id="addHiringCompanyBtn">
-                            <i class="fas fa-plus"></i>
-                        </button>
-                    </div>
-                    <div class="items-list" id="hiringCompaniesList">
-                        <!-- Hiring companies will be added here dynamically -->
-                    </div>
-                </div>
-                
-                <button type="submit" class="submit-btn">Save Salary Info</button>
-            </form>
+<!-- Edit Salary Modal -->
+<div class="modal" id="salaryModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Edit Salary Information</h2>
+            <button class="close-modal">&times;</button>
         </div>
+        <form id="salaryForm">
+            <div class="form-group">
+                <label for="salaryAmount">
+                    <i class="fas fa-money-bill-wave"></i> Average Salary
+                </label>
+                <input type="text" id="salaryAmount" class="form-control" placeholder="Enter average salary (e.g., $80,000 - $120,000)">
+            </div>
+
+            <div class="form-group">
+                <label for="hiringCompanies">
+                    <i class="fas fa-building"></i> Hiring Companies
+                </label>
+                <div class="multi-input-container">
+                    <input type="text" id="hiringCompanyInput" class="form-control" placeholder="Add a hiring company">
+                    <button type="button" class="add-item-btn" id="addHiringCompanyBtn">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                <div class="items-list" id="hiringCompaniesList">
+                    <!-- Hiring companies will be added here dynamically -->
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">Save Salary Info</button>
+        </form>
     </div>
+</div>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 
 <script>
     // Firebase configuration
-   const firebaseConfig = {
-    apiKey: "AIzaSyA_hxFQDQBdZG9vSRDvLzSLylCxJFtPd98",
-    authDomain: "myeceverse.firebaseapp.com",
-    databaseURL: "https://myeceverse-default-rtdb.firebaseio.com",
-    projectId: "myeceverse",
-    storageBucket: "myeceverse.firebasestorage.app",
-    messagingSenderId: "231954423329",
-    appId: "1:231954423329:web:9e3e5f29a378e2434c8d60",
-    measurementId: "G-J9Y63HZ43E"
-  };
+    const firebaseConfig = {
+        apiKey: "AIzaSyA_hxFQDQBdZG9vSRDvLzSLylCxJFtPd98",
+        authDomain: "myeceverse.firebaseapp.com",
+        databaseURL: "https://myeceverse-default-rtdb.firebaseio.com",
+        projectId: "myeceverse",
+        storageBucket: "myeceverse.firebasestorage.app",
+        messagingSenderId: "231954423329",
+        appId: "1:231954423329:web:9e3e5f29a378e2434c8d60",
+        measurementId: "G-J9Y63HZ43E"
+    };
 
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
@@ -1112,12 +1123,12 @@
         // Get the job ID from localStorage
         currentJobId = localStorage.getItem('selectedJobId');
         const jobRole = localStorage.getItem('selectedJobRole');
-        
+
         // Set the role title if available
         if (jobRole) {
             document.querySelector('.role-title').textContent = jobRole;
         }
-        
+
         // Check authentication state
         auth.onAuthStateChanged((user) => {
             if (user) {
@@ -1125,7 +1136,7 @@
                 // User is signed in
                 document.querySelector('.user-avatar').textContent = user.email.substring(0, 2).toUpperCase();
                 document.querySelector('.user-info span').textContent = user.email;
-                
+
                 // Show edit buttons only for admin user
                 if (user.email === 'srujansrujan@gmail.com') {
                     document.querySelectorAll('.edit-btn').forEach(btn => {
@@ -1136,7 +1147,7 @@
                         btn.style.display = 'none';
                     });
                 }
-                
+
                 // Load job data from Firestore if we have a job ID
                 if (currentJobId) {
                     loadJobData(currentJobId);
@@ -1155,50 +1166,50 @@
         const descriptionModal = document.getElementById('descriptionModal');
         const skillsModal = document.getElementById('skillsModal');
         const salaryModal = document.getElementById('salaryModal');
-        
+
         // Buttons to open modals
         const editRoleBtn = document.getElementById('editRoleBtn');
         const editDescriptionBtn = document.getElementById('editDescriptionBtn');
         const editSkillsBtn = document.getElementById('editSkillsBtn');
         const editSalaryBtn = document.getElementById('editSalaryBtn');
-        
+
         // Close buttons
         const closeButtons = document.querySelectorAll('.close-modal');
-        
+
         // Forms
         const roleForm = document.getElementById('roleForm');
         const descriptionForm = document.getElementById('descriptionForm');
         const skillsForm = document.getElementById('skillsForm');
         const salaryForm = document.getElementById('salaryForm');
-        
+
         // Item management
         const addSkillBtn = document.getElementById('addSkillBtn');
         const addCompanyBtn = document.getElementById('addCompanyBtn');
         const addToolBtn = document.getElementById('addToolBtn');
         const addHiringCompanyBtn = document.getElementById('addHiringCompanyBtn');
-        
+
         // Open modals
         // Open modals
-editRoleBtn.addEventListener('click', async () => {
-    await loadRoleDataToForm();
-    roleModal.classList.add('show');
-});
+        editRoleBtn.addEventListener('click', async () => {
+            await loadRoleDataToForm();
+            roleModal.classList.add('show');
+        });
 
-editDescriptionBtn.addEventListener('click', async () => {
-    await loadDescriptionToForm();
-    descriptionModal.classList.add('show');
-});
+        editDescriptionBtn.addEventListener('click', async () => {
+            await loadDescriptionToForm();
+            descriptionModal.classList.add('show');
+        });
 
-editSkillsBtn.addEventListener('click', async () => {
-    await loadSkillsToForm();
-    skillsModal.classList.add('show');
-});
+        editSkillsBtn.addEventListener('click', async () => {
+            await loadSkillsToForm();
+            skillsModal.classList.add('show');
+        });
 
-editSalaryBtn.addEventListener('click', async () => {
-    await loadSalaryToForm();
-    salaryModal.classList.add('show');
-});
-        
+        editSalaryBtn.addEventListener('click', async () => {
+            await loadSalaryToForm();
+            salaryModal.classList.add('show');
+        });
+
         // Close modals
         closeButtons.forEach(button => {
             button.addEventListener('click', () => {
@@ -1208,7 +1219,7 @@ editSalaryBtn.addEventListener('click', async () => {
                 salaryModal.classList.remove('show');
             });
         });
-        
+
         // Close modal when clicking outside
         window.addEventListener('click', (e) => {
             if (e.target === roleModal) roleModal.classList.remove('show');
@@ -1216,12 +1227,12 @@ editSalaryBtn.addEventListener('click', async () => {
             if (e.target === skillsModal) skillsModal.classList.remove('show');
             if (e.target === salaryModal) salaryModal.classList.remove('show');
         });
-        
+
         // Add skill with delete functionality
         addSkillBtn.addEventListener('click', () => {
             const skillInput = document.getElementById('skillInput');
             const skill = skillInput.value.trim();
-            
+
             if (skill) {
                 const skillsList = document.getElementById('skillsList');
                 const skillTag = document.createElement('div');
@@ -1230,23 +1241,23 @@ editSalaryBtn.addEventListener('click', async () => {
                     ${skill}
                     <span class="remove-item" data-action="delete">&times;</span>
                 `;
-                
+
                 skillTag.querySelector('.remove-item').addEventListener('click', function() {
                     if (this.dataset.action === 'delete') {
                         skillsList.removeChild(skillTag);
                     }
                 });
-                
+
                 skillsList.appendChild(skillTag);
                 skillInput.value = '';
             }
         });
-        
+
         // Add company with delete functionality
         addCompanyBtn.addEventListener('click', () => {
             const companyInput = document.getElementById('companyInput');
             const company = companyInput.value.trim();
-            
+
             if (company) {
                 const companiesList = document.getElementById('companiesList');
                 const companyTag = document.createElement('div');
@@ -1255,23 +1266,23 @@ editSalaryBtn.addEventListener('click', async () => {
                     ${company}
                     <span class="remove-item" data-action="delete">&times;</span>
                 `;
-                
+
                 companyTag.querySelector('.remove-item').addEventListener('click', function() {
                     if (this.dataset.action === 'delete') {
                         companiesList.removeChild(companyTag);
                     }
                 });
-                
+
                 companiesList.appendChild(companyTag);
                 companyInput.value = '';
             }
         });
-        
+
         // Add tool with delete functionality
         addToolBtn.addEventListener('click', () => {
             const toolInput = document.getElementById('toolInput');
             const tool = toolInput.value.trim();
-            
+
             if (tool) {
                 const toolsList = document.getElementById('toolsListModal');
                 const toolTag = document.createElement('div');
@@ -1280,23 +1291,23 @@ editSalaryBtn.addEventListener('click', async () => {
                     ${tool}
                     <span class="remove-item" data-action="delete">&times;</span>
                 `;
-                
+
                 toolTag.querySelector('.remove-item').addEventListener('click', function() {
                     if (this.dataset.action === 'delete') {
                         toolsList.removeChild(toolTag);
                     }
                 });
-                
+
                 toolsList.appendChild(toolTag);
                 toolInput.value = '';
             }
         });
-        
+
         // Add hiring company with delete functionality
         addHiringCompanyBtn.addEventListener('click', () => {
             const hiringCompanyInput = document.getElementById('hiringCompanyInput');
             const company = hiringCompanyInput.value.trim();
-            
+
             if (company) {
                 const hiringCompaniesList = document.getElementById('hiringCompaniesList');
                 const companyTag = document.createElement('div');
@@ -1305,417 +1316,415 @@ editSalaryBtn.addEventListener('click', async () => {
                     ${company}
                     <span class="remove-item" data-action="delete">&times;</span>
                 `;
-                
+
                 companyTag.querySelector('.remove-item').addEventListener('click', function() {
                     if (this.dataset.action === 'delete') {
                         hiringCompaniesList.removeChild(companyTag);
                     }
                 });
-                
+
                 hiringCompaniesList.appendChild(companyTag);
                 hiringCompanyInput.value = '';
             }
         });
-        
+
         // Form submissions
-      // Form submissions
-roleForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    
-    // Get form data
-    const roleTitle = document.getElementById('roleTitle').value;
-    const skillsList = document.getElementById('skillsList');
-    const companiesList = document.getElementById('companiesList');
-    
-    const essentialSkills = Array.from(skillsList.children).map(tag => tag.textContent.replace('×', '').trim());
-    const companies = Array.from(companiesList.children).map(tag => tag.textContent.replace('×', '').trim());
-    
-    // Update UI
-    if (roleTitle) {
-        document.querySelector('.role-title').textContent = roleTitle;
-    }
-    
-    const essentialSkillsContainer = document.getElementById('essentialSkills');
-    if (essentialSkills.length > 0) {
-        essentialSkillsContainer.innerHTML = '';
-        essentialSkills.forEach(skill => {
-            const skillTag = document.createElement('span');
-            skillTag.className = 'skill-tag';
-            skillTag.textContent = skill;
-            essentialSkillsContainer.appendChild(skillTag);
+        // Form submissions
+        roleForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            // Get form data
+            const roleTitle = document.getElementById('roleTitle').value;
+            const skillsList = document.getElementById('skillsList');
+            const companiesList = document.getElementById('companiesList');
+
+            const essentialSkills = Array.from(skillsList.children).map(tag => tag.textContent.replace('×', '').trim());
+            const companies = Array.from(companiesList.children).map(tag => tag.textContent.replace('×', '').trim());
+
+            // Update UI
+            if (roleTitle) {
+                document.querySelector('.role-title').textContent = roleTitle;
+            }
+
+            const essentialSkillsContainer = document.getElementById('essentialSkills');
+            if (essentialSkills.length > 0) {
+                essentialSkillsContainer.innerHTML = '';
+                essentialSkills.forEach(skill => {
+                    const skillTag = document.createElement('span');
+                    skillTag.className = 'skill-tag';
+                    skillTag.textContent = skill;
+                    essentialSkillsContainer.appendChild(skillTag);
+                });
+            } else {
+                essentialSkillsContainer.innerHTML = '<div class="empty-state">No skills added yet</div>';
+            }
+
+            const companiesLogosContainer = document.getElementById('companiesLogos');
+            if (companies.length > 0) {
+                companiesLogosContainer.innerHTML = '';
+                companies.forEach(company => {
+                    const logo = document.createElement('div');
+                    logo.className = 'company-logo';
+                    logo.textContent = company;
+                    companiesLogosContainer.appendChild(logo);
+                });
+            } else {
+                companiesLogosContainer.innerHTML = '<div class="empty-state">No companies added yet</div>';
+            }
+
+            // Save to Firestore (roleDetails collection)
+            saveJobData({
+                role: roleTitle,
+                essentialSkills: essentialSkills,
+                companies: companies
+            });
+
+            roleModal.classList.remove('show');
         });
-    } else {
-        essentialSkillsContainer.innerHTML = '<div class="empty-state">No skills added yet</div>';
-    }
-    
-    const companiesLogosContainer = document.getElementById('companiesLogos');
-    if (companies.length > 0) {
-        companiesLogosContainer.innerHTML = '';
-        companies.forEach(company => {
-            const logo = document.createElement('div');
-            logo.className = 'company-logo';
-            logo.textContent = company;
-            companiesLogosContainer.appendChild(logo);
-        });
-    } else {
-        companiesLogosContainer.innerHTML = '<div class="empty-state">No companies added yet</div>';
-    }
-    
-    // Save to Firestore (roleDetails collection)
-    saveJobData({
-        role: roleTitle,
-        essentialSkills: essentialSkills,
-        companies: companies
-    });
-    
-    roleModal.classList.remove('show');
-});
-descriptionForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    
-    const isParagraphFormat = document.querySelector('#descriptionModal .toggle-btn[data-format="paragraph"]').classList.contains('active');
-    let description = '';
-    
-    if (isParagraphFormat) {
-        description = document.getElementById('jobDescriptionInput').value;
-    } else {
-        const points = Array.from(document.getElementById('pointsList').children)
-            .map(tag => `• ${tag.textContent.replace('×', '').trim()}`)
-            .join('\n');
-        description = points;
-    }
-    
-    // Update UI with proper formatting
-    const descriptionContainer = document.getElementById('jobDescription');
-    if (description) {
-        if (description.includes('•')) {
-            // Format as bullet points
-            const formattedDescription = description
-                .split('\n')
-                .filter(line => line.trim())
-                .map(line => line.trim().startsWith('•') 
-                    ? `<div style="display: flex; align-items: flex-start; margin-bottom: 8px;">
+        descriptionForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const isParagraphFormat = document.querySelector('#descriptionModal .toggle-btn[data-format="paragraph"]').classList.contains('active');
+            let description = '';
+
+            if (isParagraphFormat) {
+                description = document.getElementById('jobDescriptionInput').value;
+            } else {
+                const points = Array.from(document.getElementById('pointsList').children)
+                    .map(tag => `• ${tag.textContent.replace('×', '').trim()}`)
+                    .join('\n');
+                description = points;
+            }
+
+            // Update UI with proper formatting
+            const descriptionContainer = document.getElementById('jobDescription');
+            if (description) {
+                if (description.includes('•')) {
+                    // Format as bullet points
+                    const formattedDescription = description
+                        .split('\n')
+                        .filter(line => line.trim())
+                        .map(line => line.trim().startsWith('•')
+                            ? `<div style="display: flex; align-items: flex-start; margin-bottom: 8px;">
                          <span style="margin-right: 8px;">•</span>
                          <span>${line.replace('•', '').trim()}</span>
                        </div>`
-                    : `<p>${line}</p>`
-                )
-                .join('');
-            descriptionContainer.innerHTML = formattedDescription;
-        } else {
-            // Regular paragraph
-            descriptionContainer.innerHTML = `<p>${description.replace(/\n/g, '<br>')}</p>`;
-        }
-    } else {
-        descriptionContainer.innerHTML = '<div class="empty-state">No job description added yet</div>';
-    }
-    
-    // Save to Firestore
-    saveJobData({
-        description: description
-    });
-    
-    descriptionModal.classList.remove('show');
-});
+                            : `<p>${line}</p>`
+                        )
+                        .join('');
+                    descriptionContainer.innerHTML = formattedDescription;
+                } else {
+                    // Regular paragraph
+                    descriptionContainer.innerHTML = `<p>${description.replace(/\n/g, '<br>')}</p>`;
+                }
+            } else {
+                descriptionContainer.innerHTML = '<div class="empty-state">No job description added yet</div>';
+            }
 
-skillsForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    
-    const isParagraphFormat = document.querySelector('#skillsModal .toggle-btn[data-format="paragraph"]').classList.contains('active');
-    let skillsDetails = '';
-    
-    if (isParagraphFormat) {
-        skillsDetails = document.getElementById('skillsDetailsInput').value;
-    } else {
-        const points = Array.from(document.getElementById('skillsPointsList').children)
-            .map(tag => `• ${tag.textContent.replace('×', '').trim()}`)
-            .join('\n');
-        skillsDetails = points;
-    }
-    
-    // Update UI with proper formatting
-    const skillsDetailsContainer = document.getElementById('requiredSkills');
-    if (skillsDetails) {
-        if (skillsDetails.includes('•')) {
-            // Format as bullet points
-            const formattedSkills = skillsDetails
-                .split('\n')
-                .filter(line => line.trim())
-                .map(line => line.trim().startsWith('•') 
-                    ? `<div style="display: flex; align-items: flex-start; margin-bottom: 8px;">
+            // Save to Firestore
+            saveJobData({
+                description: description
+            });
+
+            descriptionModal.classList.remove('show');
+        });
+
+        skillsForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const isParagraphFormat = document.querySelector('#skillsModal .toggle-btn[data-format="paragraph"]').classList.contains('active');
+            let skillsDetails = '';
+
+            if (isParagraphFormat) {
+                skillsDetails = document.getElementById('skillsDetailsInput').value;
+            } else {
+                const points = Array.from(document.getElementById('skillsPointsList').children)
+                    .map(tag => `• ${tag.textContent.replace('×', '').trim()}`)
+                    .join('\n');
+                skillsDetails = points;
+            }
+
+            // Update UI with proper formatting
+            const skillsDetailsContainer = document.getElementById('requiredSkills');
+            if (skillsDetails) {
+                if (skillsDetails.includes('•')) {
+                    // Format as bullet points
+                    const formattedSkills = skillsDetails
+                        .split('\n')
+                        .filter(line => line.trim())
+                        .map(line => line.trim().startsWith('•')
+                            ? `<div style="display: flex; align-items: flex-start; margin-bottom: 8px;">
                          <span style="margin-right: 8px;">•</span>
                          <span>${line.replace('•', '').trim()}</span>
                        </div>`
-                    : `<p>${line}</p>`
-                )
-                .join('');
-            skillsDetailsContainer.innerHTML = formattedSkills;
-        } else {
-            // Regular paragraph
-            skillsDetailsContainer.innerHTML = `<p>${skillsDetails.replace(/\n/g, '<br>')}</p>`;
-        }
-    } else {
-        skillsDetailsContainer.innerHTML = '<div class="empty-state">No skills details added yet</div>';
-    }
-    
-    const toolsList = document.getElementById('toolsListModal');
-    const tools = Array.from(toolsList.children).map(tag => tag.textContent.replace('×', '').trim());
-    
-    const toolsContainer = document.getElementById('toolsList');
-    if (tools.length > 0) {
-        toolsContainer.innerHTML = '';
-        tools.forEach(tool => {
-            const toolTag = document.createElement('span');
-            toolTag.className = 'tool-tag';
-            toolTag.textContent = tool;
-            toolsContainer.appendChild(toolTag);
-        });
-    }
-    
-    // Save to Firestore
-    saveJobData({
-        skillsDetails: skillsDetails,
-        tools: tools
-    });
-    
-    skillsModal.classList.remove('show');
-});
+                            : `<p>${line}</p>`
+                        )
+                        .join('');
+                    skillsDetailsContainer.innerHTML = formattedSkills;
+                } else {
+                    // Regular paragraph
+                    skillsDetailsContainer.innerHTML = `<p>${skillsDetails.replace(/\n/g, '<br>')}</p>`;
+                }
+            } else {
+                skillsDetailsContainer.innerHTML = '<div class="empty-state">No skills details added yet</div>';
+            }
 
-salaryForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    
-    const salary = document.getElementById('salaryAmount').value;
-    if (salary) {
-        document.getElementById('salaryInfo').innerHTML = `
+            const toolsList = document.getElementById('toolsListModal');
+            const tools = Array.from(toolsList.children).map(tag => tag.textContent.replace('×', '').trim());
+
+            const toolsContainer = document.getElementById('toolsList');
+            if (tools.length > 0) {
+                toolsContainer.innerHTML = '';
+                tools.forEach(tool => {
+                    const toolTag = document.createElement('span');
+                    toolTag.className = 'tool-tag';
+                    toolTag.textContent = tool;
+                    toolsContainer.appendChild(toolTag);
+                });
+            }
+
+            // Save to Firestore
+            saveJobData({
+                skillsDetails: skillsDetails,
+                tools: tools
+            });
+
+            skillsModal.classList.remove('show');
+        });
+
+        salaryForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const salary = document.getElementById('salaryAmount').value;
+            if (salary) {
+                document.getElementById('salaryInfo').innerHTML = `
             <p>Average annual salary for this role:</p>
             <div class="salary-amount">${salary}</div>
         `;
-    } else {
-        document.getElementById('salaryInfo').innerHTML = '<div class="empty-state">No salary information added yet</div>';
-    }
-    
-    const hiringCompaniesList = document.getElementById('hiringCompaniesList');
-    const hiringCompanies = Array.from(hiringCompaniesList.children).map(tag => tag.textContent.replace('×', '').trim());
-    
-    const hiringCompaniesContainer = document.getElementById('hiringCompanies');
-    if (hiringCompanies.length > 0) {
-        hiringCompaniesContainer.innerHTML = '';
-        hiringCompanies.forEach(company => {
-            const companyTag = document.createElement('span');
-            companyTag.className = 'company-tag';
-            companyTag.textContent = company;
-            hiringCompaniesContainer.appendChild(companyTag);
-        });
-    } else {
-        hiringCompaniesContainer.innerHTML = '<div class="empty-state">No companies added yet</div>';
-    }
-    
-    // Save to Firestore (roleDetails collection)
-    saveJobData({
-        salaryInfo: salary,
-        hiringCompanies: hiringCompanies
-    });
-    
-    salaryModal.classList.remove('show');
-});
-        
-        // Theme toggle functionality
-        const themeToggle = document.querySelector('.theme-toggle');
-        themeToggle.addEventListener('click', () => {
-            document.body.classList.toggle('dark-theme');
-            const icon = themeToggle.querySelector('i');
-            
-            if (document.body.classList.contains('dark-theme')) {
-                icon.classList.remove('fa-moon');
-                icon.classList.add('fa-sun');
             } else {
-                icon.classList.remove('fa-sun');
-                icon.classList.add('fa-moon');
+                document.getElementById('salaryInfo').innerHTML = '<div class="empty-state">No salary information added yet</div>';
             }
+
+            const hiringCompaniesList = document.getElementById('hiringCompaniesList');
+            const hiringCompanies = Array.from(hiringCompaniesList.children).map(tag => tag.textContent.replace('×', '').trim());
+
+            const hiringCompaniesContainer = document.getElementById('hiringCompanies');
+            if (hiringCompanies.length > 0) {
+                hiringCompaniesContainer.innerHTML = '';
+                hiringCompanies.forEach(company => {
+                    const companyTag = document.createElement('span');
+                    companyTag.className = 'company-tag';
+                    companyTag.textContent = company;
+                    hiringCompaniesContainer.appendChild(companyTag);
+                });
+            } else {
+                hiringCompaniesContainer.innerHTML = '<div class="empty-state">No companies added yet</div>';
+            }
+
+            // Save to Firestore (roleDetails collection)
+            saveJobData({
+                salaryInfo: salary,
+                hiringCompanies: hiringCompanies
+            });
+
+            salaryModal.classList.remove('show');
         });
-        
+
+        // Theme toggle functionality
+        // Consistent theme toggle using data-theme
+        const themeToggle = document.querySelector('.theme-toggle');
+        const savedThemeRole = localStorage.getItem('theme') || 'dark';
+        document.body.setAttribute('data-theme', savedThemeRole);
+        themeToggle.innerHTML = savedThemeRole === 'light' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+        themeToggle.addEventListener('click', () => {
+            const current = document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            document.body.setAttribute('data-theme', current);
+            localStorage.setItem('theme', current);
+            themeToggle.innerHTML = current === 'light' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+        });
+
         // Action buttons functionality
         document.querySelector('.explore-projects').addEventListener('click', () => {
             alert('Explore Projects functionality would go here');
         });
-        
+
         document.querySelector('.save-role').addEventListener('click', () => {
             alert('Save Role functionality would go here');
         });
-        
+
         document.querySelector('.share-role').addEventListener('click', () => {
             alert('Share Role functionality would go here');
         });
-        
+
         document.querySelector('.compare-roles').addEventListener('click', () => {
             alert('Compare Roles functionality would go here');
         });
-        
+
         document.querySelector('.prepare-btn').addEventListener('click', () => {
             alert('Start Preparing functionality would go here');
         });
     });
 
-   // Firestore functions
-async function loadJobData(jobId) {
-    try {
-        const doc = await db.collection('jobs').doc(jobId).get();
-        if (doc.exists) {
-            currentJobData = doc.data();
-            
-            // Update role title (from the job card)
-            if (currentJobData.role) {
-                document.querySelector('.role-title').textContent = currentJobData.role;
-            }
-            
-            // Load role details from a separate collection
-            const roleDetailsDoc = await db.collection('roleDetails').doc(jobId).get();
-            
-            if (roleDetailsDoc.exists) {
-                const roleDetails = roleDetailsDoc.data();
-                
-                // Update essential skills (from role details, not job card)
-                const essentialSkillsContainer = document.getElementById('essentialSkills');
-                if (roleDetails.essentialSkills && roleDetails.essentialSkills.length > 0) {
-                    essentialSkillsContainer.innerHTML = '';
-                    roleDetails.essentialSkills.forEach(skill => {
-                        const skillTag = document.createElement('span');
-                        skillTag.className = 'skill-tag';
-                        skillTag.textContent = skill;
-                        essentialSkillsContainer.appendChild(skillTag);
-                    });
-                } else {
-                    essentialSkillsContainer.innerHTML = '<div class="empty-state">No skills added yet</div>';
+    // Firestore functions
+    async function loadJobData(jobId) {
+        try {
+            const doc = await db.collection('jobs').doc(jobId).get();
+            if (doc.exists) {
+                currentJobData = doc.data();
+
+                // Update role title (from the job card)
+                if (currentJobData.role) {
+                    document.querySelector('.role-title').textContent = currentJobData.role;
                 }
-                
-                // Update companies (from role details, not job card)
-                const companiesLogosContainer = document.getElementById('companiesLogos');
-                if (roleDetails.companies && roleDetails.companies.length > 0) {
-                    companiesLogosContainer.innerHTML = '';
-                    roleDetails.companies.forEach(company => {
-                        const logo = document.createElement('div');
-                        logo.className = 'company-logo';
-                        logo.textContent = company;
-                        companiesLogosContainer.appendChild(logo);
-                    });
-                } else {
-                    companiesLogosContainer.innerHTML = '<div class="empty-state">No companies added yet</div>';
-                }
-                
-                // Update description
-                // Update description
-const descriptionContainer = document.getElementById('jobDescription');
-if (roleDetails.description) {
-    if (roleDetails.description.includes('•')) {
-        // Format as bullet points
-        const formattedDescription = roleDetails.description
-            .split('\n')
-            .filter(line => line.trim())
-            .map(line => line.trim().startsWith('•') 
-                ? `<div style="display: flex; align-items: flex-start; margin-bottom: 8px;">
+
+                // Load role details from a separate collection
+                const roleDetailsDoc = await db.collection('roleDetails').doc(jobId).get();
+
+                if (roleDetailsDoc.exists) {
+                    const roleDetails = roleDetailsDoc.data();
+
+                    // Update essential skills (from role details, not job card)
+                    const essentialSkillsContainer = document.getElementById('essentialSkills');
+                    if (roleDetails.essentialSkills && roleDetails.essentialSkills.length > 0) {
+                        essentialSkillsContainer.innerHTML = '';
+                        roleDetails.essentialSkills.forEach(skill => {
+                            const skillTag = document.createElement('span');
+                            skillTag.className = 'skill-tag';
+                            skillTag.textContent = skill;
+                            essentialSkillsContainer.appendChild(skillTag);
+                        });
+                    } else {
+                        essentialSkillsContainer.innerHTML = '<div class="empty-state">No skills added yet</div>';
+                    }
+
+                    // Update companies (from role details, not job card)
+                    const companiesLogosContainer = document.getElementById('companiesLogos');
+                    if (roleDetails.companies && roleDetails.companies.length > 0) {
+                        companiesLogosContainer.innerHTML = '';
+                        roleDetails.companies.forEach(company => {
+                            const logo = document.createElement('div');
+                            logo.className = 'company-logo';
+                            logo.textContent = company;
+                            companiesLogosContainer.appendChild(logo);
+                        });
+                    } else {
+                        companiesLogosContainer.innerHTML = '<div class="empty-state">No companies added yet</div>';
+                    }
+
+                    // Update description
+                    // Update description
+                    const descriptionContainer = document.getElementById('jobDescription');
+                    if (roleDetails.description) {
+                        if (roleDetails.description.includes('•')) {
+                            // Format as bullet points
+                            const formattedDescription = roleDetails.description
+                                .split('\n')
+                                .filter(line => line.trim())
+                                .map(line => line.trim().startsWith('•')
+                                    ? `<div style="display: flex; align-items: flex-start; margin-bottom: 8px;">
                      <span style="margin-right: 8px;">•</span>
                      <span>${line.replace('•', '').trim()}</span>
                    </div>`
-                : `<p>${line}</p>`
-            )
-            .join('');
-        descriptionContainer.innerHTML = formattedDescription;
-    } else {
-        // Regular paragraph
-        descriptionContainer.innerHTML = `<p>${roleDetails.description.replace(/\n/g, '<br>')}</p>`;
-    }
-} else {
-    descriptionContainer.innerHTML = '<div class="empty-state">No job description added yet</div>';
-}
+                                    : `<p>${line}</p>`
+                                )
+                                .join('');
+                            descriptionContainer.innerHTML = formattedDescription;
+                        } else {
+                            // Regular paragraph
+                            descriptionContainer.innerHTML = `<p>${roleDetails.description.replace(/\n/g, '<br>')}</p>`;
+                        }
+                    } else {
+                        descriptionContainer.innerHTML = '<div class="empty-state">No job description added yet</div>';
+                    }
 
 // Update skills details
-const skillsDetailsContainer = document.getElementById('requiredSkills');
-if (roleDetails.skillsDetails) {
-    if (roleDetails.skillsDetails.includes('•')) {
-        // Format as bullet points
-        const formattedSkills = roleDetails.skillsDetails
-            .split('\n')
-            .filter(line => line.trim())
-            .map(line => line.trim().startsWith('•') 
-                ? `<div style="display: flex; align-items: flex-start; margin-bottom: 8px;">
+                    const skillsDetailsContainer = document.getElementById('requiredSkills');
+                    if (roleDetails.skillsDetails) {
+                        if (roleDetails.skillsDetails.includes('•')) {
+                            // Format as bullet points
+                            const formattedSkills = roleDetails.skillsDetails
+                                .split('\n')
+                                .filter(line => line.trim())
+                                .map(line => line.trim().startsWith('•')
+                                    ? `<div style="display: flex; align-items: flex-start; margin-bottom: 8px;">
                      <span style="margin-right: 8px;">•</span>
                      <span>${line.replace('•', '').trim()}</span>
                    </div>`
-                : `<p>${line}</p>`
-            )
-            .join('');
-        skillsDetailsContainer.innerHTML = formattedSkills;
-    } else {
-        // Regular paragraph
-        skillsDetailsContainer.innerHTML = `<p>${roleDetails.skillsDetails.replace(/\n/g, '<br>')}</p>`;
-    }
-} else {
-    skillsDetailsContainer.innerHTML = '<div class="empty-state">No skills details added yet</div>';
-}
-                
-                // Update tools
-                const toolsContainer = document.getElementById('toolsList');
-                if (roleDetails.tools && roleDetails.tools.length > 0) {
-                    toolsContainer.innerHTML = '';
-                    roleDetails.tools.forEach(tool => {
-                        const toolTag = document.createElement('span');
-                        toolTag.className = 'tool-tag';
-                        toolTag.textContent = tool;
-                        toolsContainer.appendChild(toolTag);
-                    });
-                }
-                
-                // Update salary info
-                const salaryContainer = document.getElementById('salaryInfo');
-                if (roleDetails.salaryInfo) {
-                    salaryContainer.innerHTML = `
+                                    : `<p>${line}</p>`
+                                )
+                                .join('');
+                            skillsDetailsContainer.innerHTML = formattedSkills;
+                        } else {
+                            // Regular paragraph
+                            skillsDetailsContainer.innerHTML = `<p>${roleDetails.skillsDetails.replace(/\n/g, '<br>')}</p>`;
+                        }
+                    } else {
+                        skillsDetailsContainer.innerHTML = '<div class="empty-state">No skills details added yet</div>';
+                    }
+
+                    // Update tools
+                    const toolsContainer = document.getElementById('toolsList');
+                    if (roleDetails.tools && roleDetails.tools.length > 0) {
+                        toolsContainer.innerHTML = '';
+                        roleDetails.tools.forEach(tool => {
+                            const toolTag = document.createElement('span');
+                            toolTag.className = 'tool-tag';
+                            toolTag.textContent = tool;
+                            toolsContainer.appendChild(toolTag);
+                        });
+                    }
+
+                    // Update salary info
+                    const salaryContainer = document.getElementById('salaryInfo');
+                    if (roleDetails.salaryInfo) {
+                        salaryContainer.innerHTML = `
                         <p>Average annual salary for this role:</p>
                         <div class="salary-amount">${roleDetails.salaryInfo}</div>
                     `;
+                    } else {
+                        salaryContainer.innerHTML = '<div class="empty-state">No salary information added yet</div>';
+                    }
+
+                    // Update hiring companies
+                    const hiringCompaniesContainer = document.getElementById('hiringCompanies');
+                    if (roleDetails.hiringCompanies && roleDetails.hiringCompanies.length > 0) {
+                        hiringCompaniesContainer.innerHTML = '';
+                        roleDetails.hiringCompanies.forEach(company => {
+                            const companyTag = document.createElement('span');
+                            companyTag.className = 'company-tag';
+                            companyTag.textContent = company;
+                            hiringCompaniesContainer.appendChild(companyTag);
+                        });
+                    } else {
+                        hiringCompaniesContainer.innerHTML = '<div class="empty-state">No companies added yet</div>';
+                    }
                 } else {
-                    salaryContainer.innerHTML = '<div class="empty-state">No salary information added yet</div>';
-                }
-                
-                // Update hiring companies
-                const hiringCompaniesContainer = document.getElementById('hiringCompanies');
-                if (roleDetails.hiringCompanies && roleDetails.hiringCompanies.length > 0) {
-                    hiringCompaniesContainer.innerHTML = '';
-                    roleDetails.hiringCompanies.forEach(company => {
-                        const companyTag = document.createElement('span');
-                        companyTag.className = 'company-tag';
-                        companyTag.textContent = company;
-                        hiringCompaniesContainer.appendChild(companyTag);
+                    // No role details exist yet, show empty states
+                    showEmptyStates();
+
+                    // Create empty role details document
+                    await db.collection('roleDetails').doc(jobId).set({
+                        jobId: jobId,
+                        role: currentJobData.role,
+                        essentialSkills: [],
+                        companies: [],
+                        description: "",
+                        skillsDetails: "",
+                        tools: [],
+                        salaryInfo: "",
+                        hiringCompanies: []
                     });
-                } else {
-                    hiringCompaniesContainer.innerHTML = '<div class="empty-state">No companies added yet</div>';
                 }
             } else {
-                // No role details exist yet, show empty states
                 showEmptyStates();
-                
-                // Create empty role details document
-                await db.collection('roleDetails').doc(jobId).set({
-                    jobId: jobId,
-                    role: currentJobData.role,
-                    essentialSkills: [],
-                    companies: [],
-                    description: "",
-                    skillsDetails: "",
-                    tools: [],
-                    salaryInfo: "",
-                    hiringCompanies: []
-                });
             }
-        } else {
+        } catch (error) {
+            console.error("Error loading job data:", error);
             showEmptyStates();
         }
-    } catch (error) {
-        console.error("Error loading job data:", error);
-        showEmptyStates();
     }
-}
 
-    
+
     function showEmptyStates() {
         document.getElementById('essentialSkills').innerHTML = '<div class="empty-state">No skills added yet</div>';
         document.getElementById('companiesLogos').innerHTML = '<div class="empty-state">No companies added yet</div>';
@@ -1724,432 +1733,432 @@ if (roleDetails.skillsDetails) {
         document.getElementById('salaryInfo').innerHTML = '<div class="empty-state">No salary information added yet</div>';
         document.getElementById('hiringCompanies').innerHTML = '<div class="empty-state">No companies added yet</div>';
     }
-    
-   async function loadRoleDataToForm() {
-    // Load from roleDetails collection, not the job data
-    try {
-        const roleDetailsDoc = await db.collection('roleDetails').doc(currentJobId).get();
-        if (!roleDetailsDoc.exists) return;
-        
-        const roleDetails = roleDetailsDoc.data();
-        
-        // Populate role form with existing data from roleDetails
-        document.getElementById('roleTitle').value = roleDetails.role || '';
-        
-        const skillsList = document.getElementById('skillsList');
-        skillsList.innerHTML = '';
-        if (roleDetails.essentialSkills) {
-            roleDetails.essentialSkills.forEach(skill => {
-                const skillTag = document.createElement('div');
-                skillTag.className = 'item-tag';
-                skillTag.innerHTML = `
+
+    async function loadRoleDataToForm() {
+        // Load from roleDetails collection, not the job data
+        try {
+            const roleDetailsDoc = await db.collection('roleDetails').doc(currentJobId).get();
+            if (!roleDetailsDoc.exists) return;
+
+            const roleDetails = roleDetailsDoc.data();
+
+            // Populate role form with existing data from roleDetails
+            document.getElementById('roleTitle').value = roleDetails.role || '';
+
+            const skillsList = document.getElementById('skillsList');
+            skillsList.innerHTML = '';
+            if (roleDetails.essentialSkills) {
+                roleDetails.essentialSkills.forEach(skill => {
+                    const skillTag = document.createElement('div');
+                    skillTag.className = 'item-tag';
+                    skillTag.innerHTML = `
                     ${skill}
                     <span class="remove-item" data-action="delete">&times;</span>
                 `;
-                
-                skillTag.querySelector('.remove-item').addEventListener('click', function() {
-                    if (this.dataset.action === 'delete') {
-                        skillsList.removeChild(skillTag);
-                    }
+
+                    skillTag.querySelector('.remove-item').addEventListener('click', function() {
+                        if (this.dataset.action === 'delete') {
+                            skillsList.removeChild(skillTag);
+                        }
+                    });
+
+                    skillsList.appendChild(skillTag);
                 });
-                
-                skillsList.appendChild(skillTag);
-            });
-        }
-        
-        const companiesList = document.getElementById('companiesList');
-        companiesList.innerHTML = '';
-        if (roleDetails.companies) {
-            roleDetails.companies.forEach(company => {
-                const companyTag = document.createElement('div');
-                companyTag.className = 'item-tag';
-                companyTag.innerHTML = `
+            }
+
+            const companiesList = document.getElementById('companiesList');
+            companiesList.innerHTML = '';
+            if (roleDetails.companies) {
+                roleDetails.companies.forEach(company => {
+                    const companyTag = document.createElement('div');
+                    companyTag.className = 'item-tag';
+                    companyTag.innerHTML = `
                     ${company}
                     <span class="remove-item" data-action="delete">&times;</span>
                 `;
-                
-                companyTag.querySelector('.remove-item').addEventListener('click', function() {
-                    if (this.dataset.action === 'delete') {
-                        companiesList.removeChild(companyTag);
+
+                    companyTag.querySelector('.remove-item').addEventListener('click', function() {
+                        if (this.dataset.action === 'delete') {
+                            companiesList.removeChild(companyTag);
+                        }
+                    });
+
+                    companiesList.appendChild(companyTag);
+                });
+            }
+        } catch (error) {
+            console.error("Error loading role data to form:", error);
+        }
+    }
+
+    async function loadDescriptionToForm() {
+        // Load from roleDetails collection
+        try {
+            const roleDetailsDoc = await db.collection('roleDetails').doc(currentJobId).get();
+            if (!roleDetailsDoc.exists) return;
+
+            const roleDetails = roleDetailsDoc.data();
+
+            // Check if description contains bullet points
+            if (roleDetails.description && roleDetails.description.includes('•')) {
+                // Switch to points format
+                document.querySelector('#descriptionModal .toggle-btn[data-format="points"]').classList.add('active');
+                document.querySelector('#descriptionModal .toggle-btn[data-format="paragraph"]').classList.remove('active');
+                document.getElementById('jobDescriptionInput').style.display = 'none';
+                document.getElementById('pointsContainer').style.display = 'block';
+
+                // Parse bullet points and add to list
+                const pointsList = document.getElementById('pointsList');
+                pointsList.innerHTML = '';
+                const points = roleDetails.description.split('\n').filter(line => line.trim().startsWith('•'));
+
+                points.forEach(point => {
+                    const pointText = point.replace('•', '').trim();
+                    if (pointText) {
+                        const pointTag = document.createElement('div');
+                        pointTag.className = 'item-tag';
+                        pointTag.innerHTML = `
+                        ${pointText}
+                        <span class="remove-item" data-action="delete">&times;</span>
+                    `;
+
+                        pointTag.querySelector('.remove-item').addEventListener('click', function() {
+                            if (this.dataset.action === 'delete') {
+                                pointsList.removeChild(pointTag);
+                            }
+                        });
+
+                        pointsList.appendChild(pointTag);
                     }
                 });
-                
-                companiesList.appendChild(companyTag);
-            });
+            } else {
+                // Use paragraph format
+                document.querySelector('#descriptionModal .toggle-btn[data-format="paragraph"]').classList.add('active');
+                document.querySelector('#descriptionModal .toggle-btn[data-format="points"]').classList.remove('active');
+                document.getElementById('jobDescriptionInput').style.display = 'block';
+                document.getElementById('pointsContainer').style.display = 'none';
+                document.getElementById('jobDescriptionInput').value = roleDetails.description || '';
+            }
+        } catch (error) {
+            console.error("Error loading description to form:", error);
         }
-    } catch (error) {
-        console.error("Error loading role data to form:", error);
     }
-}
 
-async function loadDescriptionToForm() {
-    // Load from roleDetails collection
-    try {
-        const roleDetailsDoc = await db.collection('roleDetails').doc(currentJobId).get();
-        if (!roleDetailsDoc.exists) return;
-        
-        const roleDetails = roleDetailsDoc.data();
-        
-        // Check if description contains bullet points
-        if (roleDetails.description && roleDetails.description.includes('•')) {
-            // Switch to points format
-            document.querySelector('#descriptionModal .toggle-btn[data-format="points"]').classList.add('active');
-            document.querySelector('#descriptionModal .toggle-btn[data-format="paragraph"]').classList.remove('active');
-            document.getElementById('jobDescriptionInput').style.display = 'none';
-            document.getElementById('pointsContainer').style.display = 'block';
-            
-            // Parse bullet points and add to list
-            const pointsList = document.getElementById('pointsList');
-            pointsList.innerHTML = '';
-            const points = roleDetails.description.split('\n').filter(line => line.trim().startsWith('•'));
-            
-            points.forEach(point => {
-                const pointText = point.replace('•', '').trim();
-                if (pointText) {
-                    const pointTag = document.createElement('div');
-                    pointTag.className = 'item-tag';
-                    pointTag.innerHTML = `
+    async function loadSkillsToForm() {
+        // Load from roleDetails collection
+        try {
+            const roleDetailsDoc = await db.collection('roleDetails').doc(currentJobId).get();
+            if (!roleDetailsDoc.exists) return;
+
+            const roleDetails = roleDetailsDoc.data();
+
+            // Check if skillsDetails contains bullet points
+            if (roleDetails.skillsDetails && roleDetails.skillsDetails.includes('•')) {
+                // Switch to points format
+                document.querySelector('#skillsModal .toggle-btn[data-format="points"]').classList.add('active');
+                document.querySelector('#skillsModal .toggle-btn[data-format="paragraph"]').classList.remove('active');
+                document.getElementById('skillsDetailsInput').style.display = 'none';
+                document.getElementById('skillsPointsContainer').style.display = 'block';
+
+                // Parse bullet points and add to list
+                const pointsList = document.getElementById('skillsPointsList');
+                pointsList.innerHTML = '';
+                const points = roleDetails.skillsDetails.split('\n').filter(line => line.trim().startsWith('•'));
+
+                points.forEach(point => {
+                    const pointText = point.replace('•', '').trim();
+                    if (pointText) {
+                        const pointTag = document.createElement('div');
+                        pointTag.className = 'item-tag';
+                        pointTag.innerHTML = `
                         ${pointText}
                         <span class="remove-item" data-action="delete">&times;</span>
                     `;
-                    
-                    pointTag.querySelector('.remove-item').addEventListener('click', function() {
-                        if (this.dataset.action === 'delete') {
-                            pointsList.removeChild(pointTag);
-                        }
-                    });
-                    
-                    pointsList.appendChild(pointTag);
-                }
-            });
-        } else {
-            // Use paragraph format
-            document.querySelector('#descriptionModal .toggle-btn[data-format="paragraph"]').classList.add('active');
-            document.querySelector('#descriptionModal .toggle-btn[data-format="points"]').classList.remove('active');
-            document.getElementById('jobDescriptionInput').style.display = 'block';
-            document.getElementById('pointsContainer').style.display = 'none';
-            document.getElementById('jobDescriptionInput').value = roleDetails.description || '';
-        }
-    } catch (error) {
-        console.error("Error loading description to form:", error);
-    }
-}
 
-async function loadSkillsToForm() {
-    // Load from roleDetails collection
-    try {
-        const roleDetailsDoc = await db.collection('roleDetails').doc(currentJobId).get();
-        if (!roleDetailsDoc.exists) return;
-        
-        const roleDetails = roleDetailsDoc.data();
-        
-        // Check if skillsDetails contains bullet points
-        if (roleDetails.skillsDetails && roleDetails.skillsDetails.includes('•')) {
-            // Switch to points format
-            document.querySelector('#skillsModal .toggle-btn[data-format="points"]').classList.add('active');
-            document.querySelector('#skillsModal .toggle-btn[data-format="paragraph"]').classList.remove('active');
-            document.getElementById('skillsDetailsInput').style.display = 'none';
-            document.getElementById('skillsPointsContainer').style.display = 'block';
-            
-            // Parse bullet points and add to list
-            const pointsList = document.getElementById('skillsPointsList');
-            pointsList.innerHTML = '';
-            const points = roleDetails.skillsDetails.split('\n').filter(line => line.trim().startsWith('•'));
-            
-            points.forEach(point => {
-                const pointText = point.replace('•', '').trim();
-                if (pointText) {
-                    const pointTag = document.createElement('div');
-                    pointTag.className = 'item-tag';
-                    pointTag.innerHTML = `
-                        ${pointText}
-                        <span class="remove-item" data-action="delete">&times;</span>
-                    `;
-                    
-                    pointTag.querySelector('.remove-item').addEventListener('click', function() {
-                        if (this.dataset.action === 'delete') {
-                            pointsList.removeChild(pointTag);
-                        }
-                    });
-                    
-                    pointsList.appendChild(pointTag);
-                }
-            });
-        } else {
-            // Use paragraph format
-            document.querySelector('#skillsModal .toggle-btn[data-format="paragraph"]').classList.add('active');
-            document.querySelector('#skillsModal .toggle-btn[data-format="points"]').classList.remove('active');
-            document.getElementById('skillsDetailsInput').style.display = 'block';
-            document.getElementById('skillsPointsContainer').style.display = 'none';
-            document.getElementById('skillsDetailsInput').value = roleDetails.skillsDetails || '';
-        }
-        
-        const toolsList = document.getElementById('toolsListModal');
-        toolsList.innerHTML = '';
-        if (roleDetails.tools) {
-            roleDetails.tools.forEach(tool => {
-                const toolTag = document.createElement('div');
-                toolTag.className = 'item-tag';
-                toolTag.innerHTML = `
+                        pointTag.querySelector('.remove-item').addEventListener('click', function() {
+                            if (this.dataset.action === 'delete') {
+                                pointsList.removeChild(pointTag);
+                            }
+                        });
+
+                        pointsList.appendChild(pointTag);
+                    }
+                });
+            } else {
+                // Use paragraph format
+                document.querySelector('#skillsModal .toggle-btn[data-format="paragraph"]').classList.add('active');
+                document.querySelector('#skillsModal .toggle-btn[data-format="points"]').classList.remove('active');
+                document.getElementById('skillsDetailsInput').style.display = 'block';
+                document.getElementById('skillsPointsContainer').style.display = 'none';
+                document.getElementById('skillsDetailsInput').value = roleDetails.skillsDetails || '';
+            }
+
+            const toolsList = document.getElementById('toolsListModal');
+            toolsList.innerHTML = '';
+            if (roleDetails.tools) {
+                roleDetails.tools.forEach(tool => {
+                    const toolTag = document.createElement('div');
+                    toolTag.className = 'item-tag';
+                    toolTag.innerHTML = `
                     ${tool}
                     <span class="remove-item" data-action="delete">&times;</span>
                 `;
-                
-                toolTag.querySelector('.remove-item').addEventListener('click', function() {
-                    if (this.dataset.action === 'delete') {
-                        toolsList.removeChild(toolTag);
-                    }
-                });
-                
-                toolsList.appendChild(toolTag);
-            });
-        }
-    } catch (error) {
-        console.error("Error loading skills to form:", error);
-    }
-}
 
-async function loadSalaryToForm() {
-    // Load from roleDetails collection
-    try {
-        const roleDetailsDoc = await db.collection('roleDetails').doc(currentJobId).get();
-        if (!roleDetailsDoc.exists) return;
-        
-        const roleDetails = roleDetailsDoc.data();
-        
-        document.getElementById('salaryAmount').value = roleDetails.salaryInfo || '';
-        
-        const hiringCompaniesList = document.getElementById('hiringCompaniesList');
-        hiringCompaniesList.innerHTML = '';
-        if (roleDetails.hiringCompanies) {
-            roleDetails.hiringCompanies.forEach(company => {
-                const companyTag = document.createElement('div');
-                companyTag.className = 'item-tag';
-                companyTag.innerHTML = `
+                    toolTag.querySelector('.remove-item').addEventListener('click', function() {
+                        if (this.dataset.action === 'delete') {
+                            toolsList.removeChild(toolTag);
+                        }
+                    });
+
+                    toolsList.appendChild(toolTag);
+                });
+            }
+        } catch (error) {
+            console.error("Error loading skills to form:", error);
+        }
+    }
+
+    async function loadSalaryToForm() {
+        // Load from roleDetails collection
+        try {
+            const roleDetailsDoc = await db.collection('roleDetails').doc(currentJobId).get();
+            if (!roleDetailsDoc.exists) return;
+
+            const roleDetails = roleDetailsDoc.data();
+
+            document.getElementById('salaryAmount').value = roleDetails.salaryInfo || '';
+
+            const hiringCompaniesList = document.getElementById('hiringCompaniesList');
+            hiringCompaniesList.innerHTML = '';
+            if (roleDetails.hiringCompanies) {
+                roleDetails.hiringCompanies.forEach(company => {
+                    const companyTag = document.createElement('div');
+                    companyTag.className = 'item-tag';
+                    companyTag.innerHTML = `
                     ${company}
                     <span class="remove-item" data-action="delete">&times;</span>
                 `;
-                
-                companyTag.querySelector('.remove-item').addEventListener('click', function() {
-                    if (this.dataset.action === 'delete') {
-                        hiringCompaniesList.removeChild(companyTag);
-                    }
+
+                    companyTag.querySelector('.remove-item').addEventListener('click', function() {
+                        if (this.dataset.action === 'delete') {
+                            hiringCompaniesList.removeChild(companyTag);
+                        }
+                    });
+
+                    hiringCompaniesList.appendChild(companyTag);
                 });
-                
-                hiringCompaniesList.appendChild(companyTag);
-            });
+            }
+        } catch (error) {
+            console.error("Error loading salary to form:", error);
         }
-    } catch (error) {
-        console.error("Error loading salary to form:", error);
     }
-}
-    
-async function saveJobData(data) {
-    if (!currentJobId) return;
-    
-    try {
-        await db.collection('roleDetails').doc(currentJobId).update(data);
-        console.log("Role details saved successfully");
-        
-        // Update local data
-        const roleDetailsDoc = await db.collection('roleDetails').doc(currentJobId).get();
-        if (roleDetailsDoc.exists) {
-            currentJobData = { ...currentJobData, ...roleDetailsDoc.data() };
-        }
-    } catch (error) {
-        console.error("Error saving role details:", error);
-        
-        // If document doesn't exist yet, create it
-        if (error.code === 'not-found') {
-            try {
-                await db.collection('roleDetails').doc(currentJobId).set({
-                    jobId: currentJobId,
-                    role: currentJobData.role,
-                    ...data
-                });
-                console.log("Role details document created successfully");
-            } catch (createError) {
-                console.error("Error creating role details document:", createError);
+
+    async function saveJobData(data) {
+        if (!currentJobId) return;
+
+        try {
+            await db.collection('roleDetails').doc(currentJobId).update(data);
+            console.log("Role details saved successfully");
+
+            // Update local data
+            const roleDetailsDoc = await db.collection('roleDetails').doc(currentJobId).get();
+            if (roleDetailsDoc.exists) {
+                currentJobData = { ...currentJobData, ...roleDetailsDoc.data() };
+            }
+        } catch (error) {
+            console.error("Error saving role details:", error);
+
+            // If document doesn't exist yet, create it
+            if (error.code === 'not-found') {
+                try {
+                    await db.collection('roleDetails').doc(currentJobId).set({
+                        jobId: currentJobId,
+                        role: currentJobData.role,
+                        ...data
+                    });
+                    console.log("Role details document created successfully");
+                } catch (createError) {
+                    console.error("Error creating role details document:", createError);
+                    alert("Error saving data. Please try again.");
+                }
+            } else {
                 alert("Error saving data. Please try again.");
             }
-        } else {
-            alert("Error saving data. Please try again.");
         }
     }
-}
 
-// Toggle functionality for paragraph/points
-document.addEventListener('DOMContentLoaded', function() {
-    // Description format toggle
-    const descParagraphBtn = document.querySelector('#descriptionModal .toggle-btn[data-format="paragraph"]');
-    const descPointsBtn = document.querySelector('#descriptionModal .toggle-btn[data-format="points"]');
-    const descTextarea = document.getElementById('jobDescriptionInput');
-    const descPointsContainer = document.getElementById('pointsContainer');
-    const addPointBtn = document.getElementById('addPointBtn');
-    
-    // Skills format toggle
-    const skillsParagraphBtn = document.querySelector('#skillsModal .toggle-btn[data-format="paragraph"]');
-    const skillsPointsBtn = document.querySelector('#skillsModal .toggle-btn[data-format="points"]');
-    const skillsTextarea = document.getElementById('skillsDetailsInput');
-    const skillsPointsContainer = document.getElementById('skillsPointsContainer');
-    const addSkillPointBtn = document.getElementById('addSkillPointBtn');
-    
-    // Description toggle functionality
-    descParagraphBtn.addEventListener('click', () => {
-        descParagraphBtn.classList.add('active');
-        descPointsBtn.classList.remove('active');
-        descTextarea.style.display = 'block';
-        descPointsContainer.style.display = 'none';
-    });
-    
-    descPointsBtn.addEventListener('click', () => {
-        descPointsBtn.classList.add('active');
-        descParagraphBtn.classList.remove('active');
-        descTextarea.style.display = 'none';
-        descPointsContainer.style.display = 'block';
-    });
-    
-    // Skills toggle functionality
-    skillsParagraphBtn.addEventListener('click', () => {
-        skillsParagraphBtn.classList.add('active');
-        skillsPointsBtn.classList.remove('active');
-        skillsTextarea.style.display = 'block';
-        skillsPointsContainer.style.display = 'none';
-    });
-    
-    skillsPointsBtn.addEventListener('click', () => {
-        skillsPointsBtn.classList.add('active');
-        skillsParagraphBtn.classList.remove('active');
-        skillsTextarea.style.display = 'none';
-        skillsPointsContainer.style.display = 'block';
-    });
-    
-    // Add point to description
-    addPointBtn.addEventListener('click', () => {
-        const pointInput = document.getElementById('pointInput');
-        const point = pointInput.value.trim();
-        
-        if (point) {
-            const pointsList = document.getElementById('pointsList');
-            const pointTag = document.createElement('div');
-            pointTag.className = 'item-tag';
-            pointTag.innerHTML = `
+    // Toggle functionality for paragraph/points
+    document.addEventListener('DOMContentLoaded', function() {
+        // Description format toggle
+        const descParagraphBtn = document.querySelector('#descriptionModal .toggle-btn[data-format="paragraph"]');
+        const descPointsBtn = document.querySelector('#descriptionModal .toggle-btn[data-format="points"]');
+        const descTextarea = document.getElementById('jobDescriptionInput');
+        const descPointsContainer = document.getElementById('pointsContainer');
+        const addPointBtn = document.getElementById('addPointBtn');
+
+        // Skills format toggle
+        const skillsParagraphBtn = document.querySelector('#skillsModal .toggle-btn[data-format="paragraph"]');
+        const skillsPointsBtn = document.querySelector('#skillsModal .toggle-btn[data-format="points"]');
+        const skillsTextarea = document.getElementById('skillsDetailsInput');
+        const skillsPointsContainer = document.getElementById('skillsPointsContainer');
+        const addSkillPointBtn = document.getElementById('addSkillPointBtn');
+
+        // Description toggle functionality
+        descParagraphBtn.addEventListener('click', () => {
+            descParagraphBtn.classList.add('active');
+            descPointsBtn.classList.remove('active');
+            descTextarea.style.display = 'block';
+            descPointsContainer.style.display = 'none';
+        });
+
+        descPointsBtn.addEventListener('click', () => {
+            descPointsBtn.classList.add('active');
+            descParagraphBtn.classList.remove('active');
+            descTextarea.style.display = 'none';
+            descPointsContainer.style.display = 'block';
+        });
+
+        // Skills toggle functionality
+        skillsParagraphBtn.addEventListener('click', () => {
+            skillsParagraphBtn.classList.add('active');
+            skillsPointsBtn.classList.remove('active');
+            skillsTextarea.style.display = 'block';
+            skillsPointsContainer.style.display = 'none';
+        });
+
+        skillsPointsBtn.addEventListener('click', () => {
+            skillsPointsBtn.classList.add('active');
+            skillsParagraphBtn.classList.remove('active');
+            skillsTextarea.style.display = 'none';
+            skillsPointsContainer.style.display = 'block';
+        });
+
+        // Add point to description
+        addPointBtn.addEventListener('click', () => {
+            const pointInput = document.getElementById('pointInput');
+            const point = pointInput.value.trim();
+
+            if (point) {
+                const pointsList = document.getElementById('pointsList');
+                const pointTag = document.createElement('div');
+                pointTag.className = 'item-tag';
+                pointTag.innerHTML = `
                 ${point}
                 <span class="remove-item" data-action="delete">&times;</span>
             `;
-            
-            pointTag.querySelector('.remove-item').addEventListener('click', function() {
-                if (this.dataset.action === 'delete') {
-                    pointsList.removeChild(pointTag);
-                }
-            });
-            
-            pointsList.appendChild(pointTag);
-            pointInput.value = '';
-        }
-    });
-    
-    // Add point to skills
-    addSkillPointBtn.addEventListener('click', () => {
-        const skillPointInput = document.getElementById('skillPointInput');
-        const point = skillPointInput.value.trim();
-        
-        if (point) {
-            const skillsPointsList = document.getElementById('skillsPointsList');
-            const pointTag = document.createElement('div');
-            pointTag.className = 'item-tag';
-            pointTag.innerHTML = `
+
+                pointTag.querySelector('.remove-item').addEventListener('click', function() {
+                    if (this.dataset.action === 'delete') {
+                        pointsList.removeChild(pointTag);
+                    }
+                });
+
+                pointsList.appendChild(pointTag);
+                pointInput.value = '';
+            }
+        });
+
+        // Add point to skills
+        addSkillPointBtn.addEventListener('click', () => {
+            const skillPointInput = document.getElementById('skillPointInput');
+            const point = skillPointInput.value.trim();
+
+            if (point) {
+                const skillsPointsList = document.getElementById('skillsPointsList');
+                const pointTag = document.createElement('div');
+                pointTag.className = 'item-tag';
+                pointTag.innerHTML = `
                 ${point}
                 <span class="remove-item" data-action="delete">&times;</span>
             `;
-            
-            pointTag.querySelector('.remove-item').addEventListener('click', function() {
-                if (this.dataset.action === 'delete') {
-                    skillsPointsList.removeChild(pointTag);
-                }
+
+                pointTag.querySelector('.remove-item').addEventListener('click', function() {
+                    if (this.dataset.action === 'delete') {
+                        skillsPointsList.removeChild(pointTag);
+                    }
+                });
+
+                skillsPointsList.appendChild(pointTag);
+                skillPointInput.value = '';
+            }
+        });
+
+        // Update form submission to handle points format
+        const originalDescriptionSubmit = descriptionForm.onsubmit;
+        descriptionForm.onsubmit = function(e) {
+            e.preventDefault();
+
+            const isParagraphFormat = descParagraphBtn.classList.contains('active');
+            let description = '';
+
+            if (isParagraphFormat) {
+                description = descTextarea.value;
+            } else {
+                const points = Array.from(document.getElementById('pointsList').children)
+                    .map(tag => `• ${tag.textContent.replace('×', '').trim()}`)
+                    .join('\n');
+                description = points;
+            }
+
+            if (description) {
+                document.getElementById('jobDescription').innerHTML = `<p>${description.replace(/\n/g, '<br>')}</p>`;
+            } else {
+                document.getElementById('jobDescription').innerHTML = '<div class="empty-state">No job description added yet</div>';
+            }
+
+            // Save to Firestore
+            saveJobData({
+                description: description
             });
-            
-            skillsPointsList.appendChild(pointTag);
-            skillPointInput.value = '';
-        }
+
+            descriptionModal.classList.remove('show');
+        };
+
+        const originalSkillsSubmit = skillsForm.onsubmit;
+        skillsForm.onsubmit = function(e) {
+            e.preventDefault();
+
+            const isParagraphFormat = skillsParagraphBtn.classList.contains('active');
+            let skillsDetails = '';
+
+            if (isParagraphFormat) {
+                skillsDetails = skillsTextarea.value;
+            } else {
+                const points = Array.from(document.getElementById('skillsPointsList').children)
+                    .map(tag => `• ${tag.textContent.replace('×', '').trim()}`)
+                    .join('\n');
+                skillsDetails = points;
+            }
+
+            if (skillsDetails) {
+                document.getElementById('requiredSkills').innerHTML = `<p>${skillsDetails.replace(/\n/g, '<br>')}</p>`;
+            } else {
+                document.getElementById('requiredSkills').innerHTML = '<div class="empty-state">No skills details added yet</div>';
+            }
+
+            const toolsList = document.getElementById('toolsListModal');
+            const tools = Array.from(toolsList.children).map(tag => tag.textContent.replace('×', '').trim());
+
+            const toolsContainer = document.getElementById('toolsList');
+            if (tools.length > 0) {
+                toolsContainer.innerHTML = '';
+                tools.forEach(tool => {
+                    const toolTag = document.createElement('span');
+                    toolTag.className = 'tool-tag';
+                    toolTag.textContent = tool;
+                    toolsContainer.appendChild(toolTag);
+                });
+            }
+
+            // Save to Firestore
+            saveJobData({
+                skillsDetails: skillsDetails,
+                tools: tools
+            });
+
+            skillsModal.classList.remove('show');
+        };
     });
-    
-    // Update form submission to handle points format
-    const originalDescriptionSubmit = descriptionForm.onsubmit;
-    descriptionForm.onsubmit = function(e) {
-        e.preventDefault();
-        
-        const isParagraphFormat = descParagraphBtn.classList.contains('active');
-        let description = '';
-        
-        if (isParagraphFormat) {
-            description = descTextarea.value;
-        } else {
-            const points = Array.from(document.getElementById('pointsList').children)
-                .map(tag => `• ${tag.textContent.replace('×', '').trim()}`)
-                .join('\n');
-            description = points;
-        }
-        
-        if (description) {
-            document.getElementById('jobDescription').innerHTML = `<p>${description.replace(/\n/g, '<br>')}</p>`;
-        } else {
-            document.getElementById('jobDescription').innerHTML = '<div class="empty-state">No job description added yet</div>';
-        }
-        
-        // Save to Firestore
-        saveJobData({
-            description: description
-        });
-        
-        descriptionModal.classList.remove('show');
-    };
-    
-    const originalSkillsSubmit = skillsForm.onsubmit;
-    skillsForm.onsubmit = function(e) {
-        e.preventDefault();
-        
-        const isParagraphFormat = skillsParagraphBtn.classList.contains('active');
-        let skillsDetails = '';
-        
-        if (isParagraphFormat) {
-            skillsDetails = skillsTextarea.value;
-        } else {
-            const points = Array.from(document.getElementById('skillsPointsList').children)
-                .map(tag => `• ${tag.textContent.replace('×', '').trim()}`)
-                .join('\n');
-            skillsDetails = points;
-        }
-        
-        if (skillsDetails) {
-            document.getElementById('requiredSkills').innerHTML = `<p>${skillsDetails.replace(/\n/g, '<br>')}</p>`;
-        } else {
-            document.getElementById('requiredSkills').innerHTML = '<div class="empty-state">No skills details added yet</div>';
-        }
-        
-        const toolsList = document.getElementById('toolsListModal');
-        const tools = Array.from(toolsList.children).map(tag => tag.textContent.replace('×', '').trim());
-        
-        const toolsContainer = document.getElementById('toolsList');
-        if (tools.length > 0) {
-            toolsContainer.innerHTML = '';
-            tools.forEach(tool => {
-                const toolTag = document.createElement('span');
-                toolTag.className = 'tool-tag';
-                toolTag.textContent = tool;
-                toolsContainer.appendChild(toolTag);
-            });
-        }
-        
-        // Save to Firestore
-        saveJobData({
-            skillsDetails: skillsDetails,
-            tools: tools
-        });
-        
-        skillsModal.classList.remove('show');
-    };
-});
 </script>
 </body>
 </html>

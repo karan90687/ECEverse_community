@@ -11,1265 +11,1794 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    
-<style>
-    :root {
-      --primary: #000000;
-      --primary-dark: #423d7b;
-      --primary-light: #d7161600;
-      --secondary: #10B981;
-      --accent: #F59E0B;
-      --text-primary: #1F2937;
-      --text-secondary: #4B5563;
-      --bg-primary: #ebeaea5a;  
-      --bg-secondary: #fdfafa; 
-      --bg-tertiary: #ffffff;
-      --border-color: #0a0a0b;
-      --card-shadow: 0 4px 6px rgba(247, 244, 244, 0.952), 0 1px 3px rgba(230, 221, 221, 0.947);
-      --success: #10B981;
-      --warning: #F59E0B;
-      --gradient: linear-gradient(135deg, #0d0d0d 0%, #141219 100%);
-      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    * { 
-      margin: 0; 
-      padding: 0; 
-      box-sizing: border-box; 
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
-    }
-
-    body { 
-      background: var(--bg-primary); 
-      color: var(--text-primary); 
-      line-height: 1.6;
-      font-size: 14px;
-      transition: var(--transition);
-    }
-
-    /* Header */
-    header {
-      background: var(--bg-secondary);
-      border-bottom: 1px solid var(--border-color);
-      padding: 16px 32px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      box-shadow: 0 4px 6px -1px rgba(236, 201, 75, 0.1)
-    }
-
-    .logo {
-      font-size: 24px;
-      font-weight: 700;
-      color: var(--text-primary);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-family: 'Poppins', sans-serif;
-    }
-
-    .logo span {
-      background: var(--gradient);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .logo i {
-      font-size: 28px;
-      color: var(--primary);
-    }
-
-    nav {
-      display: flex;
-      gap: 32px;
-      align-items: center;
-    }
-
-    nav a {
-      color: var(--text-secondary);
-      text-decoration: none;
-      font-weight: 500;
-      font-size: 15px;
-      transition: var(--transition);
-      position: relative;
-      padding: 8px 0;
-    }
-
-    nav a:hover {
-      color: var(--text-primary);
-    }
-
-    nav a::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background: var(--gradient);
-      transition: var(--transition);
-    }
-
-    nav a:hover::after {
-      width: 100%;
-    }
-
-    nav a.active {
-      color: var(--text-primary);
-    }
-
-    nav a.active::after {
-      width: 100%;
-    }
-
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .user-info {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      cursor: pointer;
-      padding: 8px 16px;
-      border-radius: 12px;
-      transition: var(--transition);
-      background: var(--bg-tertiary);
-    }
-
-    .user-info:hover {
-      background: rgb(11, 10, 10);
-      color: white;
-    }
-
-    .user-avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: var(--gradient);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 600;
-      color: white;
-      font-size: 16px;
-    }
-    /* .user-avatar:hover{
-      background-color: #ed1010;
-      color: black;
-      
-    } */
-
-    .theme-toggle {
-      background: var(--bg-tertiary);
-      border: none;
-      color: var(--text-primary);
-      cursor: pointer;
-      font-size: 18px;
-      width: 44px;
-      height: 44px;
-      border-radius: 12px;
-      transition: var(--transition);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .theme-toggle:hover {
-      background: var(--border-color);
-      transform: rotate(15deg);
-    }
-
-    /* Container */
-    .container {
-      display: flex;
-      min-height: calc(100vh - 80px);
-    }
-
-    /* Sidebar */
-   .sidebar {
-  width: 320px;
-  background: var(--bg-secondary);
-  border-right: 1px solid var(--border-color);
-  padding: 24px;
-  overflow-y: auto;
-  transition: var(--transition);
-  position: sticky;
-  top: 80px;
-  height: calc(100vh - 80px);
-}
-
-.sidebar-section {
-  margin-bottom: 28px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid var(--border-color);
-  max-height: 200px; /* Limit height of each section */
-  overflow-y: auto; /* Enable scrolling within each section */
-}
-
-.sidebar-section:last-child {
-  border-bottom: none;
-}
-.sidebar-search {
-  margin-bottom: 20px;
-  position: relative;
-}
-
-.sidebar-search i {
-  position: absolute;
-  left: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--text-secondary);
-  z-index: 2;
-}
-
-.sidebar-search-input {
-  width: 100%;
-  padding: 10px 10px 10px 36px;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  font-size: 14px;
-  background: var(--bg-tertiary);
-  color: var(--text-primary);
-}
-
-/* Remove icons from filter buttons */
-.filter-btn i {
-  display: none;
-}
-
-/* Adjust filter button text alignment */
-.filter-btn {
-  justify-content: center;
-  text-align: center;
-}
-
-    .sidebar-title {
-      font-size: 16px;
-      font-weight: 600;
-      color: var(--text-primary);
-      margin-bottom: 16px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-family: 'Poppins', sans-serif;
-    }
-
-    .sidebar-title i {
-      color: var(--primary);
-      font-size: 18px;
-    }
-
-    /* Main content */
-    .main-content {
-      flex: 1;
-      padding: 32px;
-      overflow-y: auto;
-      width: calc(100% - 320px);
-      transition: var(--transition);
-      background: var(--bg-primary);
-    }
-
-    /* Search container */
-    .search-container {
-      position: relative;
-      margin-bottom: 28px;
-    }
-
-    .search-container i {
-      position: absolute;
-      left: 20px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--text-secondary);
-      z-index: 2;
-    }
-
-    .search-input {
-      width: 100%;
-      padding: 16px 20px 16px 52px;
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      font-size: 16px;
-      background: var(--bg-secondary);
-      color: var(--text-primary);
-      transition: var(--transition);
-      box-shadow: var(--card-shadow);
-    }
-
-    .search-input:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
-    }
-
-    /* Jobs Section Styles */
-    .jobs-header {
-      margin-bottom: 32px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .jobs-header h1 {
-      font-size: 32px;
-      font-weight: 700;
-      margin-bottom: 8px;
-      color: var(--text-primary);
-      font-family: 'Poppins', sans-serif;
-    }
-
-    .jobs-description {
-      color: var(--text-secondary);
-      font-size: 16px;
-      max-width: 600px;
-      line-height: 1.7;
-    }
-
-    .admin-btn {
-      padding: 14px 24px;
-      background: var(--gradient);
-      color: white;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      font-weight: 500;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      transition: var(--transition);
-      box-shadow: 0 4px 6px rgba(99, 102, 241, 0.3);
-      font-size: 15px;
-    }
-
-    .admin-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 12px rgba(99, 102, 241, 0.4);
-    }
-
-    /* Jobs Filters */
-    .jobs-filters {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-bottom: 32px;
-    }
-
-    .filter-btn {
-      padding: 12px 20px;
-      border: 1px solid var(--border-color);
-      background: var(--bg-secondary);
-      color: var(--text-secondary);
-      border-radius: 12px;
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: var(--transition);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .filter-btn:hover {
-      border-color: var(--primary);
-      color: var(--primary);
-      box-shadow: 0 2px 6px rgba(99, 102, 241, 0.1);
-    }
-
-    .filter-btn.active {
-      background: var(--primary);
-      border-color: var(--primary);
-      color: white;
-      box-shadow: 0 4px 8px rgba(99, 102, 241, 0.2);
-    }
-
-    /* Jobs Grid */
-    /* Jobs Grid */
-.jobs-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-  gap: 28px;
-  align-items: start; /* This is the key change - makes cards independent */
-}
-
-  .job-card {
-  background: var(--bg-secondary);
-  border-radius: 16px;
-  padding: 28px;
-  box-shadow: var(--card-shadow);
-  transition: var(--transition);
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  border: 1px solid var(--border-color);
-  height: auto; /* Ensure it's auto */
-  min-height: 280px; /* Keep minimum height */
-  /* Remove any fixed height property if present */
-}
-
-    .job-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 4px;
-      background: var(--gradient);
-      z-index: 1;
-    }
-
-    .job-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
-      border-color: var(--primary);
-    }
-
-    .job-role {
-      font-size: 22px;
-      font-weight: 700;
-      color: var(--text-primary);
-      margin-bottom: 16px;
-      line-height: 1.3;
-      font-family: 'Poppins', sans-serif;
-    }
-
-    .job-skills {
-      margin-bottom: 20px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .skill-tag {
-      display: inline-block;
-      background: rgba(99, 101, 241, 0.11);
-      color: var(--primary-dark);
-      padding: 8px 14px;
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 500;
-      transition: var(--transition);
-      border: 1px solid rgba(99, 102, 241, 0.2);
-      white-space: nowrap;
-    }
-
-    .skill-tag:hover {
-      background: rgba(99, 102, 241, 0.2);
-      transform: translateY(-2px);
-    }
-
-    .job-salary {
-      font-size: 18px;
-      font-weight: 600;
-      color: var(--success);
-      margin-bottom: 16px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .job-salary i {
-      font-size: 16px;
-    }
-
-    .job-companies {
-      margin-top: auto;
-      margin-bottom: 16px;
-    }
-
-    .companies-title {
-      font-size: 14px;
-      color: var(--text-secondary);
-      margin-bottom: 10px;
-      font-weight: 500;
-    }
-
-    .company-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .company-tag {
-      display: inline-block;
-      background: rgba(16, 185, 129, 0.162);
-      color: var(--success);
-      padding: 8px 14px;
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 500;
-      transition: var(--transition);
-      border: 1px solid rgba(1, 19, 13, 0.171);
-      white-space: nowrap;
-      
-    }
-
-    .company-tag:hover {
-      background: rgba(16, 185, 129, 0.2);
-      transform: translateY(-2px);
-    }
-
-    /* Job actions (edit/delete buttons) */
-    .job-actions {
-      margin-top: auto;
-      display: flex;
-      gap: 10px;
-      opacity: 0;
-      transform: translateY(10px);
-      transition: var(--transition);
-    }
-
-    .job-card:hover .job-actions {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .edit-job-btn {
-      flex: 1;
-      padding: 10px;
-      background: var(--gradient);
-      border: none;
-      color: white;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: var(--transition);
-      font-weight: 500;
-    }
-
-    .edit-job-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(99, 102, 241, 0.3);
-    }
-
-    .delete-job-btn {
-      flex: 1;
-      padding: 10px;
-      background: #DC2626;
-      border: none;
-      color: white;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: var(--transition);
-      font-weight: 500;
-    }
-
-    .delete-job-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(220, 38, 38, 0.3);
-    }
-
-    /* Range Slider */
-    .range-slider {
-      margin: 20px 0;
-    }
-
-    .range-slider label {
-      display: block;
-      margin-bottom: 14px;
-      color: var(--text-primary);
-      font-weight: 500;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .slider-container {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .slider-value {
-      min-width: 50px;
-      text-align: center;
-      font-weight: 600;
-      color: var(--primary-dark);
-      background: rgba(99, 102, 241, 0.1);
-      padding: 6px 12px;
-      border-radius: 8px;
-      border: 1px solid rgba(99, 102, 241, 0.2);
-    }
-
-    input[type="range"] {
-      flex: 1;
-      -webkit-appearance: none;
-      height: 6px;
-      background: var(--bg-tertiary);
-      border-radius: 6px;
-      outline: none;
-    }
-
-    input[type="range"]::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      background: var(--primary);
-      cursor: pointer;
-      box-shadow: 0 2px 6px rgba(99, 102, 241, 0.3);
-      transition: var(--transition);
-      border: 2px solid var(--bg-secondary);
-    }
-
-    input[type="range"]::-webkit-slider-thumb:hover {
-      transform: scale(1.1);
-      background: var(--primary-dark);
-    }
-
-    /* Admin Modal */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.7);
-      z-index: 1000;
-      align-items: center;
-      justify-content: center;
-      backdrop-filter: blur(5px);
-      padding: 20px;
-    }
-
-    .modal.show {
-      display: flex;
-      animation: fadeIn 0.3s ease;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    .modal-content {
-      background: var(--bg-secondary);
-      border-radius: 16px;
-      width: 540px;
-      max-width: 100%;
-      max-height: 90vh;
-      overflow-y: auto;
-      padding: 32px;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-      border: 1px solid var(--border-color);
-      animation: slideUp 0.3s ease;
-    }
-
-    @keyframes slideUp {
-      from { transform: translateY(20px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 28px;
-      padding-bottom: 20px;
-      border-bottom: 1px solid var(--border-color);
-    }
-
-    .modal-header h2 {
-      font-size: 24px;
-      color: var(--text-primary);
-      font-weight: 600;
-      font-family: 'Poppins', sans-serif;
-    }
-
-    .close-modal {
-      background: none;
-      border: none;
-      font-size: 28px;
-      color: var(--text-secondary);
-      cursor: pointer;
-      transition: var(--transition);
-    }
-
-    .close-modal:hover {
-      color: var(--accent);
-      transform: rotate(90deg);
-    }
-
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    .form-group label {
-      display: block;
-      margin-bottom: 10px;
-      font-weight: 500;
-      color: var(--text-primary);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .form-control {
-      width: 100%;
-      padding: 14px 16px;
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      background: var(--bg-tertiary);
-      color: var(--text-primary);
-      transition: var(--transition);
-      font-size: 15px;
-    }
-
-    .form-control:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
-    }
-
-    .multi-input-container {
-      display: flex;
-      gap: 12px;
-    }
-
-    .multi-input-container input {
-      flex: 1;
-    }
-
-    .add-item-btn {
-      padding: 14px;
-      background: var(--bg-tertiary);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      color: var(--text-primary);
-      cursor: pointer;
-      transition: var(--transition);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .add-item-btn:hover {
-      background: var(--primary);
-      color: white;
-    }
-
-    .items-list {
-      margin-top: 14px;
-      max-height: 150px;
-      overflow-y: auto;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .item-tag {
-      display: inline-flex;
-      align-items: center;
-      background: var(--bg-tertiary);
-      padding: 10px 16px;
-      border-radius: 8px;
-      font-size: 14px;
-      color: var(--text-primary);
-      gap: 8px;
-      border: 1px solid var(--border-color);
-    }
-
-    .remove-item {
-      color: var(--accent);
-      cursor: pointer;
-      font-size: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: var(--transition);
-    }
-
-    .remove-item:hover {
-      transform: scale(1.2);
-    }
-
-    .submit-btn {
-      padding: 16px 24px;
-      background: var(--gradient);
-      color: white;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      font-weight: 500;
-      width: 100%;
-      margin-top: 24px;
-      transition: var(--transition);
-      font-size: 16px;
-      box-shadow: 0 4px 6px rgba(99, 102, 241, 0.3);
-    }
-
-    .submit-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 12px rgba(99, 102, 241, 0.4);
-    }
-
-    /* Salary Range Inputs */
-    .salary-inputs {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-    }
-
-    .salary-inputs input {
-      flex: 1;
-    }
-
-    .salary-inputs span {
-      color: var(--text-secondary);
-    }
-
-    /* Responsive adjustments */
-    @media (max-width: 1200px) {
-      .jobs-grid {
-        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      }
-    }
-
-    @media (max-width: 992px) {
-      .jobs-grid {
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      }
-      
-      .sidebar {
-        width: 280px;
-      }
-      
-      .main-content {
-        width: calc(100% - 280px);
-      }
-    }
-
-    @media (max-width: 768px) {
-      .container {
-        flex-direction: column;
-      }
-      
-      .main-content {
-        width: 100%;
-        padding: 24px;
-      }
-      
-      .jobs-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 16px;
-      }
-      
-      .jobs-filters {
-        overflow-x: auto;
-        padding-bottom: 10px;
-      }
-      
-      header {
-        padding: 12px 20px;
-      }
-      
-      nav {
-        gap: 20px;
-      }
-      
-      .job-actions {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @media (max-width: 576px) {
-      header {
-        flex-direction: column;
-        gap: 16px;
-        padding: 16px;
-      }
-      
-      nav {
-        gap: 16px;
-        flex-wrap: wrap;
-        justify-content: center;
-      }
-      
-      .header-right {
-        width: 100%;
-        justify-content: center;
-      }
-      
-      .jobs-grid {
-        grid-template-columns: 1fr;
-      }
-      
-      .modal-content {
-        padding: 24px;
-      }
-      
-      .jobs-header h1 {
-        font-size: 28px;
-      }
-      
-      .job-skills, .company-tags {
-        gap: 6px;
-      }
-      
-      .skill-tag, .company-tag {
-        padding: 6px 10px;
-        font-size: 12px;
-      }
-    }
-
-    /* Scrollbar styling */
-    ::-webkit-scrollbar {
-      width: 8px;
-    }
-
-    ::-webkit-scrollbar-track {
-      background: var(--bg-tertiary);
-      border-radius: 4px;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: var(--border-color);
-      border-radius: 4px;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-      background: var(--primary);
-    }
-
-.filter-options {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  max-height: 120px; /* Shorter height */
-  overflow-y: auto;
-}
-
-.filter-options .filter-btn {
-  justify-content: center;
-  text-align: center;
-  margin: 0;
-  padding: 8px 12px; /* Smaller padding */
-  flex: 1 0 calc(50% - 3px); /* Two items per row */
-  min-width: calc(50% - 3px);
-  font-size: 12px; /* Smaller font */
-}
-
-/* Remove icons from filter buttons */
-.filter-btn i {
-  display: none;
-}
-.filter-options::-webkit-scrollbar {
-  width: 0px;
-}
-
-.filter-options::-webkit-scrollbar-thumb {
-  border-radius: 0px;
-}
-
-    /* Animation for job cards */
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .job-card {
-      animation: fadeInUp 0.5s ease-out;
-    }
-
-    /* Loading animation */
-    .loading {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 200px;
-    }
-
-    .loading-spinner {
-      width: 40px;
-      height: 40px;
-      border: 4px solid var(--bg-tertiary);
-      border-top: 4px solid var(--primary);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    /* Search input placeholder styling */
-    .search-input::placeholder {
-      color: var(--text-secondary);
-      opacity: 0.8;
-    }
-
-    .search-input:-ms-input-placeholder {
-      color: var(--text-secondary);
-    }
-
-    .search-input::-ms-input-placeholder {
-      color: var(--text-secondary);
-    }
-    
-    /* Auth button styling */
-    .auth-btn {
-      padding: 10px 20px;
-      border: 1px solid var(--border-color);
-      background: var(--bg-tertiary);
-      color: var(--text-primary);
-      border-radius: 8px;
-      cursor: pointer;
-      transition: var(--transition);
-    }
-
-    .auth-btn:hover {
-      background: var(--primary);
-      color: white;
-    }
-</style>
+
+    <style>
+        :root {
+            --primary: #000000;
+            --primary-dark: #423d7b;
+            --primary-light: #d7161600;
+            --secondary: #10B981;
+            --accent: #F59E0B;
+            --text-primary: #1F2937;
+            --text-secondary: #4B5563;
+            --bg-primary: #ebeaea5a;
+            --bg-secondary: #fdfafa;
+            --bg-tertiary: #ffffff;
+            --border-color: #0a0a0b;
+            --card-shadow: 0 4px 6px rgba(247, 244, 244, 0.952), 0 1px 3px rgba(230, 221, 221, 0.947);
+            --success: #10B981;
+            --warning: #F59E0B;
+            --gradient: linear-gradient(135deg, #0d0d0d 0%, #141219 100%);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Dark theme overrides (applied when body[data-theme="dark"]) */
+        [data-theme="dark"] {
+            --bg-primary: #0B0F14;
+            --bg-secondary: #0F172A;
+            --bg-tertiary: #111827;
+            --text-primary: #E5E7EB;
+            --text-secondary: #9CA3AF;
+            --border-color: #1F2937;
+            --card-shadow: 0 4px 6px rgba(0,0,0,0.4), 0 1px 3px rgba(0,0,0,0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        /* Header */
+        header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 6px -1px rgba(236, 201, 75, 0.1)
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .logo span {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo i {
+            font-size: 28px;
+            color: var(--primary);
+        }
+
+        nav {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 15px;
+            transition: var(--transition);
+            position: relative;
+            padding: 8px 0;
+        }
+
+        nav a:hover {
+            color: var(--text-primary);
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient);
+            transition: var(--transition);
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        nav a.active {
+            color: var(--text-primary);
+        }
+
+        nav a.active::after {
+            width: 100%;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            padding: 8px 16px;
+            border-radius: 12px;
+            transition: var(--transition);
+            background: var(--bg-tertiary);
+        }
+
+        .user-info:hover {
+            background: rgb(11, 10, 10);
+            color: white;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: white;
+            font-size: 16px;
+        }
+
+        .theme-toggle {
+            background: var(--bg-tertiary);
+            border: none;
+            color: var(--text-primary);
+            cursor: pointer;
+            font-size: 18px;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-toggle:hover {
+            background: var(--border-color);
+            transform: rotate(15deg);
+        }
+
+        /* Container */
+        .container {
+            display: flex;
+            min-height: calc(100vh - 80px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 320px;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            padding: 24px;
+            overflow-y: auto;
+            transition: var(--transition);
+            position: sticky;
+            top: 80px;
+            height: calc(100vh - 80px);
+        }
+
+        .sidebar-section {
+            margin-bottom: 28px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            max-height: 200px; /* Limit height of each section */
+            overflow-y: auto; /* Enable scrolling within each section */
+        }
+
+        .sidebar-section:last-child {
+            border-bottom: none;
+        }
+        .sidebar-search {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .sidebar-search i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            z-index: 2;
+        }
+
+        .sidebar-search-input {
+            width: 100%;
+            padding: 10px 10px 10px 36px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        /* Remove icons from filter buttons */
+        .filter-btn i {
+            display: none;
+        }
+
+        /* Adjust filter button text alignment */
+        .filter-btn {
+            justify-content: center;
+            text-align: center;
+        }
+
+        .sidebar-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .sidebar-title i {
+            color: var(--primary);
+            font-size: 18px;
+        }
+
+        /* Main content */
+        .main-content {
+            flex: 1;
+            padding: 32px;
+            overflow-y: auto;
+            width: calc(100% - 320px);
+            transition: var(--transition);
+            background: var(--bg-primary);
+        }
+
+        /* Hide legacy sidebar and expand content to full width */
+        .sidebar { display: none; }
+        .main-content { width: 100%; }
+
+        /* Search container */
+        .search-container {
+            position: relative;
+            margin-bottom: 28px;
+        }
+
+        .search-container i {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            z-index: 2;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 16px 20px 16px 52px;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 16px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            transition: var(--transition);
+            box-shadow: var(--card-shadow);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+
+        /* Jobs Section Styles */
+        .jobs-header {
+            margin-bottom: 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .jobs-header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .jobs-description {
+            color: var(--text-secondary);
+            font-size: 16px;
+            max-width: 600px;
+            line-height: 1.7;
+        }
+
+        /* Job Roles Section Styles */
+        .job-roles-section {
+            margin-bottom: 48px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .section-title i {
+            color: var(--primary);
+        }
+
+        .section-description {
+            color: var(--text-secondary);
+            font-size: 16px;
+            margin-bottom: 32px;
+            line-height: 1.6;
+        }
+
+        .job-roles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .job-role-card {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+        }
+
+        .job-role-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient);
+            z-index: 1;
+        }
+
+        .job-role-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+            border-color: var(--primary);
+        }
+
+        .role-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            line-height: 1.3;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .role-description {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .role-skills {
+            margin-bottom: 20px;
+        }
+
+        .skills-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .skills-title i {
+            color: var(--primary);
+            font-size: 12px;
+        }
+
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .skill-item {
+            display: inline-block;
+            background: rgba(99, 101, 241, 0.11);
+            color: var(--primary-dark);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            transition: var(--transition);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .role-companies {
+            margin-top: auto;
+        }
+
+        .companies-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .companies-title i {
+            color: var(--success);
+            font-size: 12px;
+        }
+
+        .companies-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .company-item {
+            display: inline-block;
+            background: rgba(16, 185, 129, 0.11);
+            color: var(--success);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            transition: var(--transition);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .role-actions {
+            margin-top: 20px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .role-action-btn {
+            flex: 1;
+            padding: 10px 16px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 13px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .role-action-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .role-action-btn.primary {
+            background: var(--gradient);
+            color: white;
+            border-color: transparent;
+        }
+
+        .role-action-btn.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(99, 102, 241, 0.3);
+        }
+
+        .admin-btn {
+            padding: 14px 24px;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: var(--transition);
+            box-shadow: 0 4px 6px rgba(99, 102, 241, 0.3);
+            font-size: 15px;
+        }
+
+        .admin-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(99, 102, 241, 0.4);
+        }
+
+        /* Jobs Filters */
+        .jobs-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .filter-btn {
+            padding: 12px 20px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .filter-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            box-shadow: 0 2px 6px rgba(99, 102, 241, 0.1);
+        }
+
+        .filter-btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+            box-shadow: 0 4px 8px rgba(99, 102, 241, 0.2);
+        }
+
+        /* Jobs Grid */
+        .jobs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 28px;
+            align-items: start; /* This is the key change - makes cards independent */
+        }
+
+        .job-card {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 28px;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--border-color);
+            height: auto; /* Ensure it's auto */
+            min-height: 280px; /* Keep minimum height */
+            /* Remove any fixed height property if present */
+        }
+
+        .job-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient);
+            z-index: 1;
+        }
+
+        .job-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary);
+        }
+
+        .job-role {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            line-height: 1.3;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .job-skills {
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .skill-tag {
+            display: inline-block;
+            background: rgba(99, 101, 241, 0.11);
+            color: var(--primary-dark);
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: var(--transition);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            white-space: nowrap;
+        }
+
+        .skill-tag:hover {
+            background: rgba(99, 102, 241, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .job-salary {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--success);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .job-salary i {
+            font-size: 16px;
+        }
+
+        .job-companies {
+            margin-top: auto;
+            margin-bottom: 16px;
+        }
+
+        .companies-title {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .company-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .company-tag {
+            display: inline-block;
+            background: rgba(16, 185, 129, 0.162);
+            color: var(--success);
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: var(--transition);
+            border: 1px solid rgba(1, 19, 13, 0.171);
+            white-space: nowrap;
+
+        }
+
+        .company-tag:hover {
+            background: rgba(16, 185, 129, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Job actions (edit/delete buttons) */
+        .job-actions {
+            margin-top: auto;
+            display: flex;
+            gap: 10px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: var(--transition);
+        }
+
+        .job-card:hover .job-actions {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .edit-job-btn {
+            flex: 1;
+            padding: 10px;
+            background: var(--gradient);
+            border: none;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .edit-job-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(99, 102, 241, 0.3);
+        }
+
+        .delete-job-btn {
+            flex: 1;
+            padding: 10px;
+            background: #DC2626;
+            border: none;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .delete-job-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(220, 38, 38, 0.3);
+        }
+
+        /* Range Slider */
+        .range-slider {
+            margin: 20px 0;
+        }
+
+        .range-slider label {
+            display: block;
+            margin-bottom: 14px;
+            color: var(--text-primary);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .slider-value {
+            min-width: 50px;
+            text-align: center;
+            font-weight: 600;
+            color: var(--primary-dark);
+            background: rgba(99, 102, 241, 0.1);
+            padding: 6px 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        input[type="range"] {
+            flex: 1;
+            -webkit-appearance: none;
+            height: 6px;
+            background: var(--bg-tertiary);
+            border-radius: 6px;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(99, 102, 241, 0.3);
+            transition: var(--transition);
+            border: 2px solid var(--bg-secondary);
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+            background: var(--primary-dark);
+        }
+
+        /* Role Dialog Modal */
+        .role-dialog-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+            padding: 20px;
+        }
+
+        .role-dialog-modal.show {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .role-dialog-content {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            width: 800px;
+            max-width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 32px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            border: 1px solid var(--border-color);
+            animation: slideUp 0.3s ease;
+        }
+
+        .role-dialog-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .role-dialog-title {
+            font-size: 24px;
+            color: var(--text-primary);
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .role-dialog-close {
+            background: none;
+            border: none;
+            font-size: 28px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .role-dialog-close:hover {
+            color: var(--accent);
+            transform: rotate(90deg);
+        }
+
+        .role-dialog-sections {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+        }
+
+        .role-dialog-section {
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid var(--border-color);
+        }
+
+        .role-dialog-section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .role-dialog-section-title i {
+            color: var(--primary);
+        }
+
+        .role-dialog-content-text {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .role-dialog-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: var(--gradient);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: var(--transition);
+            margin-top: 16px;
+        }
+
+        .role-dialog-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(99, 102, 241, 0.3);
+        }
+
+        /* Admin Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+            padding: 20px;
+        }
+
+        .modal.show {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            width: 540px;
+            max-width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 32px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            border: 1px solid var(--border-color);
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .modal-header h2 {
+            font-size: 24px;
+            color: var(--text-primary);
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 28px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .close-modal:hover {
+            color: var(--accent);
+            transform: rotate(90deg);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 500;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            transition: var(--transition);
+            font-size: 15px;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+
+        .multi-input-container {
+            display: flex;
+            gap: 12px;
+        }
+
+        .multi-input-container input {
+            flex: 1;
+        }
+
+        .add-item-btn {
+            padding: 14px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .add-item-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .items-list {
+            margin-top: 14px;
+            max-height: 150px;
+            overflow-y: auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .item-tag {
+            display: inline-flex;
+            align-items: center;
+            background: var(--bg-tertiary);
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            color: var(--text-primary);
+            gap: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .remove-item {
+            color: var(--accent);
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .remove-item:hover {
+            transform: scale(1.2);
+        }
+
+        .submit-btn {
+            padding: 16px 24px;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 500;
+            width: 100%;
+            margin-top: 24px;
+            transition: var(--transition);
+            font-size: 16px;
+            box-shadow: 0 4px 6px rgba(99, 102, 241, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(99, 102, 241, 0.4);
+        }
+
+        /* Salary Range Inputs */
+        .salary-inputs {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .salary-inputs input {
+            flex: 1;
+        }
+
+        .salary-inputs span {
+            color: var(--text-secondary);
+        }
+
+        /* Career Path Card Actions */
+        .career-path-actions {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: var(--transition);
+        }
+
+        .job-role-card:hover .career-path-actions {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .delete-career-path-btn {
+            padding: 10px;
+            background: #DC2626;
+            border: none;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .delete-career-path-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(220, 38, 38, 0.3);
+        }
+
+        .add-jobs-btn {
+            padding: 10px;
+            background: var(--gradient);
+            border: none;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .add-jobs-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(99, 102, 241, 0.3);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 1200px) {
+            .jobs-grid {
+                grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            }
+        }
+
+        @media (max-width: 992px) {
+            .jobs-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+
+            .sidebar {
+                width: 280px;
+            }
+
+            .main-content {
+                width: calc(100% - 280px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .main-content {
+                width: 100%;
+                padding: 24px;
+            }
+
+            .jobs-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+
+            .jobs-filters {
+                overflow-x: auto;
+                padding-bottom: 10px;
+            }
+
+            header {
+                padding: 12px 20px;
+            }
+
+            nav {
+                gap: 20px;
+            }
+
+            .job-actions {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            /* Job roles responsive */
+            .job-roles-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .role-dialog-sections {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+
+            .role-dialog-content {
+                width: 95%;
+                padding: 24px;
+            }
+
+            .role-actions {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .career-path-actions {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 576px) {
+            header {
+                flex-direction: column;
+                gap: 16px;
+                padding: 16px;
+            }
+
+            nav {
+                gap: 16px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .header-right {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .jobs-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                padding: 24px;
+            }
+
+            .jobs-header h1 {
+                font-size: 28px;
+            }
+
+            .job-skills, .company-tags {
+                gap: 6px;
+            }
+
+            .skill-tag, .company-tag {
+                padding: 6px 10px;
+                font-size: 12px;
+            }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+
+        .filter-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            max-height: 120px; /* Shorter height */
+            overflow-y: auto;
+        }
+
+        .filter-options .filter-btn {
+            justify-content: center;
+            text-align: center;
+            margin: 0;
+            padding: 8px 12px; /* Smaller padding */
+            flex: 1 0 calc(50% - 3px); /* Two items per row */
+            min-width: calc(50% - 3px);
+            font-size: 12px; /* Smaller font */
+        }
+
+        /* Remove icons from filter buttons */
+        .filter-btn i {
+            display: none;
+        }
+        .filter-options::-webkit-scrollbar {
+            width: 0px;
+        }
+
+        .filter-options::-webkit-scrollbar-thumb {
+            border-radius: 0px;
+        }
+
+        /* Animation for job cards */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .job-card {
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        /* Loading animation */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--bg-tertiary);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Search input placeholder styling */
+        .search-input::placeholder {
+            color: var(--text-secondary);
+            opacity: 0.8;
+        }
+
+        .search-input:-ms-input-placeholder {
+            color: var(--text-secondary);
+        }
+
+        .search-input::-ms-input-placeholder {
+            color: var(--text-secondary);
+        }
+
+        /* Auth button styling */
+        .auth-btn {
+            padding: 10px 20px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .auth-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <div class="logo">
-            <i class="fas fa-microchip"></i>
-            <span>ECEVerse</span>
-        </div>
-        <nav>
-            <a href="#">Learn</a>
-            <a href="#">Practice</a>
-            <a href="#" class="active">Jobs</a>
-            <a href="#">Community</a>
-        </nav>
-       <div class="header-right">
-    <button class="theme-toggle">
-        <i class="fas fa-moon"></i>
-    </button>
-    <div class="user-info">
-        <div class="user-avatar">U</div>
-        <span id="user-name">User</span>
+<header>
+    <div class="logo">
+        <i class="fas fa-microchip"></i>
+        <span>ECEVerse</span>
     </div>
+    <nav>
+        <a href="#">Learn</a>
+        <a href="#">Practice</a>
+        <a href="#" class="active">Jobs</a>
+        <a href="#">Community</a>
+    </nav>
+    <div class="header-right">
+        <button class="theme-toggle">
+            <i class="fas fa-moon"></i>
+        </button>
+        <div class="user-info">
+            <div class="user-avatar">U</div>
+            <span id="user-name">User</span>
+        </div>
 
-   </div>
-    </header>
+    </div>
+</header>
 
-    <div class="container">
-        <aside class="sidebar">
-            <div class="sidebar-section">
-                <h3 class="sidebar-title"><i class="fas fa-chart-line"></i> Experience Level</h3>
-                <div class="range-slider">
-                    <label for="experience-slider"><i class="fas fa-user-tie"></i> Years of Experience: <span class="slider-value" id="experience-value">0</span></label>
-                    <div class="slider-container">
-                        <span>0</span>
-                        <input type="range" id="experience-slider" min="0" max="15" value="0">
-                        <span>15</span>
-                    </div>
+<div class="container">
+    <aside class="sidebar">
+        <div class="sidebar-section">
+            <h3 class="sidebar-title"><i class="fas fa-chart-line"></i> Experience Level</h3>
+            <div class="range-slider">
+                <label for="experience-slider"><i class="fas fa-user-tie"></i> Years of Experience: <span class="slider-value" id="experience-value">0</span></label>
+                <div class="slider-container">
+                    <span>0</span>
+                    <input type="range" id="experience-slider" min="0" max="15" value="0">
+                    <span>15</span>
                 </div>
             </div>
-            <div class="sidebar-search">
-  <i class="fas fa-search"></i>
-  <input type="text" class="sidebar-search-input" placeholder="Search filters..." autocomplete="off">
-</div>
-            
-            <div class="sidebar-section">
-                <h3 class="sidebar-title"><i class="fas fa-tools"></i> Skills</h3>
-                <div id="skills-container" class="filter-options">
-                    <!-- Skills will be loaded dynamically -->
-                </div>
-            </div>
-            
-            <div class="sidebar-section">
-                <h3 class="sidebar-title"><i class="fas fa-map-marker-alt"></i> Locations</h3>
-                <div id="locations-container" class="filter-options">
-                    <!-- Locations will be loaded dynamically -->
-                </div>
-            </div>
-            
-            <div class="sidebar-section">
-                <h3 class="sidebar-title"><i class="fas fa-money-bill-wave"></i> Salary Range</h3>
-                <div id="salary-container" class="filter-options">
-                    <!-- Salary ranges will be loaded dynamically -->
-                </div>
-            </div>
-            
-            <div class="sidebar-section">
-                <h3 class="sidebar-title"><i class="fas fa-briefcase"></i> Job Type</h3>
-                <div id="jobtype-container" class="filter-options">
-                    <!-- Job types will be loaded dynamically -->
-                </div>
-            </div>
-            
-            <div class="sidebar-section">
-                <h3 class="sidebar-title"><i class="fas fa-building"></i> Companies</h3>
-                <div id="companies-container" class="filter-options">
-                    <!-- Companies will be loaded dynamically -->
-                </div>
-            </div>
-        </aside>
+        </div>
+        <div class="sidebar-search">
+            <i class="fas fa-search"></i>
+            <input type="text" class="sidebar-search-input" placeholder="Search filters..." autocomplete="off">
+        </div>
 
-        <main class="main-content">
-            <div class="jobs-header">
+        <div class="sidebar-section">
+            <h3 class="sidebar-title"><i class="fas fa-tools"></i> Skills</h3>
+            <div id="skills-container" class="filter-options">
+                <!-- Skills will be loaded dynamically -->
+            </div>
+        </div>
+
+        <div class="sidebar-section">
+            <h3 class="sidebar-title"><i class="fas fa-map-marker-alt"></i> Locations</h3>
+            <div id="locations-container" class="filter-options">
+                <!-- Locations will be loaded dynamically -->
+            </div>
+        </div>
+
+        <div class="sidebar-section">
+            <h3 class="sidebar-title"><i class="fas fa-money-bill-wave"></i> Salary Range</h3>
+            <div id="salary-container" class="filter-options">
+                <!-- Salary ranges will be loaded dynamically -->
+            </div>
+        </div>
+
+        <div class="sidebar-section">
+            <h3 class="sidebar-title"><i class="fas fa-briefcase"></i> Job Type</h3>
+            <div id="jobtype-container" class="filter-options">
+                <!-- Job types will be loaded dynamically -->
+            </div>
+        </div>
+
+        <div class="sidebar-section">
+            <h3 class="sidebar-title"><i class="fas fa-building"></i> Companies</h3>
+            <div id="companies-container" class="filter-options">
+                <!-- Companies will be loaded dynamically -->
+            </div>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <div class="jobs-header">
+            <div>
+                <h1>ECE Job Opportunities</h1>
+                <p class="jobs-description">Discover your dream career in Electronics and Communication Engineering with top companies worldwide</p>
+            </div>
+            <button id="admin-btn" class="admin-btn" style="display: none;">
+                <i class="fas fa-cog"></i> Admin Settings
+            </button>
+        </div>
+
+        <div class="search-container">
+            <i class="fas fa-search"></i>
+            <input type="text" class="search-input" placeholder="Search roles..." autocomplete="off" id="main-search-input">
+        </div>
+
+        <!-- Job Roles Section -->
+        <div class="job-roles-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                 <div>
-                    <h1>ECE Job Opportunities</h1>
-                    <p class="jobs-description">Discover your dream career in Electronics and Communication Engineering with top companies worldwide</p>
+                    <h2 class="section-title">
+                        <i class="fas fa-briefcase"></i> Explore ECE Career Paths
+                    </h2>
+                    <p class="section-description">Discover different roles in Electronics and Communication Engineering</p>
                 </div>
-                <button id="admin-btn" class="admin-btn" style="display: none;">
-                    <i class="fas fa-cog"></i> Admin Settings
+                <button id="add-career-path-btn" class="admin-btn" style="display: none;">
+                    <i class="fas fa-plus"></i> Add Career Path
                 </button>
             </div>
 
-            <div class="search-container">
-                <i class="fas fa-search"></i>
-              <input type="text" class="search-input" placeholder="Search jobs by role, skill, or company..." autocomplete="off" id="main-search-input">
+            <div class="job-roles-grid" id="job-roles-container">
+                <!-- Job role cards will be generated here -->
             </div>
+        </div>
 
-            <!-- <div class="jobs-filters">
-                <button class="filter-btn active"><i class="fas fa-layer-group"></i> All Jobs</button>
-                <button class="filter-btn"><i class="fas fa-laptop-house"></i> Remote</button>
-                <button class="filter-btn"><i class="fas fa-map-pin"></i> Bangalore</button>
-                <button class="filter-btn"><i class="fas fa-map-pin"></i> Hyderabad</button>
-                <button class="filter-btn"><i class="fas fa-map-pin"></i> Chennai</button>
-            </div> -->
-
+        <!-- Existing Jobs Section -->
+        <div class="jobs-section">
+            <h2 class="section-title">
+                <i class="fas fa-search"></i> Current Job Openings
+            </h2>
             <div class="jobs-grid" id="jobs-container">
                 <!-- Jobs will be loaded dynamically from Firebase -->
                 <div class="loading">
                     <div class="loading-spinner"></div>
                 </div>
             </div>
-            
-            <button id="add-job-btn" class="admin-btn" style="margin-top: 32px; display: none;">
-                <i class="fas fa-plus"></i> Add Job Card
-            </button>
-        </main>
-    </div>
+        </div>
 
-    <!-- Add Job Modal -->
-    <div class="modal" id="add-job-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Add New Job</h2>
-                <button class="close-modal">&times;</button>
+        <button id="add-job-btn" class="admin-btn" style="margin-top: 32px; display: none;">
+            <i class="fas fa-plus"></i> Add Job Card
+        </button>
+    </main>
+</div>
+
+<!-- Add Job Modal -->
+<div class="modal" id="add-job-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Add New Job</h2>
+            <button class="close-modal">&times;</button>
+        </div>
+
+        <div class="form-group">
+            <label for="job-role"><i class="fas fa-user-tie"></i> Job Role</label>
+            <input type="text" id="job-role" class="form-control" placeholder="Enter job role">
+        </div>
+
+        <div class="form-group">
+            <label for="job-skills"><i class="fas fa-tools"></i> Skills (Add one at a time)</label>
+            <div class="multi-input-container">
+                <input type="text" id="job-skills" class="form-control" placeholder="Enter a skill">
+                <button class="add-item-btn" data-target="job-skills-list"><i class="fas fa-plus"></i></button>
             </div>
-            
-            <div class="form-group">
-                <label for="job-role"><i class="fas fa-user-tie"></i> Job Role</label>
-                <input type="text" id="job-role" class="form-control" placeholder="Enter job role">
+            <div id="job-skills-list" class="items-list"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="salary-min"><i class="fas fa-money-bill-wave"></i> Salary Range (LPA)</label>
+            <div class="salary-inputs">
+                <input type="number" id="salary-min" class="form-control" placeholder="Min" min="0">
+                <span>-</span>
+                <input type="number" id="salary-max" class="form-control" placeholder="Max" min="0">
             </div>
-            
-            <div class="form-group">
-                <label for="job-skills"><i class="fas fa-tools"></i> Skills (Add one at a time)</label>
-                <div class="multi-input-container">
-                    <input type="text" id="job-skills" class="form-control" placeholder="Enter a skill">
-                    <button class="add-item-btn" data-target="job-skills-list"><i class="fas fa-plus"></i></button>
+        </div>
+
+        <div class="form-group">
+            <label for="job-companies"><i class="fas fa-building"></i> Companies (Add one at a time)</label>
+            <div class="multi-input-container">
+                <input type="text" id="job-companies" class="form-control" placeholder="Enter a company">
+                <button class="add-item-btn" data-target="job-companies-list"><i class="fas fa-plus"></i></button>
+            </div>
+            <div id="job-companies-list" class="items-list"></div>
+        </div>
+
+        <button class="submit-btn" id="save-job">Save Job</button>
+    </div>
+</div>
+
+<!-- Add Career Path Modal -->
+<div class="modal" id="add-career-path-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Add New Career Path</h2>
+            <button class="close-modal">&times;</button>
+        </div>
+
+        <div class="form-group">
+            <label for="career-path-title"><i class="fas fa-user-tie"></i> Career Path Title</label>
+            <input type="text" id="career-path-title" class="form-control" placeholder="Enter career path title">
+        </div>
+
+        <div class="form-group">
+            <label for="career-path-description"><i class="fas fa-align-left"></i> Description</label>
+            <textarea id="career-path-description" class="form-control" placeholder="Enter career path description" rows="3"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="career-path-skills"><i class="fas fa-tools"></i> Required Skills (Add one at a time)</label>
+            <div class="multi-input-container">
+                <input type="text" id="career-path-skills" class="form-control" placeholder="Enter a skill">
+                <button class="add-item-btn" data-target="career-path-skills-list"><i class="fas fa-plus"></i></button>
+            </div>
+            <div id="career-path-skills-list" class="items-list"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="career-path-companies"><i class="fas fa-building"></i> Top Hiring Companies (Add one at a time)</label>
+            <div class="multi-input-container">
+                <input type="text" id="career-path-companies" class="form-control" placeholder="Enter a company">
+                <button class="add-item-btn" data-target="career-path-companies-list"><i class="fas fa-plus"></i></button>
+            </div>
+            <div id="career-path-companies-list" class="items-list"></div>
+        </div>
+
+        <button class="submit-btn" id="save-career-path">Save Career Path</button>
+    </div>
+</div>
+
+<!-- Role Dialog Modal -->
+<div class="role-dialog-modal" id="role-dialog-modal">
+    <div class="role-dialog-content">
+        <div class="role-dialog-header">
+            <h2 class="role-dialog-title" id="role-dialog-title">Role Information</h2>
+            <button class="role-dialog-close" id="role-dialog-close">&times;</button>
+        </div>
+
+        <div class="role-dialog-sections">
+            <div class="role-dialog-section">
+                <h3 class="role-dialog-section-title">
+                    <i class="fas fa-route"></i> Learning Roadmap
+                </h3>
+                <div class="role-dialog-content-text" id="roadmap-content">
+                    <!-- Roadmap content will be loaded here -->
                 </div>
-                <div id="job-skills-list" class="items-list"></div>
+                <a href="#" class="role-dialog-link" id="roadmap-link">
+                    <i class="fas fa-external-link-alt"></i>
+                    View Detailed Roadmap
+                </a>
             </div>
-            
-            <div class="form-group">
-                <label for="salary-min"><i class="fas fa-money-bill-wave"></i> Salary Range (LPA)</label>
-                <div class="salary-inputs">
-                    <input type="number" id="salary-min" class="form-control" placeholder="Min" min="0">
-                    <span>-</span>
-                    <input type="number" id="salary-max" class="form-control" placeholder="Max" min="0">
+
+            <div class="role-dialog-section">
+                <h3 class="role-dialog-section-title">
+                    <i class="fas fa-question-circle"></i> Interview Questions
+                </h3>
+                <div class="role-dialog-content-text" id="questions-content">
+                    <!-- Questions content will be loaded here -->
                 </div>
+                <a href="#" class="role-dialog-link" id="questions-link">
+                    <i class="fas fa-external-link-alt"></i>
+                    Practice Questions
+                </a>
             </div>
-            
-            <div class="form-group">
-                <label for="job-companies"><i class="fas fa-building"></i> Companies (Add one at a time)</label>
-                <div class="multi-input-container">
-                    <input type="text" id="job-companies" class="form-control" placeholder="Enter a company">
-                    <button class="add-item-btn" data-target="job-companies-list"><i class="fas fa-plus"></i></button>
-                </div>
-                <div id="job-companies-list" class="items-list"></div>
-            </div>
-            
-            <button class="submit-btn" id="save-job">Save Job</button>
         </div>
     </div>
+</div>
 
-    <!-- Admin Modal -->
-    <div class="modal" id="admin-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Admin Settings - Filter Management</h2>
-                <button class="close-modal">&times;</button>
+<!-- Skill Dialog Modal -->
+<div class="role-dialog-modal" id="skill-dialog-modal">
+    <div class="role-dialog-content">
+        <div class="role-dialog-header">
+            <h2 class="role-dialog-title" id="skill-dialog-title">Skill</h2>
+            <button class="role-dialog-close" id="skill-dialog-close" onclick="closeSkillDialog()">&times;</button>
+        </div>
+        <div class="role-dialog-sections">
+            <div class="role-dialog-section">
+                <h3 class="role-dialog-section-title">
+                    <i class="fas fa-route"></i> Roadmap
+                </h3>
+                <a href="#" class="role-dialog-link" id="skill-roadmap-link">
+                    <i class="fas fa-external-link-alt"></i>
+                    Open Roadmap
+                </a>
             </div>
-            
-            <div class="form-group">
-                <label for="skills-input"><i class="fas fa-tools"></i> Skills (Add one at a time)</label>
-                <div class="multi-input-container">
-                    <input type="text" id="skills-input" class="form-control" placeholder="Enter a skill">
-                    <button class="add-item-btn" data-target="skills-list"><i class="fas fa-plus"></i></button>
-                </div>
-                <div id="skills-list" class="items-list"></div>
+            <div class="role-dialog-section">
+                <h3 class="role-dialog-section-title">
+                    <i class="fas fa-dumbbell"></i> Practice
+                </h3>
+                <a href="#" class="role-dialog-link" id="skill-practice-link">
+                    <i class="fas fa-external-link-alt"></i>
+                    Start Practice
+                </a>
             </div>
-            
-            <div class="form-group">
-                <label for="locations-input"><i class="fas fa-map-marker-alt"></i> Locations (Add one at a time)</label>
-                <div class="multi-input-container">
-                    <input type="text" id="locations-input" class="form-control" placeholder="Enter a location">
-                    <button class="add-item-btn" data-target="locations-list"><i class="fas fa-plus"></i></button>
-                </div>
-                <div id="locations-list" class="items-list"></div>
-            </div>
-            
-            <div class="form-group">
-                <label for="salary-min-input"><i class="fas fa-money-bill-wave"></i> Salary Range (Min - Max in LPA)</label>
-                <div class="multi-input-container">
-                    <input type="number" id="salary-min-input" class="form-control" placeholder="Min" min="0">
-                    <span>-</span>
-                    <input type="number" id="salary-max-input" class="form-control" placeholder="Max" min="0">
-                    <button class="add-item-btn" data-target="salary-list"><i class="fas fa-plus"></i></button>
-                </div>
-                <div id="salary-list" class="items-list"></div>
-            </div>
-            
-            <div class="form-group">
-                <label for="companies-input"><i class="fas fa-building"></i> Companies (Add one at a time)</label>
-                <div class="multi-input-container">
-                    <input type="text" id="companies-input" class="form-control" placeholder="Enter a company">
-                    <button class="add-item-btn" data-target="companies-list"><i class="fas fa-plus"></i></button>
-                </div>
-                <div id="companies-list" class="items-list"></div>
-            </div>
-            
-            <div class="form-group">
-                <label for="jobtype-input"><i class="fas fa-briefcase"></i> Job Types (Add one at a time)</label>
-                <div class="multi-input-container">
-                    <input type="text" id="jobtype-input" class="form-control" placeholder="Enter job type">
-                    <button class="add-item-btn" data-target="jobtype-list"><i class="fas fa-plus"></i></button>
-                </div>
-                <div id="jobtype-list" class="items-list"></div>
-            </div>
-            
-            <button class="submit-btn" id="save-filters">Save Filters</button>
         </div>
     </div>
+</div>
 
-    <script>
+<!-- Admin Modal -->
+<div class="modal" id="admin-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Admin Settings - Filter Management</h2>
+            <button class="close-modal">&times;</button>
+        </div>
+
+        <div class="form-group">
+            <label for="skills-input"><i class="fas fa-tools"></i> Skills (Add one at a time)</label>
+            <div class="multi-input-container">
+                <input type="text" id="skills-input" class="form-control" placeholder="Enter a skill">
+                <button class="add-item-btn" data-target="skills-list"><i class="fas fa-plus"></i></button>
+            </div>
+            <div id="skills-list" class="items-list"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="locations-input"><i class="fas fa-map-marker-alt"></i> Locations (Add one at a time)</label>
+            <div class="multi-input-container">
+                <input type="text" id="locations-input" class="form-control" placeholder="Enter a location">
+                <button class="add-item-btn" data-target="locations-list"><i class="fas fa-plus"></i></button>
+            </div>
+            <div id="locations-list" class="items-list"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="salary-min-input"><i class="fas fa-money-bill-wave"></i> Salary Range (Min - Max in LPA)</label>
+            <div class="multi-input-container">
+                <input type="number" id="salary-min-input" class="form-control" placeholder="Min" min="0">
+                <span>-</span>
+                <input type="number" id="salary-max-input" class="form-control" placeholder="Max" min="0">
+                <button class="add-item-btn" data-target="salary-list"><i class="fas fa-plus"></i></button>
+            </div>
+            <div id="salary-list" class="items-list"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="companies-input"><i class="fas fa-building"></i> Companies (Add one at a time)</label>
+            <div class="multi-input-container">
+                <input type="text" id="companies-input" class="form-control" placeholder="Enter a company">
+                <button class="add-item-btn" data-target="companies-list"><i class="fas fa-plus"></i></button>
+            </div>
+            <div id="companies-list" class="items-list"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="jobtype-input"><i class="fas fa-briefcase"></i> Job Types (Add one at a time)</label>
+            <div class="multi-input-container">
+                <input type="text" id="jobtype-input" class="form-control" placeholder="Enter job type">
+                <button class="add-item-btn" data-target="jobtype-list"><i class="fas fa-plus"></i></button>
+            </div>
+            <div id="jobtype-list" class="items-list"></div>
+        </div>
+
+        <button class="submit-btn" id="save-filters">Save Filters</button>
+    </div>
+</div>
+
+<script>
     // Firebase configuration
     const firebaseConfig = {
-    apiKey: "AIzaSyA_hxFQDQBdZG9vSRDvLzSLylCxJFtPd98",
-    authDomain: "myeceverse.firebaseapp.com",
-    databaseURL: "https://myeceverse-default-rtdb.firebaseio.com",
-    projectId: "myeceverse",
-    storageBucket: "myeceverse.firebasestorage.app",
-    messagingSenderId: "231954423329",
-    appId: "1:231954423329:web:9e3e5f29a378e2434c8d60",
-    measurementId: "G-J9Y63HZ43E"
-  };
+        apiKey: "AIzaSyA_hxFQDQBdZG9vSRDvLzSLylCxJFtPd98",
+        authDomain: "myeceverse.firebaseapp.com",
+        databaseURL: "https://myeceverse-default-rtdb.firebaseio.com",
+        projectId: "myeceverse",
+        storageBucket: "myeceverse.firebasestorage.app",
+        messagingSenderId: "231954423329",
+        appId: "1:231954423329:web:9e3e5f29a378e2434c8d60",
+        measurementId: "G-J9Y63HZ43E"
+    };
 
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
@@ -1295,18 +1824,9 @@
     const companiesContainer = document.getElementById('companies-container');
     const searchInput = document.querySelector('.search-input');
     const sidebarSearchInput = document.querySelector('.sidebar-search-input');
-    // Add these with your other DOM element references
-const loginBtn = document.getElementById('login-btn');
-const logoutBtn = document.getElementById('logout-btn');
-const loginModal = document.getElementById('login-modal');
-const registerModal = document.getElementById('register-modal');
-const loginSubmit = document.getElementById('login-submit');
-const registerSubmit = document.getElementById('register-submit');
-const showRegister = document.getElementById('show-register');
-const showLogin = document.getElementById('show-login');
-
-
-
+    const addCareerPathBtn = document.getElementById('add-career-path-btn');
+    const addCareerPathModal = document.getElementById('add-career-path-modal');
+    const saveCareerPathBtn = document.getElementById('save-career-path');
 
     // Current user and filters data
     let currentUser = null;
@@ -1317,15 +1837,27 @@ const showLogin = document.getElementById('show-login');
         jobTypes: [],
         companies: []
     };
-    
+
     // Job form data
     let jobFormData = {
         skills: [],
         companies: []
     };
 
+    // Career path form data
+    let careerPathFormData = {
+        skills: [],
+        companies: []
+    };
+
     // All jobs data
     let allJobs = [];
+
+    // All career paths data
+    let allCareerPaths = [];
+
+    // Current career path for adding jobs
+    let currentCareerPathForJob = null;
 
     // Add job button event
     addJobBtn.addEventListener('click', () => {
@@ -1338,6 +1870,19 @@ const showLogin = document.getElementById('show-login');
         document.getElementById('job-companies-list').innerHTML = '';
         jobFormData.skills = [];
         jobFormData.companies = [];
+        currentCareerPathForJob = null;
+    });
+
+    // Add career path button event
+    addCareerPathBtn.addEventListener('click', () => {
+        addCareerPathModal.classList.add('show');
+        // Clear any previous inputs
+        document.getElementById('career-path-title').value = '';
+        document.getElementById('career-path-description').value = '';
+        document.getElementById('career-path-skills-list').innerHTML = '';
+        document.getElementById('career-path-companies-list').innerHTML = '';
+        careerPathFormData.skills = [];
+        careerPathFormData.companies = [];
     });
 
     // Close modal events
@@ -1345,11 +1890,15 @@ const showLogin = document.getElementById('show-login');
         btn.addEventListener('click', () => {
             addJobModal.classList.remove('show');
             adminModal.classList.remove('show');
+            addCareerPathModal.classList.remove('show');
         });
     });
 
     // Save job event
     saveJobBtn.addEventListener('click', saveJob);
+
+    // Save career path event
+    saveCareerPathBtn.addEventListener('click', saveCareerPath);
 
     // Experience slider event
     experienceSlider.addEventListener('input', () => {
@@ -1370,6 +1919,9 @@ const showLogin = document.getElementById('show-login');
             if (target.includes('job-')) {
                 // This is for the job modal
                 addItemToJobForm(target);
+            } else if (target.includes('career-path-')) {
+                // This is for the career path modal
+                addItemToCareerPathForm(target);
             } else {
                 // This is for the admin modal
                 addItemToList(target);
@@ -1387,86 +1939,101 @@ const showLogin = document.getElementById('show-login');
     sidebarSearchInput.addEventListener('input', filterSidebarItems);
 
     // Initialize the app
-function init() {
-    // Load saved theme preference
+    function init() {
+        // Load saved theme preference
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.body.setAttribute('data-theme', savedTheme);
 
-    
-    const savedTheme = localStorage.getItem('theme') || 'dark';
-    document.body.setAttribute('data-theme', savedTheme);
-
-    // Set correct icon based on saved theme
-    if (savedTheme === 'light') {
-        document.querySelector('.theme-toggle').innerHTML = '<i class="fas fa-sun"></i>';
-        // Apply light theme variables
-        document.documentElement.style.setProperty('--bg-primary', '#F3F4F6');
-        document.documentElement.style.setProperty('--bg-secondary', '#FFFFFF');
-        document.documentElement.style.setProperty('--bg-tertiary', '#E5E7EB');
-        document.documentElement.style.setProperty('--text-primary', '#111827');
-        document.documentElement.style.setProperty('--text-secondary', '#4B5563');
-        document.documentElement.style.setProperty('--border-color', '#D1D5DB');
-    } else {
-        document.querySelector('.theme-toggle').innerHTML = '<i class="fas fa-moon"></i>';
-    }
-    
-    // Set up Firebase auth state listener
-    auth.onAuthStateChanged((user) => {
-        onAuthStateChanged(user);
-    });
-    
-    // Load filters and jobs
-    loadFilters();
-    loadJobs();
-    
-    // Theme toggle functionality
-    const themeToggle = document.querySelector('.theme-toggle');
-    themeToggle.addEventListener('click', () => {
-        const body = document.body;
-        const isDark = body.getAttribute('data-theme') === 'dark';
-        body.setAttribute('data-theme', isDark ? 'light' : 'dark');
-        themeToggle.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-        
-        // Save theme preference
-        localStorage.setItem('theme', isDark ? 'light' : 'dark');
-    });
-
-    // Clear search inputs on page load
-    window.addEventListener('load', function() {
-        document.querySelector('.search-input').value = '';
-        document.querySelector('.sidebar-search-input').value = '';
-    });
-}
-// Auth state change handler
-function onAuthStateChanged(user) {
-    currentUser = user;
-    const userName = document.getElementById('user-name');
-    
-    if (user) {
-        userName.textContent = user.displayName || user.email;
-        
-        // Show admin button only for srujansrujan@gmail.com
-        if (user.email === "srujansrujan@gmail.com") {
-            adminBtn.style.display = 'flex';
-            addJobBtn.style.display = 'flex';
+        // Set correct icon based on saved theme
+        if (savedTheme === 'light') {
+            document.querySelector('.theme-toggle').innerHTML = '<i class="fas fa-sun"></i>';
+            // Apply light theme variables
+            document.documentElement.style.setProperty('--bg-primary', '#F3F4F6');
+            document.documentElement.style.setProperty('--bg-secondary', '#FFFFFF');
+            document.documentElement.style.setProperty('--bg-tertiary', '#E5E7EB');
+            document.documentElement.style.setProperty('--text-primary', '#111827');
+            document.documentElement.style.setProperty('--text-secondary', '#4B5563');
+            document.documentElement.style.setProperty('--border-color', '#D1D5DB');
         } else {
+            document.querySelector('.theme-toggle').innerHTML = '<i class="fas fa-moon"></i>';
+        }
+
+        // Set up Firebase auth state listener
+        auth.onAuthStateChanged((user) => {
+            onAuthStateChanged(user);
+        });
+
+        // Load filters, jobs and career paths
+        loadFilters();
+        loadJobs();
+        loadCareerPaths();
+
+        // Add event listeners for role dialog
+        document.getElementById('role-dialog-close').addEventListener('click', closeRoleDialog);
+
+        // Close dialog when clicking outside
+        document.getElementById('role-dialog-modal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('role-dialog-modal')) {
+                closeRoleDialog();
+            }
+        });
+
+        // Theme toggle functionality
+        const themeToggle = document.querySelector('.theme-toggle');
+        themeToggle.addEventListener('click', () => {
+            const body = document.body;
+            const isDark = body.getAttribute('data-theme') === 'dark';
+            body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+            themeToggle.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+
+            // Save theme preference
+            localStorage.setItem('theme', isDark ? 'light' : 'dark');
+        });
+
+        // Clear search inputs on page load
+        window.addEventListener('load', function() {
+            document.querySelector('.search-input').value = '';
+            document.querySelector('.sidebar-search-input').value = '';
+        });
+    }
+
+    // Auth state change handler
+    function onAuthStateChanged(user) {
+        currentUser = user;
+        const userName = document.getElementById('user-name');
+
+        if (user) {
+            userName.textContent = user.displayName || user.email;
+
+            // Show admin buttons only for srujansrujan@gmail.com
+            if (user.email === "srujansrujan@gmail.com") {
+                adminBtn.style.display = 'flex';
+                addJobBtn.style.display = 'flex';
+                addCareerPathBtn.style.display = 'flex';
+            } else {
+                adminBtn.style.display = 'none';
+                addJobBtn.style.display = 'none';
+                addCareerPathBtn.style.display = 'none';
+            }
+        } else {
+            // No user is signed in
+            userName.textContent = "Guest";
             adminBtn.style.display = 'none';
             addJobBtn.style.display = 'none';
+            addCareerPathBtn.style.display = 'none';
         }
-    } else {
-        // No user is signed in
-        userName.textContent = "Guest";
-        adminBtn.style.display = 'none';
-        addJobBtn.style.display = 'none';
+
+        // Re-render jobs to show/hide edit/delete buttons based on auth status
+        renderJobs(allJobs);
+        // Re-render career paths to show/hide admin buttons
+        renderCareerPaths(allCareerPaths);
     }
-    
-    // Re-render jobs to show/hide edit/delete buttons based on auth status
-    renderJobs(allJobs);
-}
 
     // Load filters from Firestore
     async function loadFilters() {
         try {
             const doc = await db.collection('settings').doc('filters').get();
-            
+
             if (doc.exists) {
                 filtersData = doc.data();
                 renderFilters();
@@ -1539,7 +2106,7 @@ function onAuthStateChanged(user) {
     async function loadJobs() {
         try {
             const snapshot = await db.collection('jobs').orderBy('timestamp', 'desc').get();
-            
+
             if (!snapshot.empty) {
                 allJobs = [];
                 snapshot.forEach(doc => {
@@ -1552,7 +2119,7 @@ function onAuthStateChanged(user) {
                 // Show empty state if no jobs exist
                 renderJobs([]);
             }
-            
+
             // Remove loading spinner
             document.querySelector('.loading').style.display = 'none';
         } catch (error) {
@@ -1563,26 +2130,245 @@ function onAuthStateChanged(user) {
         }
     }
 
-function renderJobs(jobs) {
-    jobsContainer.innerHTML = '';
-    
-    if (jobs.length === 0) {
-        jobsContainer.innerHTML = `
+    // Load career paths from Firestore
+    async function loadCareerPaths() {
+        try {
+            const snapshot = await db.collection('careerPaths').orderBy('timestamp', 'desc').get();
+
+            if (!snapshot.empty) {
+                allCareerPaths = [];
+                snapshot.forEach(doc => {
+                    const careerPath = doc.data();
+                    careerPath.id = doc.id;
+                    allCareerPaths.push(careerPath);
+                });
+                renderCareerPaths(allCareerPaths);
+            } else {
+                // Show default career paths if none exist
+                loadDefaultCareerPaths();
+            }
+        } catch (error) {
+            console.error("Error loading career paths:", error);
+            // Load default career paths as fallback
+            loadDefaultCareerPaths();
+        }
+    }
+
+    // Load default career paths
+    function loadDefaultCareerPaths() {
+        allCareerPaths = [
+            {
+                id: 'junior-embedded-engineer',
+                title: 'Junior Embedded Engineer',
+                description: 'Design and develop embedded systems, work with microcontrollers, and implement firmware solutions.',
+                skills: ['C/C++', 'Microcontrollers', 'RTOS', 'Debugging', 'Hardware Design', 'Communication Protocols'],
+                companies: ['Intel', 'Qualcomm', 'Texas Instruments', 'STMicroelectronics', 'NXP'],
+                roadmap: 'Start with basic C programming and microcontroller fundamentals. Learn about RTOS, communication protocols, and hardware debugging. Practice with development boards and real projects.',
+                questions: 'What is the difference between polling and interrupt-driven programming? Explain memory management in embedded systems. How do you optimize code for resource-constrained environments?',
+                roadmapLink: '#',
+                questionsLink: '#'
+            },
+            {
+                id: 'pcb-designer',
+                title: 'PCB Designer',
+                description: 'Design printed circuit boards, create schematics, and ensure proper layout for electronic devices.',
+                skills: ['Altium Designer', 'KiCad', 'Eagle', 'Signal Integrity', 'EMC/EMI', 'Thermal Management'],
+                companies: ['Apple', 'Samsung', 'Sony', 'LG', 'Panasonic'],
+                roadmap: 'Learn PCB design software like Altium or KiCad. Understand signal integrity, power distribution, and thermal considerations. Practice with different board types and manufacturing processes.',
+                questions: 'How do you minimize EMI in PCB design? Explain the importance of ground planes. What factors affect signal integrity in high-speed designs?',
+                roadmapLink: '#',
+                questionsLink: '#'
+            },
+            {
+                id: 'vlsi-engineer',
+                title: 'VLSI Engineer',
+                description: 'Design and verify very large scale integrated circuits, work with digital design and verification.',
+                skills: ['Verilog', 'SystemVerilog', 'ASIC Design', 'FPGA', 'Digital Design', 'Verification'],
+                companies: ['NVIDIA', 'AMD', 'Broadcom', 'MediaTek', 'Marvell'],
+                roadmap: 'Master digital design fundamentals and HDL languages like Verilog/SystemVerilog. Learn about ASIC design flow, verification methodologies, and FPGA development.',
+                questions: 'Explain the difference between combinational and sequential logic. What is clock domain crossing? How do you optimize power consumption in VLSI design?',
+                roadmapLink: '#',
+                questionsLink: '#'
+            },
+            {
+                id: 'rf-engineer',
+                title: 'RF Engineer',
+                description: 'Design and optimize radio frequency circuits and systems for wireless communication.',
+                skills: ['RF Design', 'Antenna Design', 'Microwave Engineering', 'Network Analysis', 'EM Simulation', 'Wireless Standards'],
+                companies: ['Ericsson', 'Nokia', 'Huawei', 'Samsung', 'Qualcomm'],
+                roadmap: 'Study electromagnetic theory and microwave engineering. Learn RF circuit design, antenna theory, and wireless communication standards. Practice with simulation tools.',
+                questions: 'What is impedance matching and why is it important? Explain antenna gain and radiation patterns. How do you minimize insertion loss in RF circuits?',
+                roadmapLink: '#',
+                questionsLink: '#'
+            },
+            {
+                id: 'test-engineer',
+                title: 'Test Engineer',
+                description: 'Develop and implement test strategies for electronic products and systems.',
+                skills: ['Test Automation', 'LabVIEW', 'Python', 'Test Equipment', 'Quality Assurance', 'Statistical Analysis'],
+                companies: ['Keysight', 'Tektronix', 'Rohde & Schwarz', 'Agilent', 'Fluke'],
+                roadmap: 'Learn test automation tools and programming languages. Understand measurement techniques, statistical analysis, and quality control processes.',
+                questions: 'How do you design a comprehensive test plan? What is the difference between functional and parametric testing? Explain test coverage analysis.',
+                roadmapLink: '#',
+                questionsLink: '#'
+            },
+            {
+                id: 'firmware-engineer',
+                title: 'Firmware Engineer',
+                description: 'Develop low-level software for embedded systems and hardware interfaces.',
+                skills: ['Embedded C', 'Assembly', 'Device Drivers', 'Bootloaders', 'Real-time Systems', 'Hardware Interfaces'],
+                companies: ['Microsoft', 'Google', 'Amazon', 'Tesla', 'SpaceX'],
+                roadmap: 'Master embedded C programming and assembly language. Learn about device drivers, bootloaders, and real-time operating systems. Practice with various microcontrollers.',
+                questions: 'How do you implement interrupt service routines? Explain memory-mapped I/O. What are the challenges in real-time firmware development?',
+                roadmapLink: '#',
+                questionsLink: '#'
+            }
+        ];
+        renderCareerPaths(allCareerPaths);
+    }
+
+    // Render career paths
+    function renderCareerPaths(careerPaths) {
+        const container = document.getElementById('job-roles-container');
+        container.innerHTML = '';
+
+        if (careerPaths.length === 0) {
+            container.innerHTML = `
+            <div class="no-career-paths" style="grid-column: 1 / -1; text-align: center; padding: 60px 20px;">
+                <i class="fas fa-briefcase" style="font-size: 56px; color: var(--text-secondary); margin-bottom: 20px;"></i>
+                <h3 style="color: var(--text-secondary); margin-bottom: 12px; font-size: 20px;">No career paths found</h3>
+                <p style="color: var(--text-secondary); font-size: 16px;">Add career paths to get started</p>
+            </div>
+        `;
+            return;
+        }
+
+        careerPaths.forEach(careerPath => {
+            const card = document.createElement('div');
+            card.className = 'job-role-card';
+            card.setAttribute('data-role-id', careerPath.id);
+
+            card.innerHTML = `
+                <h3 class="role-title">${careerPath.title}</h3>
+                <p class="role-description">${careerPath.description}</p>
+
+                <div class="role-skills">
+                    <div class="skills-title">
+                        <i class="fas fa-tools"></i>
+                        Required Skills
+                    </div>
+                    <div class="skills-list">
+                        ${careerPath.skills.map(skill => `<span class="skill-item" data-skill="${skill}">${skill}</span>`).join('')}
+                    </div>
+                </div>
+
+                <div class="role-companies">
+                    <div class="companies-title">
+                        <i class="fas fa-building"></i>
+                        Top Hiring Companies
+                    </div>
+                    <div class="companies-list">
+                        ${careerPath.companies.map(company => `<span class="company-item">${company}</span>`).join('')}
+                    </div>
+                </div>
+
+                <div class="role-actions">
+                    <button class="role-action-btn primary" data-action="learn-more" data-role-id="${careerPath.id}">
+                        <i class="fas fa-info-circle"></i>
+                        Learn More
+                    </button>
+                    <button class="role-action-btn" data-action="view-jobs" data-role-id="${careerPath.id}">
+                        <i class="fas fa-search"></i>
+                        View Jobs
+                    </button>
+                </div>
+                ${
+                    currentUser && currentUser.email === "srujansrujan@gmail.com"
+                        ? `
+                    <div class="career-path-actions">
+                        <button class="add-jobs-btn" data-career-path-id="${careerPath.id}">
+                            <i class="fas fa-plus"></i> Add Jobs
+                        </button>
+                        <button class="delete-career-path-btn" data-career-path-id="${careerPath.id}">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </div>
+                    `
+                        : ''
+                }
+            `;
+
+            container.appendChild(card);
+        });
+
+        // Add event listeners for role actions
+        document.querySelectorAll('.role-action-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const action = btn.getAttribute('data-action');
+                const roleId = btn.getAttribute('data-role-id');
+
+                if (action === 'learn-more') {
+                    showRoleDialog(roleId);
+                } else if (action === 'view-jobs') {
+                    filterJobsByCareerPath(roleId);
+                }
+            });
+        });
+
+        // Add event listeners for admin actions on career paths
+        if (currentUser && currentUser.email === "srujansrujan@gmail.com") {
+            document.querySelectorAll('.delete-career-path-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const careerPathId = btn.getAttribute('data-career-path-id');
+                    deleteCareerPath(careerPathId);
+                });
+            });
+
+            document.querySelectorAll('.add-jobs-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const careerPathId = btn.getAttribute('data-career-path-id');
+                    addJobForCareerPath(careerPathId);
+                });
+            });
+        }
+
+        // Add per-skill dialog events
+        document.querySelectorAll('.job-role-card .skill-item').forEach(el => {
+            el.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const card = e.target.closest('.job-role-card');
+                const roleId = card ? card.getAttribute('data-role-id') : null;
+                const skill = e.target.getAttribute('data-skill');
+                if (roleId && skill) {
+                    showSkillDialog(roleId, skill);
+                }
+            });
+        });
+    }
+
+    function renderJobs(jobs) {
+        jobsContainer.innerHTML = '';
+
+        if (jobs.length === 0) {
+            jobsContainer.innerHTML = `
             <div class="no-jobs" style="grid-column: 1 / -1; text-align: center; padding: 60px 20px;">
                 <i class="fas fa-search" style="font-size: 56px; color: var(--text-secondary); margin-bottom: 20px;"></i>
                 <h3 style="color: var(--text-secondary); margin-bottom: 12px; font-size: 20px;">No jobs found</h3>
                 <p style="color: var(--text-secondary); font-size: 16px;">Try adjusting your filters or search terms</p>
             </div>
         `;
-        return;
-    }
-    
-    jobs.forEach(job => {
-        const card = document.createElement('div');
-        card.className = 'job-card';
-        card.setAttribute('data-jobid', job.id); // Add job ID as data attribute
-        
-        card.innerHTML = `
+            return;
+        }
+
+        jobs.forEach(job => {
+            const card = document.createElement('div');
+            card.className = 'job-card';
+            card.setAttribute('data-jobid', job.id); // Add job ID as data attribute
+
+            card.innerHTML = `
             <h3 class="job-role">${job.role}</h3>
             <div class="job-skills">
                 ${job.skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('')}
@@ -1595,8 +2381,8 @@ function renderJobs(jobs) {
                 </div>
             </div>
             ${
-                currentUser && currentUser.email === "srujansrujan@gmail.com" 
-                ? `
+                currentUser && currentUser.email === "srujansrujan@gmail.com"
+                    ? `
                 <div class="job-actions">
                     <button class="edit-job-btn" data-id="${job.id}">
                         <i class="fas fa-edit"></i> Edit
@@ -1605,135 +2391,162 @@ function renderJobs(jobs) {
                         <i class="fas fa-trash"></i> Delete
                     </button>
                 </div>
-                ` 
-                : ''
+                `
+                    : ''
             }
         `;
-        
-        // Add click event to redirect to jobroles.html with job ID
-        card.addEventListener('click', (e) => {
-            // Don't redirect if user clicked on edit/delete buttons
-            if (!e.target.closest('.job-actions')) {
-                // Store the job ID in localStorage and redirect
-                localStorage.setItem('selectedJobId', job.id);
-                localStorage.setItem('selectedJobRole', job.role);
-                window.location.href = 'jobroles.html';
-            }
-        });
-        
-        jobsContainer.appendChild(card);
-    });
 
-    // Attach events for edit & delete
-    if (currentUser && currentUser.email === "srujansrujan@gmail.com") {
-        document.querySelectorAll('.delete-job-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation(); // Prevent event bubbling
-                deleteJob(btn.getAttribute('data-id'));
+            // Add click event to redirect to jobroles.html with job ID
+            card.addEventListener('click', (e) => {
+                // Don't redirect if user clicked on edit/delete buttons
+                if (!e.target.closest('.job-actions')) {
+                    // Store the job ID in localStorage and redirect
+                    localStorage.setItem('selectedJobId', job.id);
+                    localStorage.setItem('selectedJobRole', job.role);
+                    window.location.href = 'jobroles.html';
+                }
             });
+
+            jobsContainer.appendChild(card);
         });
 
-        document.querySelectorAll('.edit-job-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation(); // Prevent event bubbling
-                editJob(btn.getAttribute('data-id'));
+        // Attach events for edit & delete
+        if (currentUser && currentUser.email === "srujansrujan@gmail.com") {
+            document.querySelectorAll('.delete-job-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Prevent event bubbling
+                    deleteJob(btn.getAttribute('data-id'));
+                });
             });
-        });
+
+            document.querySelectorAll('.edit-job-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Prevent event bubbling
+                    editJob(btn.getAttribute('data-id'));
+                });
+            });
+        }
     }
-}
 
     // Filter jobs based on selected filters
-// Filter jobs based on selected filters
-function filterJobs() {
-    const experienceValue = parseInt(experienceSlider.value);
-    const searchText = searchInput.value.toLowerCase();
-    const activeFilters = {
-        skills: Array.from(document.querySelectorAll('#skills-container .filter-btn.active')).map(btn => btn.getAttribute('data-value')),
-        locations: Array.from(document.querySelectorAll('#locations-container .filter-btn.active')).map(btn => btn.getAttribute('data-value')),
-        salary: Array.from(document.querySelectorAll('#salary-container .filter-btn.active')).map(btn => btn.getAttribute('data-value')),
-        companies: Array.from(document.querySelectorAll('#companies-container .filter-btn.active')).map(btn => btn.getAttribute('data-value')),
-        jobtype: Array.from(document.querySelectorAll('#jobtype-container .filter-btn.active')).map(btn => btn.getAttribute('data-value'))
-    };
-    
-    // Check if any filters are active (excluding experience slider at 0 and empty search)
-    const hasActiveFilters = experienceValue > 0 || 
-                            searchText.length > 0 || 
-                            activeFilters.skills.length > 0 || 
-                            activeFilters.locations.length > 0 || 
-                            activeFilters.salary.length > 0 || 
-                            activeFilters.companies.length > 0 || 
-                            activeFilters.jobtype.length > 0;
-    
-    // If no filters are active, show all jobs
-    if (!hasActiveFilters) {
-        renderJobs(allJobs);
-        return;
-    }
-    
-    const filteredJobs = allJobs.filter(job => {
-        // Filter by experience
-        if (experienceValue > 0) {
-            // Simple assumption: higher salary jobs require more experience
-            const minSalary = parseInt(job.salary.split('-')[0]);
-            if (minSalary < experienceValue * 1.5) {
-                return false;
-            }
+    function filterJobs() {
+        const experienceValue = parseInt(experienceSlider.value);
+        const searchText = searchInput.value.toLowerCase();
+        const activeFilters = {
+            skills: Array.from(document.querySelectorAll('#skills-container .filter-btn.active')).map(btn => btn.getAttribute('data-value')),
+            locations: Array.from(document.querySelectorAll('#locations-container .filter-btn.active')).map(btn => btn.getAttribute('data-value')),
+            salary: Array.from(document.querySelectorAll('#salary-container .filter-btn.active')).map(btn => btn.getAttribute('data-value')),
+            companies: Array.from(document.querySelectorAll('#companies-container .filter-btn.active')).map(btn => btn.getAttribute('data-value')),
+            jobtype: Array.from(document.querySelectorAll('#jobtype-container .filter-btn.active')).map(btn => btn.getAttribute('data-value'))
+        };
+
+        // Check if any filters are active (excluding experience slider at 0 and empty search)
+        const hasActiveFilters = experienceValue > 0 ||
+            searchText.length > 0 ||
+            activeFilters.skills.length > 0 ||
+            activeFilters.locations.length > 0 ||
+            activeFilters.salary.length > 0 ||
+            activeFilters.companies.length > 0 ||
+            activeFilters.jobtype.length > 0;
+
+        // If no filters are active, show all jobs
+        if (!hasActiveFilters) {
+            renderJobs(allJobs);
+            return;
         }
-        
-        // Filter by search text
-        if (searchText) {
-            const searchableText = `${job.role} ${job.skills.join(' ')} ${job.companies.join(' ')}`.toLowerCase();
-            if (!searchableText.includes(searchText)) {
-                return false;
-            }
-        }
-        
-        // Filter by skills
-        if (activeFilters.skills.length > 0) {
-            const hasMatchingSkill = activeFilters.skills.some(filterSkill => 
-                job.skills.some(skill => skill.toLowerCase().includes(filterSkill.toLowerCase()))
-            );
-            if (!hasMatchingSkill) return false;
-        }
-        
-        // Filter by companies
-        if (activeFilters.companies.length > 0) {
-            const hasMatchingCompany = activeFilters.companies.some(filterCompany => 
-                job.companies.some(company => company.toLowerCase().includes(filterCompany.toLowerCase()))
-            );
-            if (!hasMatchingCompany) return false;
-        }
-        
-        // Filter by salary
-        if (activeFilters.salary.length > 0) {
-            let salaryMatch = false;
-            const jobSalary = job.salary;
-            const jobMinSalary = parseInt(jobSalary.split('-')[0]);
-            
-            for (const range of activeFilters.salary) {
-                if (range.includes('+')) {
-                    const min = parseInt(range);
-                    if (jobMinSalary >= min) {
-                        salaryMatch = true;
-                        break;
-                    }
-                } else {
-                    const [min, max] = range.split('-').map(num => parseInt(num));
-                    if (jobMinSalary >= min && jobMinSalary <= max) {
-                        salaryMatch = true;
-                        break;
-                    }
+
+        const filteredJobs = allJobs.filter(job => {
+            // Filter by experience
+            if (experienceValue > 0) {
+                // Simple assumption: higher salary jobs require more experience
+                const minSalary = parseInt(job.salary.split('-')[0]);
+                if (minSalary < experienceValue * 1.5) {
+                    return false;
                 }
             }
+
+            // Filter by search text
+            if (searchText) {
+                const searchableText = `${job.role} ${job.skills.join(' ')} ${job.companies.join(' ')}`.toLowerCase();
+                if (!searchableText.includes(searchText)) {
+                    return false;
+                }
+            }
+
+            // Filter by skills
+            if (activeFilters.skills.length > 0) {
+                const hasMatchingSkill = activeFilters.skills.some(filterSkill =>
+                    job.skills.some(skill => skill.toLowerCase().includes(filterSkill.toLowerCase()))
+                );
+                if (!hasMatchingSkill) return false;
+            }
+
+            // Filter by companies
+            if (activeFilters.companies.length > 0) {
+                const hasMatchingCompany = activeFilters.companies.some(filterCompany =>
+                    job.companies.some(company => company.toLowerCase().includes(filterCompany.toLowerCase()))
+                );
+                if (!hasMatchingCompany) return false;
+            }
+
+            // Filter by salary
+            if (activeFilters.salary.length > 0) {
+                let salaryMatch = false;
+                const jobSalary = job.salary;
+                const jobMinSalary = parseInt(jobSalary.split('-')[0]);
+
+                for (const range of activeFilters.salary) {
+                    if (range.includes('+')) {
+                        const min = parseInt(range);
+                        if (jobMinSalary >= min) {
+                            salaryMatch = true;
+                            break;
+                        }
+                    } else {
+                        const [min, max] = range.split('-').map(num => parseInt(num));
+                        if (jobMinSalary >= min && jobMinSalary <= max) {
+                            salaryMatch = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (!salaryMatch) return false;
+            }
+
+            return true;
+        });
+
+        renderJobs(filteredJobs);
+    }
+
+    // Filter jobs by career path
+    function filterJobsByCareerPath(careerPathId) {
+        const careerPath = allCareerPaths.find(cp => cp.id === careerPathId);
+        if (!careerPath) return;
+
+        // Filter jobs based on career path skills
+        const filteredJobs = allJobs.filter(job => {
+            // Check if job is linked to this career path
+            if (job.careerPathId === careerPathId) {
+                return true;
+            }
             
-            if (!salaryMatch) return false;
-        }
-        
-        return true;
-    });
-    
-    renderJobs(filteredJobs);
-}
+            // Fallback: filter by skills if no direct link
+            return careerPath.skills.some(skill =>
+                job.skills.some(jobSkill =>
+                    jobSkill.toLowerCase().includes(skill.toLowerCase())
+                )
+            );
+        });
+
+        renderJobs(filteredJobs);
+
+        // Scroll to jobs section
+        document.querySelector('.jobs-section').scrollIntoView({
+            behavior: 'smooth'
+        });
+    }
 
     // Load filters to admin modal
     function loadFiltersToModal() {
@@ -1748,14 +2561,14 @@ function filterJobs() {
     function loadItemsToList(listId, items) {
         const list = document.getElementById(listId);
         list.innerHTML = '';
-        
+
         items.forEach(item => {
             const span = document.createElement('span');
             span.className = 'item-tag';
             span.innerHTML = `${item} <span class="remove-item" data-item="${item}">&times;</span>`;
             list.appendChild(span);
         });
-        
+
         // Add event listeners to remove buttons
         document.querySelectorAll('.remove-item').forEach(btn => {
             btn.addEventListener('click', (e) => {
@@ -1768,7 +2581,7 @@ function filterJobs() {
     // Add item to a list in the modal
     function addItemToList(target) {
         let inputId, listId, arrayName;
-        
+
         switch(target) {
             case 'skills-list':
                 inputId = 'skills-input';
@@ -1784,11 +2597,11 @@ function filterJobs() {
                 const min = document.getElementById('salary-min-input').value;
                 const max = document.getElementById('salary-max-input').value;
                 if (!min || !max) return;
-                
+
                 const salaryRange = `${min}-${max} LPA`;
                 filtersData.salaryRanges.push(salaryRange);
                 loadItemsToList('salary-list', filtersData.salaryRanges);
-                
+
                 // Clear inputs
                 document.getElementById('salary-min-input').value = '';
                 document.getElementById('salary-max-input').value = '';
@@ -1804,10 +2617,10 @@ function filterJobs() {
                 arrayName = 'jobTypes';
                 break;
         }
-        
+
         const input = document.getElementById(inputId);
         const value = input.value.trim();
-        
+
         if (value && !filtersData[arrayName].includes(value)) {
             filtersData[arrayName].push(value);
             loadItemsToList(listId, filtersData[arrayName]);
@@ -1818,7 +2631,7 @@ function filterJobs() {
     // Add item to job form
     function addItemToJobForm(target) {
         let inputId, arrayName;
-        
+
         switch(target) {
             case 'job-skills-list':
                 inputId = 'job-skills';
@@ -1829,20 +2642,20 @@ function filterJobs() {
                 arrayName = 'companies';
                 break;
         }
-        
+
         const input = document.getElementById(inputId);
         const value = input.value.trim();
-        
+
         if (value && !jobFormData[arrayName].includes(value)) {
             jobFormData[arrayName].push(value);
-            
+
             // Add to the list visually
             const list = document.getElementById(target);
             const span = document.createElement('span');
             span.className = 'item-tag';
             span.innerHTML = `${value} <span class="remove-item" data-item="${value}">&times;</span>`;
             list.appendChild(span);
-            
+
             // Add event listener to remove button
             span.querySelector('.remove-item').addEventListener('click', (e) => {
                 const item = e.target.getAttribute('data-item');
@@ -1852,7 +2665,49 @@ function filterJobs() {
                 }
                 span.remove();
             });
-            
+
+            input.value = '';
+        }
+    }
+
+    // Add item to career path form
+    function addItemToCareerPathForm(target) {
+        let inputId, arrayName;
+
+        switch(target) {
+            case 'career-path-skills-list':
+                inputId = 'career-path-skills';
+                arrayName = 'skills';
+                break;
+            case 'career-path-companies-list':
+                inputId = 'career-path-companies';
+                arrayName = 'companies';
+                break;
+        }
+
+        const input = document.getElementById(inputId);
+        const value = input.value.trim();
+
+        if (value && !careerPathFormData[arrayName].includes(value)) {
+            careerPathFormData[arrayName].push(value);
+
+            // Add to the list visually
+            const list = document.getElementById(target);
+            const span = document.createElement('span');
+            span.className = 'item-tag';
+            span.innerHTML = `${value} <span class="remove-item" data-item="${value}">&times;</span>`;
+            list.appendChild(span);
+
+            // Add event listener to remove button
+            span.querySelector('.remove-item').addEventListener('click', (e) => {
+                const item = e.target.getAttribute('data-item');
+                const index = careerPathFormData[arrayName].indexOf(item);
+                if (index > -1) {
+                    careerPathFormData[arrayName].splice(index, 1);
+                }
+                span.remove();
+            });
+
             input.value = '';
         }
     }
@@ -1860,7 +2715,7 @@ function filterJobs() {
     // Remove item from a list in the modal
     function removeItemFromList(listId, item) {
         let arrayName;
-        
+
         switch(listId) {
             case 'skills-list':
                 arrayName = 'skills';
@@ -1878,7 +2733,7 @@ function filterJobs() {
                 arrayName = 'jobTypes';
                 break;
         }
-        
+
         const index = filtersData[arrayName].indexOf(item);
         if (index > -1) {
             filtersData[arrayName].splice(index, 1);
@@ -1900,55 +2755,96 @@ function filterJobs() {
     }
 
     // Save job to Firestore
-   // In the saveJob function, add empty content fields
-// In the saveJob function, remove the content fields
-async function saveJob() {
-    const role = document.getElementById('job-role').value;
-    const salaryMin = document.getElementById('salary-min').value;
-    const salaryMax = document.getElementById('salary-max').value;
-    
-    if (!role || !salaryMin || !salaryMax || jobFormData.skills.length === 0 || jobFormData.companies.length === 0) {
-        alert("Please fill all fields");
-        return;
+    async function saveJob() {
+        const role = document.getElementById('job-role').value;
+        const salaryMin = document.getElementById('salary-min').value;
+        const salaryMax = document.getElementById('salary-max').value;
+
+        if (!role || !salaryMin || !salaryMax || jobFormData.skills.length === 0 || jobFormData.companies.length === 0) {
+            alert("Please fill all fields");
+            return;
+        }
+
+        const salary = `${salaryMin}-${salaryMax} LPA`;
+
+        // Create job object
+        const job = {
+            role,
+            skills: jobFormData.skills,
+            salary,
+            companies: jobFormData.companies,
+            timestamp: new Date()
+        };
+
+        // Link job to career path if adding from a specific career path
+        if (currentCareerPathForJob) {
+            job.careerPathId = currentCareerPathForJob;
+        }
+
+        try {
+            // Save to Firestore
+            const docRef = await db.collection('jobs').add(job);
+            job.id = docRef.id;
+
+            // Add to local array
+            allJobs.unshift(job);
+
+            alert("Job added successfully!");
+            addJobModal.classList.remove('show');
+            renderJobs(allJobs);
+            filterJobs();
+            
+            // Reset current career path
+            currentCareerPathForJob = null;
+        } catch (error) {
+            console.error("Error saving job:", error);
+            alert("Error saving job. Please try again.");
+        }
     }
-    
-    const salary = `${salaryMin}-${salaryMax} LPA`;
-    
-    // Create job object WITHOUT content fields
-    const job = {
-        role,
-        skills: jobFormData.skills,
-        salary,
-        companies: jobFormData.companies,
-        timestamp: new Date()
-        // REMOVE the content fields that were here before
-    };
-    
-    try {
-        // Save to Firestore
-        const docRef = await db.collection('jobs').add(job);
-        job.id = docRef.id;
-        
-        // Add to local array
-        allJobs.unshift(job);
-        
-        alert("Job added successfully!");
-        addJobModal.classList.remove('show');
-        renderJobs(allJobs);
-        filterJobs();
-    } catch (error) {
-        console.error("Error saving job:", error);
-        alert("Error saving job. Please try again.");
+
+    // Save career path to Firestore
+    async function saveCareerPath() {
+        const title = document.getElementById('career-path-title').value;
+        const description = document.getElementById('career-path-description').value;
+
+        if (!title || !description || careerPathFormData.skills.length === 0 || careerPathFormData.companies.length === 0) {
+            alert("Please fill all fields");
+            return;
+        }
+
+        // Create career path object
+        const careerPath = {
+            title,
+            description,
+            skills: careerPathFormData.skills,
+            companies: careerPathFormData.companies,
+            timestamp: new Date()
+        };
+
+        try {
+            // Save to Firestore
+            const docRef = await db.collection('careerPaths').add(careerPath);
+            careerPath.id = docRef.id;
+
+            // Add to local array
+            allCareerPaths.unshift(careerPath);
+
+            alert("Career path added successfully!");
+            addCareerPathModal.classList.remove('show');
+            renderCareerPaths(allCareerPaths);
+        } catch (error) {
+            console.error("Error saving career path:", error);
+            alert("Error saving career path. Please try again.");
+        }
     }
-}
 
     // Filter sidebar items
     function filterSidebarItems() {
         const searchText = sidebarSearchInput.value.toLowerCase();
-        
+
         document.querySelectorAll('.filter-options').forEach(container => {
             let hasVisibleItems = false;
-            
+
             container.querySelectorAll('.filter-btn').forEach(btn => {
                 const btnText = btn.textContent.toLowerCase();
                 if (btnText.includes(searchText)) {
@@ -1958,7 +2854,7 @@ async function saveJob() {
                     btn.style.display = 'none';
                 }
             });
-            
+
             // Show/hide section based on whether it has visible items
             const section = container.closest('.sidebar-section');
             if (section) {
@@ -1968,224 +2864,246 @@ async function saveJob() {
     }
 
     // Delete job
-function deleteJob(jobId) {
-    if (!confirm("Are you sure you want to delete this job?")) return;
-    
-    db.collection("jobs").doc(jobId).delete()
-        .then(() => {
-            alert("Job deleted successfully!");
-            // Remove from local array
-            allJobs = allJobs.filter(job => job.id !== jobId);
-            renderJobs(allJobs);
-        })
-        .catch((error) => {
-            console.error("Error deleting job: ", error);
-            alert("Error deleting job. Please try again.");
+    function deleteJob(jobId) {
+        if (!confirm("Are you sure you want to delete this job?")) return;
+
+        db.collection("jobs").doc(jobId).delete()
+            .then(() => {
+                alert("Job deleted successfully!");
+                // Remove from local array
+                allJobs = allJobs.filter(job => job.id !== jobId);
+                renderJobs(allJobs);
+            })
+            .catch((error) => {
+                console.error("Error deleting job: ", error);
+                alert("Error deleting job. Please try again.");
+            });
+    }
+
+    // Delete career path
+    function deleteCareerPath(careerPathId) {
+        if (!confirm("Are you sure you want to delete this career path?")) return;
+
+        db.collection("careerPaths").doc(careerPathId).delete()
+            .then(() => {
+                alert("Career path deleted successfully!");
+                // Remove from local array
+                allCareerPaths = allCareerPaths.filter(cp => cp.id !== careerPathId);
+                renderCareerPaths(allCareerPaths);
+            })
+            .catch((error) => {
+                console.error("Error deleting career path: ", error);
+                alert("Error deleting career path. Please try again.");
+            });
+    }
+
+    // Add job for specific career path
+    function addJobForCareerPath(careerPathId) {
+        currentCareerPathForJob = careerPathId;
+        addJobModal.classList.add('show');
+        // Clear any previous inputs
+        document.getElementById('job-role').value = '';
+        document.getElementById('salary-min').value = '';
+        document.getElementById('salary-max').value = '';
+        document.getElementById('job-skills-list').innerHTML = '';
+        document.getElementById('job-companies-list').innerHTML = '';
+        jobFormData.skills = [];
+        jobFormData.companies = [];
+    }
+
+    // In the editJob function, make sure we preserve existing content
+    function editJob(jobId) {
+        const job = allJobs.find(j => j.id === jobId);
+        if (!job) return;
+
+        // Store the original save function
+        const originalSaveFunction = saveJobBtn.onclick;
+
+        // Open modal with pre-filled data
+        addJobModal.classList.add('show');
+        document.getElementById('job-role').value = job.role;
+        document.getElementById('salary-min').value = job.salary.split('-')[0];
+        document.getElementById('salary-max').value = job.salary.split('-')[1].replace(" LPA", "");
+
+        // Fill skills
+        jobFormData.skills = [...job.skills];
+        const skillsList = document.getElementById('job-skills-list');
+        skillsList.innerHTML = '';
+        job.skills.forEach(skill => {
+            const span = document.createElement('span');
+            span.className = 'item-tag';
+            span.innerHTML = `${skill} <span class="remove-item" data-item="${skill}">&times;</span>`;
+            skillsList.appendChild(span);
+
+            // Add event listener to remove button
+            span.querySelector('.remove-item').addEventListener('click', (e) => {
+                const item = e.target.getAttribute('data-item');
+                const index = jobFormData.skills.indexOf(item);
+                if (index > -1) {
+                    jobFormData.skills.splice(index, 1);
+                }
+                span.remove();
+            });
         });
-}
 
-// In the editJob function, make sure we preserve existing content
-function editJob(jobId) {
-    const job = allJobs.find(j => j.id === jobId);
-    if (!job) return;
+        // Fill companies
+        jobFormData.companies = [...job.companies];
+        const companiesList = document.getElementById('job-companies-list');
+        companiesList.innerHTML = '';
+        job.companies.forEach(company => {
+            const span = document.createElement('span');
+            span.className = 'item-tag';
+            span.innerHTML = `${company} <span class="remove-item" data-item="${company}">&times;</span>`;
+            companiesList.appendChild(span);
 
-    // Store the original save function
-    const originalSaveFunction = saveJobBtn.onclick;
-
-    // Open modal with pre-filled data
-    addJobModal.classList.add('show');
-    document.getElementById('job-role').value = job.role;
-    document.getElementById('salary-min').value = job.salary.split('-')[0];
-    document.getElementById('salary-max').value = job.salary.split('-')[1].replace(" LPA", "");
-
-    // Fill skills
-    jobFormData.skills = [...job.skills];
-    const skillsList = document.getElementById('job-skills-list');
-    skillsList.innerHTML = '';
-    job.skills.forEach(skill => {
-        const span = document.createElement('span');
-        span.className = 'item-tag';
-        span.innerHTML = `${skill} <span class="remove-item" data-item="${skill}">&times;</span>`;
-        skillsList.appendChild(span);
-        
-        // Add event listener to remove button
-        span.querySelector('.remove-item').addEventListener('click', (e) => {
-            const item = e.target.getAttribute('data-item');
-            const index = jobFormData.skills.indexOf(item);
-            if (index > -1) {
-                jobFormData.skills.splice(index, 1);
-            }
-            span.remove();
+            // Add event listener to remove button
+            span.querySelector('.remove-item').addEventListener('click', (e) => {
+                const item = e.target.getAttribute('data-item');
+                const index = jobFormData.companies.indexOf(item);
+                if (index > -1) {
+                    jobFormData.companies.splice(index, 1);
+                }
+                span.remove();
+            });
         });
-    });
 
-    // Fill companies
-    jobFormData.companies = [...job.companies];
-    const companiesList = document.getElementById('job-companies-list');
-    companiesList.innerHTML = '';
-    job.companies.forEach(company => {
-        const span = document.createElement('span');
-        span.className = 'item-tag';
-        span.innerHTML = `${company} <span class="remove-item" data-item="${company}">&times;</span>`;
-        companiesList.appendChild(span);
-        
-        // Add event listener to remove button
-        span.querySelector('.remove-item').addEventListener('click', (e) => {
-            const item = e.target.getAttribute('data-item');
-            const index = jobFormData.companies.indexOf(item);
-            if (index > -1) {
-                jobFormData.companies.splice(index, 1);
+        // Set up edit mode save function
+        saveJobBtn.onclick = function() {
+            const role = document.getElementById('job-role').value;
+            const salaryMin = document.getElementById('salary-min').value;
+            const salaryMax = document.getElementById('salary-max').value;
+
+            if (!role || !salaryMin || !salaryMax || jobFormData.skills.length === 0 || jobFormData.companies.length === 0) {
+                alert("Please fill all fields");
+                return;
             }
-            span.remove();
-        });
-    });
 
-    // Set up edit mode save function
-    saveJobBtn.onclick = function() {
-        const role = document.getElementById('job-role').value;
-        const salaryMin = document.getElementById('salary-min').value;
-        const salaryMax = document.getElementById('salary-max').value;
-        
-        if (!role || !salaryMin || !salaryMax || jobFormData.skills.length === 0 || jobFormData.companies.length === 0) {
-            alert("Please fill all fields");
-            return;
-        }
+            const salary = `${salaryMin}-${salaryMax} LPA`;
 
-        const salary = `${salaryMin}-${salaryMax} LPA`;
-        
-        // Preserve existing content when updating
-        db.collection("jobs").doc(jobId).update({
-            role,
-            skills: jobFormData.skills,
-            salary,
-            companies: jobFormData.companies,
-            // Keep the existing content fields
-            description: job.description || "",
-            skillsDetails: job.skillsDetails || "",
-            tools: job.tools || [],
-            salaryInfo: job.salaryInfo || "",
-            hiringCompanies: job.hiringCompanies || [],
-            timestamp: firebase.firestore.FieldValue.serverTimestamp()
-        })
-        .then(() => {
-            alert("Job updated successfully!");
-            addJobModal.classList.remove('show');
-            
-            // Update local array
-            const index = allJobs.findIndex(j => j.id === jobId);
-            if (index !== -1) {
-                allJobs[index] = {
-                    ...allJobs[index],
-                    role,
-                    skills: jobFormData.skills,
-                    salary,
-                    companies: jobFormData.companies,
-                    // Preserve content
-                    description: job.description || "",
-                    skillsDetails: job.skillsDetails || "",
-                    tools: job.tools || [],
-                    salaryInfo: job.salaryInfo || "",
-                    hiringCompanies: job.hiringCompanies || []
-                };
-            }
-            
-            renderJobs(allJobs);
-            
-            // Reset the form data
+            // Preserve existing content when updating
+            db.collection("jobs").doc(jobId).update({
+                role,
+                skills: jobFormData.skills,
+                salary,
+                companies: jobFormData.companies,
+                // Keep the existing content fields
+                description: job.description || "",
+                skillsDetails: job.skillsDetails || "",
+                tools: job.tools || [],
+                salaryInfo: job.salaryInfo || "",
+                hiringCompanies: job.hiringCompanies || [],
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            })
+                .then(() => {
+                    alert("Job updated successfully!");
+                    addJobModal.classList.remove('show');
+
+                    // Update local array
+                    const index = allJobs.findIndex(j => j.id === jobId);
+                    if (index !== -1) {
+                        allJobs[index] = {
+                            ...allJobs[index],
+                            role,
+                            skills: jobFormData.skills,
+                            salary,
+                            companies: jobFormData.companies,
+                            // Preserve content
+                            description: job.description || "",
+                            skillsDetails: job.skillsDetails || "",
+                            tools: job.tools || [],
+                            salaryInfo: job.salaryInfo || "",
+                            hiringCompanies: job.hiringCompanies || []
+                        };
+                    }
+
+                    renderJobs(allJobs);
+
+                    // Reset the form data
+                    document.getElementById('job-role').value = '';
+                    document.getElementById('salary-min').value = '';
+                    document.getElementById('salary-max').value = '';
+                    document.getElementById('job-skills-list').innerHTML = '';
+                    document.getElementById('job-companies-list').innerHTML = '';
+                    jobFormData = { skills: [], companies: [] };
+
+                    // Restore the original save function
+                    saveJobBtn.onclick = originalSaveFunction;
+                })
+                .catch((error) => {
+                    console.error("Error updating job: ", error);
+                    alert("Error updating job. Please try again.");
+                });
+        };
+
+        // Add event listener to close button to restore original function
+        const closeModalBtn = document.querySelector('#add-job-modal .close-modal');
+        const originalCloseHandler = closeModalBtn.onclick;
+
+        closeModalBtn.onclick = function() {
+            // Restore the original save function when modal is closed
+            saveJobBtn.onclick = originalSaveFunction;
+            // Reset the form
             document.getElementById('job-role').value = '';
             document.getElementById('salary-min').value = '';
             document.getElementById('salary-max').value = '';
             document.getElementById('job-skills-list').innerHTML = '';
             document.getElementById('job-companies-list').innerHTML = '';
             jobFormData = { skills: [], companies: [] };
-            
-            // Restore the original save function
-            saveJobBtn.onclick = originalSaveFunction;
-        })
-        .catch((error) => {
-            console.error("Error updating job: ", error);
-            alert("Error updating job. Please try again.");
-        });
-    };
-    
-    // Add event listener to close button to restore original function
-    const closeModalBtn = document.querySelector('#add-job-modal .close-modal');
-    const originalCloseHandler = closeModalBtn.onclick;
-    
-    closeModalBtn.onclick = function() {
-        // Restore the original save function when modal is closed
-        saveJobBtn.onclick = originalSaveFunction;
-        // Reset the form
-        document.getElementById('job-role').value = '';
-        document.getElementById('salary-min').value = '';
-        document.getElementById('salary-max').value = '';
-        document.getElementById('job-skills-list').innerHTML = '';
-        document.getElementById('job-companies-list').innerHTML = '';
-        jobFormData = { skills: [], companies: [] };
-        // Call the original close handler
-        if (originalCloseHandler) originalCloseHandler.call(this);
-    };
-}
+            // Call the original close handler
+            if (originalCloseHandler) originalCloseHandler.call(this);
+        };
+    }
+
+    // Show role dialog
+    function showRoleDialog(roleId) {
+        const role = allCareerPaths.find(r => r.id === roleId);
+        if (!role) return;
+
+        const modal = document.getElementById('role-dialog-modal');
+        const title = document.getElementById('role-dialog-title');
+        const roadmapContent = document.getElementById('roadmap-content');
+        const questionsContent = document.getElementById('questions-content');
+        const roadmapLink = document.getElementById('roadmap-link');
+        const questionsLink = document.getElementById('questions-link');
+
+        title.textContent = role.title;
+        roadmapContent.textContent = role.roadmap || 'Roadmap information will be added soon.';
+        questionsContent.textContent = role.questions || 'Interview questions will be added soon.';
+        roadmapLink.href = role.roadmapLink || '#';
+        questionsLink.href = role.questionsLink || '#';
+
+        modal.classList.add('show');
+    }
+
+    // Close role dialog
+    function closeRoleDialog() {
+        const modal = document.getElementById('role-dialog-modal');
+        modal.classList.remove('show');
+    }
+
+    // Show skill dialog
+    function showSkillDialog(roleId, skill) {
+        const role = allCareerPaths.find(r => r.id === roleId);
+        const modal = document.getElementById('skill-dialog-modal');
+        if (!role || !modal) return;
+
+        document.getElementById('skill-dialog-title').textContent = `${role.title} — ${skill}`;
+        // Placeholder links; update later
+        const roadmapBtn = document.getElementById('skill-roadmap-link');
+        const practiceBtn = document.getElementById('skill-practice-link');
+        roadmapBtn.href = '#';
+        practiceBtn.href = '#';
+
+        modal.classList.add('show');
+    }
+
+    function closeSkillDialog() {
+        const modal = document.getElementById('skill-dialog-modal');
+        if (modal) modal.classList.remove('show');
+    }
 
     // Initialize the app when DOM is loaded
     document.addEventListener('DOMContentLoaded', init);
 </script>
-
-<!-- Login Modal -->
-<div class="modal" id="login-modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h2>Login</h2>
-            <button class="close-modal">&times;</button>
-        </div>
-        
-        <div class="form-group">
-            <label for="login-email"><i class="fas fa-envelope"></i> Email</label>
-            <input type="email" id="login-email" class="form-control" placeholder="Enter your email">
-        </div>
-        
-        <div class="form-group">
-            <label for="login-password"><i class="fas fa-lock"></i> Password</label>
-            <input type="password" id="login-password" class="form-control" placeholder="Enter your password">
-        </div>
-        
-        <button class="submit-btn" id="login-submit">Login</button>
-        
-        <p style="text-align: center; margin-top: 16px; color: var(--text-secondary);">
-            Don't have an account? <a href="#" id="show-register" style="color: var(--primary);">Register</a>
-        </p>
-    </div>
-</div>
-
-<!-- Register Modal -->
-<div class="modal" id="register-modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h2>Register</h2>
-            <button class="close-modal">&times;</button>
-        </div>
-        
-        <div class="form-group">
-            <label for="register-name"><i class="fas fa-user"></i> Full Name</label>
-            <input type="text" id="register-name" class="form-control" placeholder="Enter your full name">
-        </div>
-        
-        <div class="form-group">
-            <label for="register-email"><i class="fas fa-envelope"></i> Email</label>
-            <input type="email" id="register-email" class="form-control" placeholder="Enter your email">
-        </div>
-        
-        <div class="form-group">
-            <label for="register-password"><i class="fas fa-lock"></i> Password</label>
-            <input type="password" id="register-password" class="form-control" placeholder="Create a password">
-        </div>
-        
-        <button class="submit-btn" id="register-submit">Register</button>
-        
-        <p style="text-align: center; margin-top: 16px; color: var(--text-secondary);">
-            Already have an account? <a href="#" id="show-login" style="color: var(--primary);">Login</a>
-        </p>
-    </div>
-</div>
 </body>
 </html>
